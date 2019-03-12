@@ -1,6 +1,7 @@
 *.ipch
 *.exe
 *.obj
+packages
 *.opendb
 *.suo
 *.tlog
