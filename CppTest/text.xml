@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<shiporder orderid="falshjje">
+	<bs>AAAA</bs>
+	<orderperson>Alex</orderperson>
+	<bs>AAAA</bs>
+	<shipto>
+		<name>asdaaa</name>
+		<address>asd</address>
+		<city></city>
+		<country>Ukraine</country>
+	</shipto>
+	<bs>AAAA</bs>
+	<item>
+		<title></title>
+		<note>asd</note>
+		<quantity></quantity>
+		<price>200</price>
+	</item>
+	<item>
+		<title></title>
+		<note>asd</note>
+		<quantity>ssss</quantity>
+		<price>200</price>
+	</item>
+</shiporder>

@@ -1,0 +1,14 @@
+*.ipch
+*.exe
+*.obj
+*.opendb
+*.suo
+*.tlog
+*.db
+*.lock
+*.ide
+*.pdb
+*.dll
+*.cache
+
+
