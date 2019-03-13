@@ -6,3 +6,11 @@ C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObje
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\obj\Debug\XSDObjectGen.pdb
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen.exe
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen.pdb
+C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\bin\XSDObjectGen.exe.config
+C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\bin\XSDObjectGen.exe
+C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\bin\XSDObjectGen.pdb
+C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\bin\XSDObjectGenLib.dll
+C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\bin\XSDObjectGenLib.pdb
+C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\bin\XSDObjectGen.exe.config
+C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\bin\XSDObjectGen.exe
+C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\bin\XSDObjectGen.pdb
