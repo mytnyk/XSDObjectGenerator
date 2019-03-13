@@ -38,30 +38,33 @@ public:
 	virtual const char* ReadAttrStr(const char* name) = 0;
 	virtual double		ReadAttrDouble(const char* name) = 0;
 	virtual int32_t		ReadAttrInt(const char* name) = 0;
-	virtual void NextChild(const char* name) = 0;
+	virtual bool NextChild(const char* name) = 0;
 	virtual void BackChild() = 0;
 private:
 	virtual void AddChild(const char* name) = 0;
-	virtual void InChild(const char* name) = 0;
+	virtual bool InChild(const char* name) = 0;
 	virtual void LeaveChild() = 0;
 protected:
 	OpenMode mode = OpenMode::Write;
 public:
 	class Scope
 	{
+	public: bool is_successfull;
 	private: IXmlSerializer& _s;
 	public: Scope(IXmlSerializer& s, const char* name) : _s(s) {
 		if (_s.mode == OpenMode::Write)
 			_s.AddChild(name);
 		else {
-			_s.InChild(name);
+			is_successfull = _s.InChild(name);
 		}
 	}
 			~Scope() {
-				if (_s.mode == OpenMode::Write)
-					_s.LeaveChild();
-				else
-					_s.BackChild();
+				if (is_successfull) {
+					if (_s.mode == OpenMode::Write)
+						_s.LeaveChild();
+					else
+						_s.BackChild();
+				}
 			}
 	};
 };
@@ -75,11 +78,25 @@ public:
 	PugiXmlSerializer() { _cursor = _doc; }
 
 	void AddChild(const char* name) override { _cursor = _cursor.append_child(name); }
-	void InChild(const char* name) override {
+	bool InChild(const char* name) override {
+		pugi::xml_node _cursor_backup = _cursor;
 		_cursor = _cursor.child(name);
+		if (_cursor == NULL) {
+			_cursor = _cursor_backup;
+			return false;
+		}
+		else
+			return true;
 	}
-	void NextChild(const char* name) override {
+	bool NextChild(const char* name) override {
+		pugi::xml_node _cursor_back = _cursor;
 		_cursor = _cursor.next_sibling(name);
+		if (_cursor == NULL) {
+			_cursor = _cursor_back;
+			return false;
+		}
+		else
+			return true;
 	}
 	void LeaveChild() override { _cursor = _cursor.parent(); }
 	void BackChild() override {
@@ -236,7 +253,7 @@ namespace Test
 		{
 		}
 		void Write(IXmlSerializer& s);
-		void Read(IXmlSerializer& s);
+		void Read(IXmlSerializer& s, bool = true);
 	};
 	struct shiporder
 	{
@@ -248,12 +265,11 @@ namespace Test
 		shipto shipto;
 		//LIST
 		std::vector<item> item;
-		std::vector<std::string> bs;
 		shiporder()
 		{
 		}
 		void Write(IXmlSerializer& s);
-		void Read(IXmlSerializer& s);
+		void Read(IXmlSerializer& s, bool = true);
 	};
 }
 void Test::shiporder::Write(IXmlSerializer& s)
@@ -271,29 +287,45 @@ void Test::shiporder::Write(IXmlSerializer& s)
 	}
 }
 
-void Test::shiporder::Read(IXmlSerializer& s)
+void Test::shiporder::Read(IXmlSerializer& s, bool init)
 {
-	IXmlSerializer::Scope scope(s, "shiporder");
-	orderid = s.ReadAttrStr("orderid");
-	{
-		IXmlSerializer::Scope scope(s, "orderperson");
-		orderperson = s.ReadStr();
+	if (init) {
+		IXmlSerializer::Scope scope(s, "shiporder");
+		orderid = s.ReadAttrStr("orderid");
+		{
+			IXmlSerializer::Scope scope(s, "orderperson");
+			orderperson = s.ReadStr();
+		}
+		shipto.Read(s);
+		{
+			IXmlSerializer::Scope scope2(s, "item");
+			if (scope2.is_successfull) {
+				do {
+					Test::item __t;
+					__t.Read(s, false);
+					item.push_back(__t);
+				} while (s.NextChild("item"));
+			}
+		}
 	}
-	
-	//bs = s.ReadVectorStr("bs");
-
-	while (true) {
-		//s.NextChild("item");
-		Test::item _item;
-		_item.Read(s);
-		s.NextChild("item");
-		Test::item _item2;
-		_item2.Read(s);
+	else {
+		orderid = s.ReadAttrStr("orderid");
+		{
+			IXmlSerializer::Scope scope(s, "orderperson");
+			orderperson = s.ReadStr();
+		}
+		shipto.Read(s);
+		{
+			IXmlSerializer::Scope scope2(s, "item");
+			if (scope2.is_successfull) {
+				do {
+					Test::item __t;
+					__t.Read(s, false);
+					item.push_back(__t);
+				} while (s.NextChild("item"));
+			}
+		}
 	}
-	//for (int i = 0; i < item.size(); i++)
-	//{
-		//item.push_back(s.Read());
-	//}
 }
 
 void Test::shipto::Write(IXmlSerializer& s)
@@ -317,24 +349,44 @@ void Test::shipto::Write(IXmlSerializer& s)
 	}
 }
 
-void Test::shipto::Read(IXmlSerializer& s)
+void Test::shipto::Read(IXmlSerializer& s, bool init)
 {
-	IXmlSerializer::Scope scope(s, "shipto");
-	{
-		IXmlSerializer::Scope scope(s, "name");
-		name = s.ReadStr();
+	if (init) {
+		IXmlSerializer::Scope scope(s, "shipto");
+		{
+			IXmlSerializer::Scope scope(s, "name");
+			name = s.ReadStr();
+		}
+		{
+			IXmlSerializer::Scope scope(s, "address");
+			address = s.ReadStr();
+		}
+		{
+			IXmlSerializer::Scope scope(s, "city");
+			city = s.ReadStr();
+		}
+		{
+			IXmlSerializer::Scope scope(s, "country");
+			country = s.ReadStr();
+		}
 	}
-	{
-		IXmlSerializer::Scope scope(s, "address");
-		address = s.ReadStr();
-	}
-	{
-		IXmlSerializer::Scope scope(s, "city");
-		city = s.ReadStr();
-	}
-	{
-		IXmlSerializer::Scope scope(s, "country");
-		country = s.ReadStr();
+	else {
+		{
+			IXmlSerializer::Scope scope(s, "name");
+			name = s.ReadStr();
+		}
+		{
+			IXmlSerializer::Scope scope(s, "address");
+			address = s.ReadStr();
+		}
+		{
+			IXmlSerializer::Scope scope(s, "city");
+			city = s.ReadStr();
+		}
+		{
+			IXmlSerializer::Scope scope(s, "country");
+			country = s.ReadStr();
+		}
 	}
 }
 
@@ -359,9 +411,9 @@ void Test::item::Write(IXmlSerializer& s)
 	}
 }
 
-void Test::item::Read(IXmlSerializer& s, bool h)
+void Test::item::Read(IXmlSerializer& s, bool init)
 {
-	if (h) {
+	if (init) {
 		IXmlSerializer::Scope scope(s, "item");
 		{
 			IXmlSerializer::Scope scope(s, "title");
@@ -399,7 +451,6 @@ void Test::item::Read(IXmlSerializer& s, bool h)
 		}
 	}
 }
-
 
 //------------------- Generated code end--------------//
 

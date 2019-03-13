@@ -56,6 +56,13 @@ namespace CPPParser
             return result;
         }
 
+        static string correctNamespace(string name, string _namespace) {
+            if (name.IndexOf("::") == -1)
+                return _namespace + "::" + name;
+            else
+                return name;
+        }
+
         static string getPrefixByType(string type)
         {
             if (type == "int")
@@ -83,6 +90,7 @@ namespace CPPParser
             List<string> new_lines = new List<string>();
             List<string> write_instructions = new List<string>();
             List<string> read_instructions = new List<string>();
+            List<string> read_instructions2 = new List<string>();
             List<string> post_lines = new List<string>();
             Dictionary<string, List<string>> pairs = new Dictionary<string, List<string>>();
             string cur_struct = "";
@@ -107,6 +115,7 @@ namespace CPPParser
                         is_in_struct = true;
                         pairs.Add(cur_struct, new List<string>());
                         write_instructions.Add(string.Format("\tIXmlSerializer::Scope scope(s, \"{0}\");", name));
+                        read_instructions.Add("\tif (init) {");
                         read_instructions.Add(string.Format("\tIXmlSerializer::Scope scope(s, \"{0}\");", name));
                     }
                     
@@ -114,7 +123,7 @@ namespace CPPParser
                     {
                         string name = lines[i + 1].Split(' ')[1].Substring(0, lines[i + 1].Split(' ')[1].Length - 1);
                         write_instructions.Add(string.Format("\ts.WriteAttr(\"{0}\", {0}.c_str());", name));
-                        read_instructions.Add(string.Format("\t{0} = s.ReadAttrStr(\"{0}\");", name));
+                        read_instructions2.Add(string.Format("\t{0} = s.ReadAttrStr(\"{0}\");", name));
                     }
                     if (lines[i] == "\t\t//ATTRIBUTE_PROTO")
                     {
@@ -122,13 +131,13 @@ namespace CPPParser
                         write_instructions.Add(string.Format("\ts.WriteAttr(\"{0}\", {0});", name));
                         string ff = lines[i + 1].Split(' ')[0].Substring(2);
                         string prefix = getPrefixByType(ff);
-                        read_instructions.Add(string.Format("\t{0} = s.ReadAttr{1}(\"{0}\");", name, prefix));
+                        read_instructions2.Add(string.Format("\t{0} = s.ReadAttr{1}(\"{0}\");", name, prefix));
                     }
                     if (lines[i] == "\t\t//ELEMENT_STD")
                     {
                         string v = lines[i + 1].Split(' ')[1].Substring(0, lines[i + 1].Split(' ')[1].Length - 1);
                         write_instructions.Add(string.Format("\t{{\n\t\tIXmlSerializer::Scope scope(s, \"{0}\");\n \t\ts.Write({0}.c_str());\n\t}}", v));
-                        read_instructions.Add(string.Format("\t{{\n\t\tIXmlSerializer::Scope scope(s, \"{0}\");\n \t\t{0} = s.ReadStr();\n\t}}", v));
+                        read_instructions2.Add(string.Format("\t{{\n\t\tIXmlSerializer::Scope scope(s, \"{0}\");\n \t\t{0} = s.ReadStr();\n\t}}", v));
                     }
                     if (lines[i] == "\t\t//ELEMENT_PROTO")
                     {
@@ -136,13 +145,13 @@ namespace CPPParser
                         write_instructions.Add(string.Format("\t{{\n\t\tIXmlSerializer::Scope scope(s, \"{0}\");\n \t\ts.Write({0});\n\t}}", name));
                         string type = lines[i + 1].Split(' ')[0].Substring(2);
                         string s = getPrefixByType(type);
-                        read_instructions.Add(string.Format("\t{{\n\t\tIXmlSerializer::Scope scope(s, \"{0}\");\n \t\t{0} = s.Read{1}();\n\t}}", name, s));
+                        read_instructions2.Add(string.Format("\t{{\n\t\tIXmlSerializer::Scope scope(s, \"{0}\");\n \t\t{0} = s.Read{1}();\n\t}}", name, s));
                     }
                     if (lines[i] == "\t\t//ELEMENT_CLASS")
                     {
                         string name = lines[i + 1].Split(' ')[1].Substring(0, lines[i + 1].Split(' ')[1].Length - 1);
                         write_instructions.Add(string.Format("\t{0}.Write(s);", name));
-                        read_instructions.Add(string.Format("\t{0}.Read(s);", name));
+                        read_instructions2.Add(string.Format("\t{0}.Read(s);", name));
                     }
                     if (lines[i] == "\t\t//LIST")
                     {
@@ -152,13 +161,12 @@ namespace CPPParser
                         {
                             string s = getPrefixByType(type);
                             write_instructions.Add(string.Format("\tfor(int i = 0;i < {0}.size();i++)\n\t{{\n\t\ts.Write({0}[i]); \n\\t}}", name));
-                            read_instructions.Add(string.Format("{0} = s.ReadVector{1}(\"{0}\")", name, s));
+                            read_instructions2.Add(string.Format("{0} = s.ReadVector{1}(\"{0}\")", name, s));
                         }
                         else
                         {
                             write_instructions.Add(string.Format("\tfor(int i = 0;i < {0}.size();i++)\n\t{{\n\t\t{0}[i].Write(s); \n\t}}", name));
-                            // Not working - bad interface
-                            read_instructions.Add(string.Format("\tfor (pugi::xml_named_node_iterator it = _cursor.children(name).begin(); it != _cursor.children(name).end(); ++it)\n\t{{\n\t\t{1} copy;\n\t\tcopy.Read{0}.push_back(copy); \n\t}}", name, type));
+                            read_instructions2.Add(string.Format("\t{{\n\t\tIXmlSerializer::Scope scope2(s, \"{0}\");\n\t\tif (scope2.is_successfull) {{\n\t\t\tdo {{\n\t\t\t\t{2} __t;\n\t\t\t\t__t.Read(s, false);\n\t\t\t\t{0}.push_back(__t);\n\t\t\t}} while (s.NextChild(\"{0}\"));\n\t\t}}\n\t}}", name, type, correctNamespace(name, cur_namespace)));
                         }
                     }
                     
@@ -166,25 +174,38 @@ namespace CPPParser
                     {
                         
                         pairs[cur_struct].Add("\t\tvoid Write(IXmlSerializer& s);");
-                        pairs[cur_struct].Add("\t\tvoid Read(IXmlSerializer& s);");
+                        pairs[cur_struct].Add("\t\tvoid Read(IXmlSerializer& s, bool = true);");
                         post_lines.Add(string.Format("void {1}::{0}::Write(IXmlSerializer& s)\n{{", cur_struct, cur_namespace));
                         foreach (var instruction in write_instructions)
                         {
                             post_lines.Add(instruction);
                         }
                         post_lines.Add("}\n");
-                        post_lines.Add(string.Format("void {1}::{0}::Read(IXmlSerializer& s)\n{{", cur_struct, cur_namespace));
+                        post_lines.Add(string.Format("void {1}::{0}::Read(IXmlSerializer& s, bool init)\n{{", cur_struct, cur_namespace));
 
                         foreach (var instruction in read_instructions)
                         {
                             post_lines.Add(instruction);
                         }
-                        post_lines.Add("}\n");
+                        
+                        foreach (var instruction in read_instructions2)
+                        {
+                            post_lines.Add(instruction);
+                        }
+
+                        post_lines.Add("\t}\n\telse {");
+                        foreach (var instruction in read_instructions2)
+                        {
+                            post_lines.Add(instruction);
+                        }
+
+                        post_lines.Add("\t}\n}\n");
 
                         pairs[cur_struct].Add(lines[i]);
                         is_in_struct = false;
                         write_instructions.Clear();
                         read_instructions.Clear();
+                        read_instructions2.Clear();
                     }
                     if (is_in_struct)
                         pairs[cur_struct].Add(lines[i]);

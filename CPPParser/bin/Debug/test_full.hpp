@@ -29,7 +29,7 @@ namespace Test
 		{
 		}
 		void Write(IXmlSerializer& s);
-		void Read(IXmlSerializer& s);
+		void Read(IXmlSerializer& s, bool = true);
 	};
 	struct shipto
 	{
@@ -45,7 +45,7 @@ namespace Test
 		{
 		}
 		void Write(IXmlSerializer& s);
-		void Read(IXmlSerializer& s);
+		void Read(IXmlSerializer& s, bool = true);
 	};
 	struct shiporder
 	{
@@ -61,7 +61,7 @@ namespace Test
 		{
 		}
 		void Write(IXmlSerializer& s);
-		void Read(IXmlSerializer& s);
+		void Read(IXmlSerializer& s, bool = true);
 	};
 }
 void Test::shiporder::Write(IXmlSerializer& s)
@@ -79,8 +79,9 @@ void Test::shiporder::Write(IXmlSerializer& s)
 	}
 }
 
-void Test::shiporder::Read(IXmlSerializer& s)
+void Test::shiporder::Read(IXmlSerializer& s, bool init)
 {
+	if (init) {
 	IXmlSerializer::Scope scope(s, "shiporder");
 	orderid = s.ReadAttrStr("orderid");
 	{
@@ -88,9 +89,34 @@ void Test::shiporder::Read(IXmlSerializer& s)
  		orderperson = s.ReadStr();
 	}
 	shipto.Read(s);
-	for(int i = 0;i < item.size();i++)
 	{
-		item.push_back(s.Read()); 
+		IXmlSerializer::Scope scope2(s, "item");
+		if (scope2.is_successfull) {
+			do {
+				Test::item __t;
+				__t.Read(s, false);
+				item.push_back(__t);
+			} while (s.NextChild("item"));
+		}
+	}
+	}
+	else {
+	orderid = s.ReadAttrStr("orderid");
+	{
+		IXmlSerializer::Scope scope(s, "orderperson");
+ 		orderperson = s.ReadStr();
+	}
+	shipto.Read(s);
+	{
+		IXmlSerializer::Scope scope2(s, "item");
+		if (scope2.is_successfull) {
+			do {
+				Test::item __t;
+				__t.Read(s, false);
+				item.push_back(__t);
+			} while (s.NextChild("item"));
+		}
+	}
 	}
 }
 
@@ -115,8 +141,9 @@ void Test::shipto::Write(IXmlSerializer& s)
 	}
 }
 
-void Test::shipto::Read(IXmlSerializer& s)
+void Test::shipto::Read(IXmlSerializer& s, bool init)
 {
+	if (init) {
 	IXmlSerializer::Scope scope(s, "shipto");
 	{
 		IXmlSerializer::Scope scope(s, "name");
@@ -133,6 +160,25 @@ void Test::shipto::Read(IXmlSerializer& s)
 	{
 		IXmlSerializer::Scope scope(s, "country");
  		country = s.ReadStr();
+	}
+	}
+	else {
+	{
+		IXmlSerializer::Scope scope(s, "name");
+ 		name = s.ReadStr();
+	}
+	{
+		IXmlSerializer::Scope scope(s, "address");
+ 		address = s.ReadStr();
+	}
+	{
+		IXmlSerializer::Scope scope(s, "city");
+ 		city = s.ReadStr();
+	}
+	{
+		IXmlSerializer::Scope scope(s, "country");
+ 		country = s.ReadStr();
+	}
 	}
 }
 
@@ -157,8 +203,9 @@ void Test::item::Write(IXmlSerializer& s)
 	}
 }
 
-void Test::item::Read(IXmlSerializer& s)
+void Test::item::Read(IXmlSerializer& s, bool init)
 {
+	if (init) {
 	IXmlSerializer::Scope scope(s, "item");
 	{
 		IXmlSerializer::Scope scope(s, "title");
@@ -175,6 +222,25 @@ void Test::item::Read(IXmlSerializer& s)
 	{
 		IXmlSerializer::Scope scope(s, "price");
  		price = s.ReadInt();
+	}
+	}
+	else {
+	{
+		IXmlSerializer::Scope scope(s, "title");
+ 		title = s.ReadStr();
+	}
+	{
+		IXmlSerializer::Scope scope(s, "note");
+ 		note = s.ReadStr();
+	}
+	{
+		IXmlSerializer::Scope scope(s, "quantity");
+ 		quantity = s.ReadStr();
+	}
+	{
+		IXmlSerializer::Scope scope(s, "price");
+ 		price = s.ReadInt();
+	}
 	}
 }
 
