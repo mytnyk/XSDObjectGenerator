@@ -37,7 +37,6 @@ class IXmlSerializerReader
 {
 public:
 	virtual ~IXmlSerializerReader() = default;
-	//virtual bool ReadInt(const char*name, int32_t&value) = 0;
 
 	virtual bool ReadInt(const char* name, int32_t& value) = 0;
 	virtual bool ReadDouble(const char* name, double& value) = 0;
@@ -51,9 +50,6 @@ public:
 	virtual const char* ReadAttrStr(const char* name) = 0;
 	virtual double		ReadAttrDouble(const char* name) = 0;
 	virtual int32_t		ReadAttrInt(const char* name) = 0;
-	//virtual bool NextChild(const char* name) = 0;
-	//virtual void beginArray() = 0;
-	//virtual void endArray() = 0;
 private:
 	virtual void LeaveChild(const char* name) = 0;
 	virtual bool EnterChild(const char* name) = 0;
@@ -155,21 +151,8 @@ public:
 			return true;
 		}
 	}
-	/*
-	bool NextChild(const char* name) override {
-		pugi::xml_node new_cursor = _cursor.next_sibling(name);
-		if (new_cursor == NULL)
-			return false;
-		else {
-			_cursor = new_cursor;
-			return true;
-		}
-	}
-	*/
 
 	void LeaveChild(const char* cname) override {
-		//names.pop();
-		//names.push("");
 		if (_cursor.next_sibling(cname) == NULL) {
 			_cursor = _cursor.parent();
 		}

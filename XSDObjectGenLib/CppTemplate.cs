@@ -12,54 +12,6 @@ namespace XSDObjectGenLib
     /// </summary>
     internal class CppTemplate : LanguageBase
     {
-
-        // {0} -- collection class name (scrubbed) -- NOT NEEDED ANYMORE WITH GENERIC LIST
-        // {1} -- type (keyword scrubbed)
-        // {2} -- xml element name
-        // {3} -- schema form
-        // {4} -- field/property name (scrubbed)
-        // {5} -- XmlElement DataType
-        // {6} -- namespace
-        // {7} -- hidden member prefix
-        // {8} -- collection suffix -- NOT NEEDED ANYMORE WITH GENERIC LIST
-        // {9} -- IsNullable
-        // {10} -- contained type within the collection
-         string sFieldCollectionTemplate = "\t\t//LIST\n\t\tstd::vector<{10}> {4};";
-
-
-        // {0} -- field name (scrubbed)
-        // {1} -- type (keyword scrubbed)
-        // {2} -- xml element name
-        // {3} -- schema form
-        // {4} -- property name (keyword scrubbed)
-        // {5} -- namespace
-        // {6} -- hidden member prefix
-        // {7} -- IsNullable
-        static string sFieldClassTemplate = "\t\t//ELEMENT_CLASS\n\t\t{1} {0};";
-
-
-        // {0} -- field name (scrubbed)
-        // {1} -- type (keyword scrubbed)
-        // {2} -- xml element name
-        // {3} -- schema form
-        // {4} -- property name (keyword scrubbed)
-        // {5} -- namespace
-        // {6} -- hidden member prefix
-        // {7} -- IsNullable
-        static string sFieldAbstractClassTemplate = "\t\t//ELEMENT_ABSTRACT\n\t\t{1} {0};";
-
-
-        //For the next 6 templates:
-        // {0} - fieldName, {1} fieldType, {2} elementName, {3} schemaForm, {4} XsdDataType, 
-        // {5} - propertyName, {6} - namespace
-        // {7} -- hidden member prefix, {8} -- IsNullable
-        // note: elementName is the unscrubbed version of fieldname
-        // note: PropertyName is keyword scrubbed and fieldName is scrubbed
-
-        static string sElementObjectTemplate = "\t\t//ELEMENT_STD\n\t\t{1} {0};";
-
-        static string sElementValueTypeTemplate = "\t\t//ELEMENT_PROTO\n\t\t{1} {0};";
-
         static string sElementAnyTemplate =
 @"		[XmlAnyElement({6})]
 		public System.Xml.XmlElement {5};";
@@ -67,54 +19,13 @@ namespace XSDObjectGenLib
         static string sElementAnyMaxOccursTemplate =
 @"		[XmlAnyElement({6})]
 		public System.Xml.XmlElement[] {5};";
-		
-        static string sAttributeObjectTemplate = "\t\t//ATTRIBUTE_STD\n\t\t{1} {0};";
-
-        static string sAttributeValueTypeTemplate = "\t\t//ATTRIBUTE_PROTO\n\t\t{1} {0};";
-
+	
         static string sAttributeAnyTemplate =
 @"		[XmlAnyAttribute()]
 		public System.Xml.XmlAttribute[] {5};";
 
-        static string sElementDateTimeTemplate = "\t\t//ELEMENT_DATETIME\n\t\tstd::tm {0};";
-
-        static string sAttributeDateTimeTemplate = "\t\t//ATTRIBUTE_DATETIME\n\t\tstd::tm {0};";
-
-        //For the next 3 templates:
-        // {0} - fieldType, {1} XsdDataType, {2} -- hidden member prefix, {3} -- mixedElementFieldName
-
-        static string sMixedObjectTemplate = "\t\t//MIXED\n\t\t{0} {3};";
-
-        static string sMixedValueTypeTemplate = "\t\t//MIXED\n\t\t{0} {3};";
-
-        static string sMixedDateTimeTemplate = "\t\t//MIXED\n\t\tstd::tm {3};";
-
-        // {0} -- fieldname of contained collection (scrubbed)
-        // {1} -- type contained in collection -- keyword scrubbed
-        // {2} -- collection suffix -- NOT NEEDED ANYMORE
-        // {3} -- hiddenMemberPrex
+     
         static string sClassEnumerabilityTemplate = "";
-        
-
-        //ACORD TC Template -- for public codes:
-        // {0} - elementName, {1} enumName, {2} -- tcCode, {3} -- valueCode
-
-        static string sAcordTCTemplate =
-@"		public void Set_{0}() 
-        {{ 
-            this.tc = (int){1}_TC._{2}; 
-            this.Value = ""{3}""; 
-        }}";
-
-        //ACORD TC Template -- for Private codees (organizational private codes)
-        // {0} - elementName, {1} enumName, {2} -- tcCode, {3} -- valueCode
-
-        static string sAcordPrivateTCTemplate =
-@"		public void Set_{0}() 
-        {{ 
-            this.tc = {2}; 
-            this.Value = ""{3}""; 
-        }}";
 
         private Hashtable keywordsTable;
 
@@ -137,30 +48,7 @@ namespace XSDObjectGenLib
             for (int i = 0; i < keywords.Length; i++)
                 keywordsTable.Add(keywords[i].ToLower(), "");
         }
-
-        // Code string templates.  See documentation in the language child classes
-        protected override string FieldCollectionTemplate { get { return sFieldCollectionTemplate; } set { sFieldCollectionTemplate = value; } }
-        protected override string FieldClassTemplate { get
-            {
-
-                return sFieldClassTemplate;
-            } set { sFieldClassTemplate = value; } }
-        protected override string FieldAbstractClassTemplate { get { return sFieldAbstractClassTemplate; } set { sFieldAbstractClassTemplate = value; } }
-        protected override string ElementObjectTemplate { get { return sElementObjectTemplate; } set { sElementObjectTemplate = value; } }
-        protected override string ElementValueTypeTemplate { get { return sElementValueTypeTemplate; } set { sElementValueTypeTemplate = value; } }
-        protected override string ElementAnyTemplate { get { return sElementAnyTemplate; } set { sElementAnyTemplate = value; } }
-        protected override string ElementAnyMaxOccursTemplate { get { return sElementAnyMaxOccursTemplate; } set { sElementAnyMaxOccursTemplate = value; } }
-        protected override string AttributeObjectTemplate { get { return sAttributeObjectTemplate; } set { sAttributeObjectTemplate = value; } }
-        protected override string AttributeValueTypeTemplate { get { return sAttributeValueTypeTemplate; } set { sAttributeValueTypeTemplate = value; } }
-        protected override string AttributeAnyTemplate { get { return sAttributeAnyTemplate; } set { sAttributeAnyTemplate = value; } }
-        protected override string ElementDateTimeTemplate { get { return sElementDateTimeTemplate; } set { sElementDateTimeTemplate = value; } }
-        protected override string AttributeDateTimeTemplate { get { return sAttributeDateTimeTemplate; } set { sAttributeDateTimeTemplate = value; } }
-        protected override string MixedObjectTemplate { get { return sMixedObjectTemplate; } set { sMixedObjectTemplate = value; } }
-        protected override string MixedValueTypeTemplate { get { return sMixedValueTypeTemplate; } set { sMixedValueTypeTemplate = value; } }
-        protected override string MixedDateTimeTemplate { get { return sMixedDateTimeTemplate; } set { sMixedDateTimeTemplate = value; } }
-        protected override string ClassEnumerabilityTemplate { get { return sClassEnumerabilityTemplate; } set { sClassEnumerabilityTemplate = value; } }
-        protected override string AcordTCTemplate { get { return sAcordTCTemplate; } set { sAcordTCTemplate = value; } }
-        protected override string AcordPrivateTCTemplate { get { return sAcordPrivateTCTemplate; } set { sAcordPrivateTCTemplate = value; } }
+		
         protected override string AttributeAssignmentOperator { get { return "="; } }
         protected override string HideInheritedMethodKeyword { get { return "new "; } }
         protected override string PartialKeyword { get { return "partial "; } }

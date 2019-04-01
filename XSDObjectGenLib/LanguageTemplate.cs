@@ -32,24 +32,6 @@ namespace XSDObjectGenLib
         public static string renameItemPrefix;          // Prefix to be placed certain xsd names that wouldn't be legal in .NET -- like xsd enumerations that start with a numeric value
         public static string mixedElementFieldName;     // Special field in a class for mixed = "true" elements.
 
-        protected abstract string FieldCollectionTemplate { get; set; }
-        protected abstract string FieldClassTemplate { get; set; }
-        protected abstract string FieldAbstractClassTemplate { get; set; }
-        protected abstract string ElementObjectTemplate { get; set; }
-        protected abstract string ElementValueTypeTemplate { get; set; }
-        protected abstract string ElementAnyTemplate { get; set; }
-        protected abstract string ElementAnyMaxOccursTemplate { get; set; }
-        protected abstract string AttributeObjectTemplate { get; set; }
-        protected abstract string AttributeAnyTemplate { get; set; }
-        protected abstract string ElementDateTimeTemplate { get; set; }
-        protected abstract string AttributeDateTimeTemplate { get; set; }
-        protected abstract string AttributeValueTypeTemplate { get; set; }
-        protected abstract string MixedObjectTemplate { get; set; }
-        protected abstract string MixedValueTypeTemplate { get; set; }
-        protected abstract string MixedDateTimeTemplate { get; set; }
-        protected abstract string ClassEnumerabilityTemplate { get; set; }
-        protected abstract string AcordTCTemplate { get; set; }
-        protected abstract string AcordPrivateTCTemplate { get; set; }
         protected abstract string AttributeAssignmentOperator { get; }
         protected abstract string HideInheritedMethodKeyword { get; }
         protected abstract string PartialKeyword { get; }
