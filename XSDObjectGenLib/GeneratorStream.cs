@@ -11,14 +11,12 @@ namespace XSDObjectGenLib
         {
             public List<string> write_instructions;
             public List<string> read_instructions;
-			public List<string> constructor_instructions;
 			public List<string> tile;
 			public HashSet<string> classes_used;
 
             public Struct() {
                 write_instructions = new List<string>();
                 read_instructions = new List<string>();
-				constructor_instructions = new List<string>();
 				tile = new List<string>();
 				classes_used = new HashSet<string>();
             }
@@ -87,8 +85,8 @@ namespace XSDObjectGenLib
                 structs[cur_index].write_instructions.Add(string.Format("\tfor(int i = 0;i < {0}.size();i++)\n\t{{\n\t\t{0}[i].Write(s); \n\t}}", name));
                 structs[cur_index].read_instructions.Add(string.Format("\twhile (true) {{ \n\t\t{1} __t;\n\t\tif (__t.Read(s) == false)\n\t\t\tbreak;\n\t\t{0}.push_back(__t);\n\t}}", name, correctNamespace(type)));
 			}
-			if (default_value != null)
-				structs[cur_index].constructor_instructions.Add(string.Format("{0} = {1};", name, default_value));
+			//if (default_value != null)
+			//	structs[cur_index].constructor_instructions.Add(string.Format("{0} = {1};", name, default_value));
 		}
 
         public void put_FieldClassTemplate(string type, string name, string default_value, bool is_required)
@@ -102,8 +100,8 @@ namespace XSDObjectGenLib
 			structs[cur_index].write_instructions.Add(string.Format("\t{0}.Write(s);", name));
 			//structs[cur_index].read_instructions.Add(string.Format("\t{0} = new {1}();", name, correctNamespace(name)));
 			structs[cur_index].read_instructions.Add(string.Format("\t{0}.Read(s);", name));
-			if (default_value != null)
-				structs[cur_index].constructor_instructions.Add(string.Format("{0} = {1};", name, default_value));
+			//if (default_value != null)
+			//	structs[cur_index].constructor_instructions.Add(string.Format("{0} = {1};", name, default_value));
 		}
 
         public void put_ElementObjectTemplate(string type, string name, string default_value, bool is_required)
@@ -120,8 +118,8 @@ namespace XSDObjectGenLib
 			structs[cur_index].write_instructions.Add(string.Format("\t{0}.Write(s);", name));
 			//structs[cur_index].read_instructions.Add(string.Format("\t{0} = new {1}();", name, correctNamespace(name)));
 			structs[cur_index].read_instructions.Add(string.Format("\t{0}.Read(s);", name));
-			if (default_value != null)
-				structs[cur_index].constructor_instructions.Add(string.Format("{0} = {1};", name, default_value));
+			//if (default_value != null)
+			//	structs[cur_index].constructor_instructions.Add(string.Format("{0} = {1};", name, default_value));
 		}
 
 		public void put_ElementValueTypeTemplate(string type, string name, string default_value, bool is_required)
@@ -129,16 +127,16 @@ namespace XSDObjectGenLib
 			if (is_required)
 				structs[cur_index].tile.Add("\t" + type + " " + name + ";");
 			else if (type == "std::string")
-				structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + " {\"\"};");
+				structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + " {\"" + (default_value ?? "") +"\"};");
 			else
-				structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + " {0};");
+				structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + " {" + (default_value ?? "0") + "};");
 			string prefix = getPrefixByType(type);
             structs[cur_index].write_instructions.Add(string.Format("\ts.Write(\"{0}\", {0}{1});", name, type.Split('<', '>')[0] == "std::string" ? ".c_str()" : ""));
             structs[cur_index].read_instructions.Add(string.Format("\ts.Read{1}(\"{0}\", {0});", name, prefix));
-			if (default_value != null)
-				structs[cur_index].constructor_instructions.Add(string.Format("{0} = {1};", name, default_value));
-			else if (type != "std::string")
-				structs[cur_index].constructor_instructions.Add(string.Format("{0} = 0;", name, default_value));
+			//if (default_value != null)
+			//	structs[cur_index].constructor_instructions.Add(string.Format("{0} = {1};", name, default_value));
+			//else if (type != "std::string")
+			//	structs[cur_index].constructor_instructions.Add(string.Format("{0} = 0;", name, default_value));
 		}
 
 		public void put_AttributeObjectTemplate(string type, string name, string default_value, bool is_required)
@@ -146,11 +144,11 @@ namespace XSDObjectGenLib
 			if (is_required)
 				structs[cur_index].tile.Add("\t" + type + " " + name + ";");
 			else
-				structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + " {\"\"};");
+				structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + " {\"" + (default_value ?? "") + "\"};");
             structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{0}\", {0}.c_str());", name));
             structs[cur_index].read_instructions.Add(string.Format("\t{0} = s.ReadAttrStr(\"{0}\");", name));
-			if (default_value != null)
-				structs[cur_index].constructor_instructions.Add(string.Format("{0} = {1};", name, default_value));
+			//if (default_value != null)
+				//structs[cur_index].constructor_instructions.Add(string.Format("{0} = {1};", name, default_value));
 		}
 
         public void put_AttributeValueTypeTemplate(string type, string name, string default_value, bool is_required)
@@ -158,14 +156,14 @@ namespace XSDObjectGenLib
 			if (is_required)
 				structs[cur_index].tile.Add("\t" + type + " " + name + ";");
 			else
-				structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + " {0};");
+				structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + " {" + (default_value ?? "0") + "};");
 			string prefix = getPrefixByType(type);
             structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{0}\", {0});", name));
             structs[cur_index].read_instructions.Add(string.Format("\t{0} = s.ReadAttr{1}(\"{0}\");", name, prefix));
-			if (default_value != null)
-				structs[cur_index].constructor_instructions.Add(string.Format("{0} = {1};", name, default_value));
-			else
-				structs[cur_index].constructor_instructions.Add(string.Format("{0} = 0;", name, default_value));
+			//if (default_value != null)
+				//structs[cur_index].constructor_instructions.Add(string.Format("{0} = {1};", name, default_value));
+			//else
+				//structs[cur_index].constructor_instructions.Add(string.Format("{0} = 0;", name, default_value));
 		}
 
         public void begin_class(string name, string is_absctract, string inheritance)
@@ -192,12 +190,7 @@ namespace XSDObjectGenLib
 
         public void put_Constructor(string name, string inherits)
         {
-			string instructions = "";
-			for (int i = 0; i < structs[correctNamespace(name)].constructor_instructions.Count; i++)
-			{
-				instructions += "\t\t" + structs[correctNamespace(name)].constructor_instructions[i] + "\n";
-			}
-            structs[cur_index].tile.Add(string.Format("\t{0}(){1} {{\n{2}\t\t}}", name, inherits, instructions));
+            structs[cur_index].tile.Add(string.Format("\t{0}(){1} {{}}", name, inherits));
 			structs[cur_index].tile.Add(string.Format("\t~{0}(){1} {{}}", name, inherits));
 		}
 

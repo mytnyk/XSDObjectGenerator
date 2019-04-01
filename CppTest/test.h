@@ -24,10 +24,8 @@ namespace Test {
 		std::string title;
 		std::optional<std::string> note{ "" };
 		std::string quantity;
-		int price;
-		item() {
-			price = 0;
-		}
+		std::optional<int> price{ 0 };
+		item() {}
 		~item() {}
 	};
 	struct shipto {
@@ -102,7 +100,7 @@ void Test::item::Write(IXmlSerializerWriter& s) {
 	s.Write("title", title.c_str());
 	s.Write("note", note.value().c_str());
 	s.Write("quantity", quantity.c_str());
-	s.Write("price", price);
+	//s.Write("price", price);
 }
 bool Test::item::Read(IXmlSerializerReader& s) {
 	IXmlSerializerReader::Scope scope(s, "item");
@@ -111,6 +109,6 @@ bool Test::item::Read(IXmlSerializerReader& s) {
 	s.ReadStr("title", title);
 	s.ReadStr("note", note.value());
 	s.ReadStr("quantity", quantity);
-	s.ReadInt("price", price);
+	//s.ReadInt("price", price);
 	return true;
 }
