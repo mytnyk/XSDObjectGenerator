@@ -56,7 +56,8 @@ namespace XSDObjectGenLib
 
         private LanguageBase code;
         private XmlSchema schema;
-        private StreamWriter outStream;
+        private GeneratorStream generator;
+        private StreamWriter outFinalStream;
         string[] outFiles;
         private bool optionConstructRequiredSchema = false;	// add schema compliancy function to class 
         private bool optionDepthFirstTraversalHooks = false;			// add DepthFirstTraversal hooks
@@ -120,14 +121,7 @@ namespace XSDObjectGenLib
                 elementFormDefault = schema.ElementFormDefault;
                 attributeFormDefault = schema.AttributeFormDefault;
 
-                if (language == Language.VB)
-                {
-                    code = (LanguageBase)new VBTemplate();
-                }
-                else if (language == Language.CS)
-                {
-                    code = (LanguageBase)new CSharpTemplate();
-                } else if (language == Language.CPP)
+                if (language == Language.CPP)
                 {
                     code = (LanguageBase)new CppTemplate();
                 }
@@ -478,7 +472,8 @@ namespace XSDObjectGenLib
 
                     outFiles[iFiles] = outFiles[iFiles] + codeFile;
                     classFile = new FileStream(outFiles[iFiles], FileMode.Create);
-                    outStream = new StreamWriter(classFile);
+                    generator = new GeneratorStream(dotnetNamespace);
+                    outFinalStream = new StreamWriter(classFile);
 
                     // Add namespace, using statement, forward declarations, and enumerations
                     string schemaFileName = schemaFile.Name;
@@ -489,12 +484,12 @@ namespace XSDObjectGenLib
                     if (genNamespace == null || genNamespace == "")
                     {
                         // the VB case where explicit namespaces are not in the code
-                        code.NamespaceHeaderCode(outStream, genNamespace, schemaFileName, null,
+                        code.NamespaceHeaderCode(generator, genNamespace, schemaFileName, null,
                             targetNamespace, enumerations, optionDepthFirstTraversalHooks, (ArrayList)namespaces[targetNamespace]);
                     }
                     else
                     {
-                        code.NamespaceHeaderCode(outStream, dotnetNamespace, schemaFileName, null,
+                        code.NamespaceHeaderCode(generator, dotnetNamespace, schemaFileName, null,
                             targetNamespace, enumerations, optionDepthFirstTraversalHooks, (ArrayList)namespaces[targetNamespace]);
                     }
 
@@ -588,16 +583,17 @@ namespace XSDObjectGenLib
                         }
                     }
 
-                    code.NamespaceTrailerCode(outStream, dotnetNamespace);
-                    outStream.Flush();
+                    code.NamespaceTrailerCode(generator, dotnetNamespace);
+                   // outStream.Flush();
 
                     iFiles++;
-                    outStream.Close();
+                    outFinalStream.Write(generator.generateCode());
+                    outFinalStream.Close(); 
                     schemaFile.Close();
                     // Finished writing out .net for a xsd namespace
                 }	// End of foreach imported namespace
 
-                System.Diagnostics.EventLog.WriteEntry("XSDSchemaParser", String.Format("Done. Writing files"));
+                //System.Diagnostics.EventLog.WriteEntry("XSDSchemaParser", String.Format("Done. Writing files"));
                 return outFiles;
             }
             catch (XSDObjectGenException e)
@@ -618,14 +614,14 @@ namespace XSDObjectGenLib
             catch (XmlSchemaException e)
             {
                 // xsd schema compiler exception.  xsd has some type of error.
-                if (outStream != null)
+                /*if (outStream != null)
                 {
                     outStream.WriteLine();
                     outStream.WriteLine("LineNumber = {0}", e.LineNumber);
                     outStream.WriteLine("LinePosition = {0}", e.LinePosition);
                     outStream.WriteLine("Message = {0}", e.Message);
                     outStream.WriteLine("Source = {0}", e.Source);
-                }
+                }*/
 
                 throw new XSDObjectGenException(string.Format(
                     ".NET Framework XSD Schema compile error.\nError occurred : {0}", e.Message));
@@ -633,14 +629,14 @@ namespace XSDObjectGenLib
             catch (XmlException e)
             {
                 // bad xml document -- schema cannot be read because it's not valid xml
-                if (outStream != null)
+                /*if (outStream != null)
                 {
                     outStream.WriteLine();
                     outStream.WriteLine("LineNumber = {0}", e.LineNumber);
                     outStream.WriteLine("LinePosition = {0}", e.LinePosition);
                     outStream.WriteLine("Message = {0}", e.Message);
                     outStream.WriteLine("Source = {0}", e.Source);
-                }
+                }*/
 
                 throw new XSDObjectGenException(string.Format(
                     ".NET Framework could not read the XSD file.  Bad XML file.\nError occurred : {0}", e.Message));
@@ -648,7 +644,7 @@ namespace XSDObjectGenLib
             catch (Exception e)
             {
                 // unexpected exceptions
-                System.Diagnostics.EventLog.WriteEntry("Unexpected XSDObjectGen exception", e.Message, System.Diagnostics.EventLogEntryType.Error);
+                /*System.Diagnostics.EventLog.WriteEntry("Unexpected XSDObjectGen exception", e.Message, System.Diagnostics.EventLogEntryType.Error);
 
                 if (outStream != null)
                 {
@@ -657,13 +653,13 @@ namespace XSDObjectGenLib
                     outStream.WriteLine("Source : {0}", e.Source);
                     outStream.WriteLine("Stack : {0}", e.StackTrace);
                 }
-
+                */
                 throw new Exception("Unexpected XSDObjectGen Exception", e);
             }
             finally
             {
-                if (outStream != null) outStream.Close();
-                if (schemaFile != null) schemaFile.Close();
+               // if (outStream != null) outStream.Close();
+               // if (schemaFile != null) schemaFile.Close();
             }
         }
 
@@ -1554,7 +1550,7 @@ namespace XSDObjectGenLib
             }
 
             // write out the class header code
-            code.ClassHeaderCode(outStream, className, elementName, baseClass, baseIsAbstract, isSchemaType, complex.IsAbstract, isLocalComplexType, enumerableClasses,
+            code.ClassHeaderCode(generator, className, elementName, baseClass, baseIsAbstract, isSchemaType, complex.IsAbstract, isLocalComplexType, enumerableClasses,
                 classNamespace, elementFormDefault, "", isElementNullable, xmlIncludedClasses, globalElementAndSchemaTypeHaveSameName);
 
             Hashtable acordSetters = new Hashtable();
@@ -1578,7 +1574,7 @@ namespace XSDObjectGenLib
                                 if (acordSetters[setterName] != null)
                                     setterName = setterName + "2";
                                 acordSetters.Add(setterName, setterName);
-                                code.AcordTransactCodes(outStream, setterName, elementName, nCode.InnerText, nDesc.InnerText, false);
+                                //code.AcordTransactCodes(outStream, setterName, elementName, nCode.InnerText, nDesc.InnerText, false);
                             }
                         }
                     }
@@ -1604,7 +1600,7 @@ namespace XSDObjectGenLib
                                 if (acordSetters[setterName] != null)
                                     setterName = setterName + "2";
                                 acordSetters.Add(setterName, setterName);
-                                code.AcordTransactCodes(outStream, setterName, elementName, nCode.InnerText, nDesc.InnerText, true);
+                                //code.AcordTransactCodes(outStream, setterName, elementName, nCode.InnerText, nDesc.InnerText, true);
                             }
                         }
                     }
@@ -1616,7 +1612,7 @@ namespace XSDObjectGenLib
             //  shema type class will already exist, and this class will inherit from it.
             if (typedGlobalElement != "")
             {
-                code.ClassTrailerCode(outStream, className, new ArrayList(), false, optionDepthFirstTraversalHooks, optionConstructRequiredSchema, baseClass, baseIsMixed, false, "");
+                code.ClassTrailerCode(generator, className, new ArrayList(), false, optionDepthFirstTraversalHooks, optionConstructRequiredSchema, baseClass, baseIsMixed, false, "");
                 return;
             }
 
@@ -1709,7 +1705,7 @@ namespace XSDObjectGenLib
             }
 
             // Add trailer class code
-            code.ClassTrailerCode(outStream, className, ctorList, optionDefaultInitialization, optionDepthFirstTraversalHooks, optionConstructRequiredSchema, baseClass, baseIsMixed, isMixed, mixedType);
+            code.ClassTrailerCode(generator, className, ctorList, optionDefaultInitialization, optionDepthFirstTraversalHooks, optionConstructRequiredSchema, baseClass, baseIsMixed, isMixed, mixedType);
 
             // Now add the child classes collected when creating this parent class
             for (int i = 0; i < childClasses.Count; i++)
@@ -1775,8 +1771,8 @@ namespace XSDObjectGenLib
                             childClasses.Add(new ChildComplexType(elementComplex, element.Name, dotnetTypeName, ns, element.QualifiedName));
 
                             dotnetTypeName = LanguageBase.ReplaceInvalidChars(dotnetTypeName);
-                            code.ClassComplexTypeFieldCode(outStream, element.Name, fname, dotnetTypeName, dotnetTypeName, className,
-                                maxOccurs, 1, elementFormDefault, ns, element.IsNillable, false);
+							code.ClassComplexTypeFieldCode(generator, element.Name, fname, dotnetTypeName, dotnetTypeName, className,
+								maxOccurs, 1, elementFormDefault, ns, element.IsNillable, false, element.DefaultValue, (elementRef.MinOccurs > 0 && element.MinOccurs > 0));
                         }
                         else  // not a locally defined complexType 
                         {
@@ -1833,8 +1829,8 @@ namespace XSDObjectGenLib
                             }
 
                             dotnetTypeName = LanguageBase.ReplaceInvalidChars(dotnetTypeName);
-                            code.ClassComplexTypeFieldCode(outStream, element.Name, fname, dotnetTypeName, collectionContainedType, className,
-                                maxOccurs, 1, elementFormDefault, ns, element.IsNillable, elementComplex.IsAbstract);
+                            code.ClassComplexTypeFieldCode(generator, element.Name, fname, dotnetTypeName, collectionContainedType, className,
+                                maxOccurs, 1, elementFormDefault, ns, element.IsNillable, elementComplex.IsAbstract, element.DefaultValue, (elementRef.MinOccurs > 0 && element.MinOccurs > 0));
                         }
 
                         // If the subelement is required, then force it's creation through constructor and 
@@ -1879,9 +1875,9 @@ namespace XSDObjectGenLib
                             string clrTypeName = code.FrameworkTypeMapping(xsdTypeName);
 
                             clrTypeName = LanguageBase.ReplaceInvalidChars(clrTypeName);
-                            code.ClassElementFieldCode(outStream, clrTypeName, xsdTypeName,
+                            code.ClassElementFieldCode(generator, clrTypeName, xsdTypeName,
                                 element.Name, dotnetElementName, maxOccurs, 1, elementFormDefault, false, ns,
-                                element.IsNillable);
+                                element.IsNillable, element.DefaultValue, (elementRef.MinOccurs > 0 && element.MinOccurs > 0));
 
                             BuildConstructorList(element.DefaultValue, element.FixedValue, (elementRef.MinOccurs > 0 && element.MinOccurs > 0),
                                 maxOccurs, dotnetElementName, clrTypeName, element.Name, ctorList, false);
@@ -1896,8 +1892,8 @@ namespace XSDObjectGenLib
                     dotnetFieldList.Add(dotnetElementName, "Any");
 
                     string ns = CalculateAnyNamespace(any.Namespace, parentNamespace);
-                    code.ClassElementFieldCode(outStream, "System.Xml.XmlElement", "", "Any", dotnetElementName, any.MaxOccurs, 1, elementFormDefault,
-                        false, ns, false);
+                    //code.ClassElementFieldCode(generator, "System.Xml.XmlElement", "", "Any", dotnetElementName, any.MaxOccurs, 1, elementFormDefault,
+                    //    false, ns, false, elemen.DefaultValue, (elementRef.MinOccurs > 0 && element.MinOccurs > 0));
                 }
                 else if (groupBase.Items[i] is XmlSchemaGroupRef)
                 {
@@ -1965,8 +1961,8 @@ namespace XSDObjectGenLib
                         string clrTypeName = code.FrameworkTypeMapping(xsdTypeName);
 
                         clrTypeName = LanguageBase.ReplaceInvalidChars(clrTypeName);
-                        code.ClassAttributeFieldCode(outStream,
-                            clrTypeName, xsdTypeName, attribute.Name, dotnetAttributeName, attributeForm, false, ns);
+                        code.ClassAttributeFieldCode(generator,
+                            clrTypeName, xsdTypeName, attribute.Name, dotnetAttributeName, attributeForm, false, ns, attribute.DefaultValue, (attribute.Use == XmlSchemaUse.Required));
 
                         BuildConstructorList(attribute.DefaultValue, attribute.FixedValue, (attribute.Use == XmlSchemaUse.Required),
                             0, dotnetAttributeName, clrTypeName, attribute.Name, ctorList, false);
@@ -1980,9 +1976,10 @@ namespace XSDObjectGenLib
                 dotnetFieldList.Add(dotnetElementName, "AnyAttr");
 
                 string ns = CalculateAnyNamespace(anyAttribute.Namespace, parentNamespace);
-                code.ClassAttributeFieldCode(outStream,
-                    "System.Xml.XmlAttribute[]", "", "AnyAttr", dotnetElementName, XmlSchemaForm.Unqualified, false, ns);
-            }
+                code.ClassAttributeFieldCode(generator,
+                    "System.Xml.XmlAttribute[]", "", "AnyAttr", dotnetElementName, XmlSchemaForm.Unqualified, false, ns, "", false); // Not implemented
+				throw new NotImplementedException();
+			}
         }
 
         /*
@@ -2017,8 +2014,8 @@ namespace XSDObjectGenLib
                 else
                     referencedDotnetFieldType = AddQualifiedNamespaceReference(name, ns, parentNamespace, GlobalXsdType.Enum);
 
-                code.ClassAttributeFieldCode(outStream, referencedDotnetFieldType, "",
-                    attribute.Name, dotnetAttributeName, attributeFormDefault, true, ns);
+                code.ClassAttributeFieldCode(generator, referencedDotnetFieldType, "",
+                    attribute.Name, dotnetAttributeName, attributeFormDefault, true, ns, attribute.DefaultValue, (attribute.Use == XmlSchemaUse.Required));
                 BuildConstructorList(attribute.DefaultValue, attribute.FixedValue, (attribute.Use == XmlSchemaUse.Required), 0, dotnetAttributeName,
                     referencedDotnetFieldType, attribute.Name, ctorList, true);
             }
@@ -2047,8 +2044,8 @@ namespace XSDObjectGenLib
                 }
                 string clrTypeName = code.FrameworkTypeMapping(xsdTypeName);
 
-                code.ClassAttributeFieldCode(outStream, clrTypeName,
-                    xsdTypeName, attribute.Name, dotnetAttributeName, attributeFormDefault, false, ns);
+                code.ClassAttributeFieldCode(generator, clrTypeName,
+                    xsdTypeName, attribute.Name, dotnetAttributeName, attributeFormDefault, false, ns, attribute.DefaultValue, (attribute.Use == XmlSchemaUse.Required));
                 BuildConstructorList(attribute.DefaultValue, attribute.FixedValue, (attribute.Use == XmlSchemaUse.Required),
                     0, dotnetAttributeName, clrTypeName, attribute.Name, ctorList, false);
             }
@@ -2066,8 +2063,8 @@ namespace XSDObjectGenLib
                         {
                             foundNonStringType = true;
                             string clrTypeName = code.FrameworkTypeMapping(unionType.Name);
-                            code.ClassAttributeFieldCode(outStream, clrTypeName,
-                                unionType.Name, attribute.Name, dotnetAttributeName, attributeFormDefault, false, ns);
+                            code.ClassAttributeFieldCode(generator, clrTypeName,
+                                unionType.Name, attribute.Name, dotnetAttributeName, attributeFormDefault, false, ns, attribute.DefaultValue, (attribute.Use == XmlSchemaUse.Required));
                             BuildConstructorList(attribute.DefaultValue, attribute.FixedValue, (attribute.Use == XmlSchemaUse.Required),
                                 0, dotnetAttributeName, clrTypeName, attribute.Name, ctorList, false);
                             break;
@@ -2126,8 +2123,8 @@ namespace XSDObjectGenLib
                             else
                                 referencedDotnetFieldType = AddQualifiedNamespaceReference(name, ns, parentNamespace, GlobalXsdType.Enum);
 
-                            code.ClassAttributeFieldCode(outStream, referencedDotnetFieldType, "",
-                                attribute.Name, dotnetAttributeName, attributeFormDefault, true, ns);
+                            code.ClassAttributeFieldCode(generator, referencedDotnetFieldType, "",
+                                attribute.Name, dotnetAttributeName, attributeFormDefault, true, ns, attribute.DefaultValue, (attribute.Use == XmlSchemaUse.Required));
                             BuildConstructorList(attribute.DefaultValue, attribute.FixedValue, (attribute.Use == XmlSchemaUse.Required), 0, dotnetAttributeName,
                                 referencedDotnetFieldType, attribute.Name, ctorList, true);
 
@@ -2139,14 +2136,14 @@ namespace XSDObjectGenLib
 
                 if (!foundNonStringType)
                 {
-                    code.ClassAttributeFieldCode(outStream, "System.String",
-                    "", attribute.Name, dotnetAttributeName, attributeFormDefault, false, ns);
+                    code.ClassAttributeFieldCode(generator, "System.String",
+                    "", attribute.Name, dotnetAttributeName, attributeFormDefault, false, ns, attribute.DefaultValue, (attribute.Use == XmlSchemaUse.Required));
                 }
             }
             else  //list
             {
-                code.ClassAttributeFieldCode(outStream, "System.String",
-                    "", attribute.Name, dotnetAttributeName, attributeFormDefault, false, ns);
+                code.ClassAttributeFieldCode(generator, "System.String",
+                    "", attribute.Name, dotnetAttributeName, attributeFormDefault, false, ns, attribute.DefaultValue, (attribute.Use == XmlSchemaUse.Required));
             }
         }
 
@@ -2181,8 +2178,8 @@ namespace XSDObjectGenLib
                 else
                     referencedDotnetFieldType = AddQualifiedNamespaceReference(name, ns, parentNamespace, GlobalXsdType.Enum);
 
-                code.ClassElementFieldCode(outStream, referencedDotnetFieldType, "",
-                    element.Name, dotnetElementName, maxOccurs, 1, elementFormDefault, true, ns, element.IsNillable);
+                code.ClassElementFieldCode(generator, referencedDotnetFieldType, "",
+                    element.Name, dotnetElementName, maxOccurs, 1, elementFormDefault, true, ns, element.IsNillable, element.DefaultValue, (elementRef.MinOccurs > 0 && element.MinOccurs > 0));
                 BuildConstructorList(element.DefaultValue, element.FixedValue, (elementRef.MinOccurs > 0 && element.MinOccurs > 0), maxOccurs, dotnetElementName,
                     referencedDotnetFieldType, element.Name, ctorList, true);
             }
@@ -2200,8 +2197,8 @@ namespace XSDObjectGenLib
                 }
                 string clrTypeName = code.FrameworkTypeMapping(xsdTypeName);
 
-                code.ClassElementFieldCode(outStream, clrTypeName,
-                    xsdTypeName, element.Name, dotnetElementName, maxOccurs, 1, elementFormDefault, false, ns, element.IsNillable);
+                code.ClassElementFieldCode(generator, clrTypeName,
+                    xsdTypeName, element.Name, dotnetElementName, maxOccurs, 1, elementFormDefault, false, ns, element.IsNillable, element.DefaultValue, (elementRef.MinOccurs > 0 && element.MinOccurs > 0));
                 BuildConstructorList(element.DefaultValue, element.FixedValue, (elementRef.MinOccurs > 0 && element.MinOccurs > 0),
                     maxOccurs, dotnetElementName, clrTypeName, element.Name, ctorList, false);
             }
@@ -2218,8 +2215,8 @@ namespace XSDObjectGenLib
                         {
                             foundNonStringType = true;
                             string clrTypeName = code.FrameworkTypeMapping(unionType.Name);
-                            code.ClassElementFieldCode(outStream, clrTypeName,
-                                unionType.Name, element.Name, dotnetElementName, maxOccurs, 1, elementFormDefault, false, ns, element.IsNillable);
+                            code.ClassElementFieldCode(generator, clrTypeName,
+                                unionType.Name, element.Name, dotnetElementName, maxOccurs, 1, elementFormDefault, false, ns, element.IsNillable, element.DefaultValue, (elementRef.MinOccurs > 0 && element.MinOccurs > 0));
                             BuildConstructorList(element.DefaultValue, element.FixedValue, (elementRef.MinOccurs > 0 && element.MinOccurs > 0),
                                 maxOccurs, dotnetElementName, clrTypeName, element.Name, ctorList, false);
                             break;
@@ -2278,8 +2275,8 @@ namespace XSDObjectGenLib
                             else
                                 referencedDotnetFieldType = AddQualifiedNamespaceReference(name, ns, parentNamespace, GlobalXsdType.Enum);
 
-                            code.ClassElementFieldCode(outStream, referencedDotnetFieldType, "",
-                                element.Name, dotnetElementName, maxOccurs, 1, elementFormDefault, true, ns, element.IsNillable);
+                            code.ClassElementFieldCode(generator, referencedDotnetFieldType, "",
+                                element.Name, dotnetElementName, maxOccurs, 1, elementFormDefault, true, ns, element.IsNillable, element.DefaultValue, (elementRef.MinOccurs > 0 && element.MinOccurs > 0));
                             BuildConstructorList(element.DefaultValue, element.FixedValue, (elementRef.MinOccurs > 0 && element.MinOccurs > 0), maxOccurs, dotnetElementName,
                                 referencedDotnetFieldType, element.Name, ctorList, true);
 
@@ -2290,12 +2287,12 @@ namespace XSDObjectGenLib
 
                 if (!foundNonStringType)
                 {
-                    code.ClassElementFieldCode(outStream, "System.String", "", element.Name, dotnetElementName, maxOccurs, 1, elementFormDefault, false, ns, element.IsNillable);
+                    code.ClassElementFieldCode(generator, "System.String", "", element.Name, dotnetElementName, maxOccurs, 1, elementFormDefault, false, ns, element.IsNillable, element.DefaultValue, (elementRef.MinOccurs > 0 && element.MinOccurs > 0));
                 }
             }
             else  // list  (XmlSchemaSimpleTypeList)
             {
-                code.ClassElementFieldCode(outStream, "System.String", "", element.Name, dotnetElementName, maxOccurs, 1, elementFormDefault, false, ns, element.IsNillable);
+                code.ClassElementFieldCode(generator, "System.String", "", element.Name, dotnetElementName, maxOccurs, 1, elementFormDefault, false, ns, element.IsNillable, element.DefaultValue, (elementRef.MinOccurs > 0 && element.MinOccurs > 0));
             }
         }
 

@@ -103,13 +103,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CppTemplate.cs" />
-    <Compile Include="CSharpTemplate.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="GeneratorStream.cs" />
     <Compile Include="LanguageTemplate.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="VBTemplate.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="XSDSchemaParser.cs">

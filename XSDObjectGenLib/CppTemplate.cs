@@ -3,6 +3,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.IO;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace XSDObjectGenLib
 {
@@ -23,7 +24,7 @@ namespace XSDObjectGenLib
         // {8} -- collection suffix -- NOT NEEDED ANYMORE WITH GENERIC LIST
         // {9} -- IsNullable
         // {10} -- contained type within the collection
-        static string sFieldCollectionTemplate = "\t\t//LIST\n\t\tstd::vector<{10}> {4};";
+         string sFieldCollectionTemplate = "\t\t//LIST\n\t\tstd::vector<{10}> {4};";
 
 
         // {0} -- field name (scrubbed)
@@ -66,7 +67,7 @@ namespace XSDObjectGenLib
         static string sElementAnyMaxOccursTemplate =
 @"		[XmlAnyElement({6})]
 		public System.Xml.XmlElement[] {5};";
-
+		
         static string sAttributeObjectTemplate = "\t\t//ATTRIBUTE_STD\n\t\t{1} {0};";
 
         static string sAttributeValueTypeTemplate = "\t\t//ATTRIBUTE_PROTO\n\t\t{1} {0};";
@@ -139,7 +140,11 @@ namespace XSDObjectGenLib
 
         // Code string templates.  See documentation in the language child classes
         protected override string FieldCollectionTemplate { get { return sFieldCollectionTemplate; } set { sFieldCollectionTemplate = value; } }
-        protected override string FieldClassTemplate { get { return sFieldClassTemplate; } set { sFieldClassTemplate = value; } }
+        protected override string FieldClassTemplate { get
+            {
+
+                return sFieldClassTemplate;
+            } set { sFieldClassTemplate = value; } }
         protected override string FieldAbstractClassTemplate { get { return sFieldAbstractClassTemplate; } set { sFieldAbstractClassTemplate = value; } }
         protected override string ElementObjectTemplate { get { return sElementObjectTemplate; } set { sElementObjectTemplate = value; } }
         protected override string ElementValueTypeTemplate { get { return sElementValueTypeTemplate; } set { sElementValueTypeTemplate = value; } }
@@ -160,13 +165,13 @@ namespace XSDObjectGenLib
         protected override string HideInheritedMethodKeyword { get { return "new "; } }
         protected override string PartialKeyword { get { return "partial "; } }
 
-        public override void NamespaceHeaderCode(StreamWriter outStream, String ns, String schemaFile,
+        public override void NamespaceHeaderCode(GeneratorStream generator, String ns, String schemaFile,
             Hashtable forwardDeclarations, string targetNamespace, Hashtable enumerations, bool depthFirstTraversalHooks,
             ArrayList importedReferences)
         {
             schemaTargetNamespace = targetNamespace;
 
-            outStream.WriteLine("#pragma once");
+            /*outStream.WriteLine("#pragma once");
             outStream.WriteLine();
             outStream.WriteLine("// Copyright 2008, Microsoft Corporation and 2019 Alex Mytnyk");
             outStream.WriteLine("// Sample Code - Use restricted to terms of use defined in the accompanying license agreement (EULA.doc)");
@@ -177,14 +182,14 @@ namespace XSDObjectGenLib
             outStream.WriteLine("// Schema file: {0}", schemaFile);
             outStream.WriteLine("// Creation Date: {0}", DateTime.Now.ToString());
             outStream.WriteLine("//--------------------------------------------------------------");
-            outStream.WriteLine();
+            outStream.WriteLine();*/
             //outStream.WriteLine("using System;");
             //outStream.WriteLine("using System.Xml.Serialization;");
             //outStream.WriteLine("using System.Collections;");
             //outStream.WriteLine("using System.Collections.Generic;");
             //outStream.WriteLine("using System.Xml.Schema;");
             //outStream.WriteLine("using System.ComponentModel;");
-            outStream.WriteLine("#include <iostream>");
+            /*outStream.WriteLine("#include <iostream>");
             outStream.WriteLine("#include <string>");
             outStream.WriteLine("#include <ctime>");
 
@@ -196,55 +201,57 @@ namespace XSDObjectGenLib
             outStream.WriteLine("\t{");
             outStream.WriteLine(string.Format("\t\tconst std::string SchemaVersion = \"{0}\";", targetNamespace));
             outStream.WriteLine("\t};");
-            outStream.WriteLine("\t//BEGIN_CPP2SERIALIZE");
+            outStream.WriteLine("\t//BEGIN_CPP2SERIALIZE");*/
 
             if (depthFirstTraversalHooks)
             {
-                outStream.WriteLine("\tpublic delegate void DepthFirstTraversalDelegate(object instance, object parent, object context);");
-                outStream.WriteLine();
+                //outStream.WriteLine("\tpublic delegate void DepthFirstTraversalDelegate(object instance, object parent, object context);");
+                //outStream.WriteLine();
             }
-
+            
             // Add enumerations
             foreach (string key in enumerations.Keys)
             {
                 //outStream.WriteLine("\t[Serializable]");
-                outStream.WriteLine("\tenum {0}", key);
-                outStream.WriteLine("\t{");
 
-                ArrayList enumValues = (ArrayList)enumerations[key];
+                string code = "";
+                code += string.Format("\tenum {0}", key) + "\n";
+                code += "{\n";
+
+               ArrayList enumValues = (ArrayList)enumerations[key];
                 for (int i = 0; i < enumValues.Count; i++)
                 {
                     string[] enumValue = (string[])enumValues[i];
                     if (i == (enumValues.Count - 1))
                     {
                         if (key.StartsWith("OLI_LU_"))
-                            outStream.WriteLine("\t\t{1} = {0}", enumValue[0], CheckForKeywords(enumValue[1]));
+                            code += string.Format("\t\t{1} = {0}", enumValue[0], CheckForKeywords(enumValue[1])) + "\n";
                         else
-                            outStream.WriteLine("\t\t{1}", enumValue[0], CheckForKeywords(enumValue[1]));
+                            code += string.Format("\t\t{1}", enumValue[0], CheckForKeywords(enumValue[1])) + "\n";
                     }
                     else
                     {
                         if (key.StartsWith("OLI_LU_"))
-                            outStream.WriteLine("\t\t{1} = {0},", enumValue[0], CheckForKeywords(enumValue[1]));
+                            code += string.Format("\t\t{1} = {0},", enumValue[0], CheckForKeywords(enumValue[1])) + "\n";
                         else
-                            outStream.WriteLine("\t\t{1},", enumValue[0], CheckForKeywords(enumValue[1]));
+                            code += string.Format("\t\t{1},", enumValue[0], CheckForKeywords(enumValue[1])) + "\n";
                     }
                 }
 
-                outStream.WriteLine("\t};");
-                outStream.WriteLine();
+                code += "\t};";
+
+                generator.put_Enum(code);
             }
 
-            outStream.WriteLine();
+            
         }
 
-        public override void ClassHeaderCode(StreamWriter outStream, string dotnetClassName, string elementName,
+        public override void ClassHeaderCode(GeneratorStream generator, string dotnetClassName, string elementName,
             string complexTypeBaseClass, bool baseIsAbstract, bool isSchemaType, bool isAbstract, bool isLocalComplexType, Hashtable enumerableClasses,
             string ns, XmlSchemaForm elementFormDefault, string annotation, bool isElementNullable, ArrayList xmlIncludedClasses,
             bool globalElementAndSchemaTypeHaveSameName)
         {
-            outStream.WriteLine();
-            outStream.WriteLine();
+            
 
             string nameSpace = "";
             if (isSchemaType)
@@ -278,7 +285,7 @@ namespace XSDObjectGenLib
             {
                 // possible root node element -- so put namespace on the element if targetNamesapce has been set
                 nameSpace = CalculateNamespace(schemaTargetNamespace, ns, false);
-                outStream.WriteLine("\t//MAIN_CLASS");
+                //outStream.WriteLine("\t//MAIN_CLASS");
                 //outStream.WriteLine("\t[XmlRoot(ElementName=\"{0}\"{1},IsNullable={2}),Serializable]",
                 //    elementName, nameSpace, isElementNullable.ToString().ToLower());
             }
@@ -291,15 +298,18 @@ namespace XSDObjectGenLib
 
             string className = CheckForKeywords(dotnetClassName);
 
-            outStream.WriteLine("\t//CLASS");
-            outStream.Write("\t{1}{2}struct {0}", className, isAbstract ? "abstract " : "", partialClasses ? PartialKeyword : "");
+            // outStream.WriteLine("\t//CLASS");
+
+            //outStream.Write("\t{1}{2}struct {0}", className, isAbstract ? "abstract " : "", partialClasses ? PartialKeyword : "");
 
             // setup inheritance for <xsd:extension base="class"> 
+            string inheritance = "";
             if (complexTypeBaseClass != null && complexTypeBaseClass != "")
-                outStream.Write(" : {0}", CheckForKeywords(complexTypeBaseClass));
-
-            outStream.WriteLine();
-            outStream.WriteLine("\t{");
+                inheritance = string.Format(" : {0}", CheckForKeywords(complexTypeBaseClass));
+			Console.WriteLine(elementName + " " + className);
+            generator.begin_class(elementName, isAbstract ? "abstract " : "", inheritance);
+            //outStream.WriteLine();
+            //outStream.WriteLine("\t{");
 
             // setup enumerability over a contained collection
             if (enumerableClasses.ContainsKey(dotnetClassName))
@@ -307,19 +317,19 @@ namespace XSDObjectGenLib
                 ArrayList values = (ArrayList)enumerableClasses[dotnetClassName];
                 string collectionName = (string)values[0];
                 collectionName = ReplaceInvalidChars(collectionName);
-                outStream.WriteLine(ClassEnumerabilityTemplate, collectionName,
-                    ConvertSystemDatatype((string)values[1]), collectionSuffix, hiddenMemberPrefix);
+                //outStream.WriteLine(ClassEnumerabilityTemplate, collectionName,
+                //    ConvertSystemDatatype((string)values[1]), collectionSuffix, hiddenMemberPrefix);
             }
         }
 
-        public override void ClassTrailerCode(StreamWriter outStream, string dotnetClassName, ArrayList ctorList,
+        public override void ClassTrailerCode(GeneratorStream generator, string dotnetClassName, ArrayList ctorList,
             bool defaultInitialization, bool depthFirstTraversalHooks, bool makeSchemaCompliant, string complexTypeBaseClass, bool baseClassIsMixed, bool mixed, string mixedXsdType)
         {
             // For mixed content (an element that has children and also text), add a special text field.
             // Base class cannot be mixed, otherwise XmlSerializer error will occur.  Can only have 1 XmlText().
             if (mixed && !baseClassIsMixed)
             {
-                outStream.WriteLine();
+                
 
                 string clrType;
                 if (mixedXsdType.StartsWith("System."))
@@ -330,24 +340,27 @@ namespace XSDObjectGenLib
                 else
                     clrType = FrameworkTypeMapping(mixedXsdType);
 
-                if (clrType == "System.DateTime")
+                /*if (clrType == "System.DateTime")
                     outStream.WriteLine(MixedDateTimeTemplate, clrType, mixedXsdType, hiddenMemberPrefix, mixedElementFieldName);
                 else if (IsValueType(clrType))
                     outStream.WriteLine(MixedValueTypeTemplate, ConvertSystemDatatype(clrType), clrType, hiddenMemberPrefix, mixedElementFieldName);
                 else
                     outStream.WriteLine(MixedObjectTemplate, "string", "string", hiddenMemberPrefix, mixedElementFieldName);
+                */        
             }
 
             bool inherits = (complexTypeBaseClass != null && complexTypeBaseClass != "");
 
             // Add a class constructor
-            outStream.WriteLine();
+
             //outStream.WriteLine("\t\t//*********************** Constructor ***********************");
-            outStream.WriteLine("\t\t{0}(){1}", CheckForKeywords(dotnetClassName), inherits ? " : super()" : "");
-            outStream.WriteLine("\t\t{");
+
+            generator.put_Constructor(CheckForKeywords(dotnetClassName), inherits ? " : super()" : "");
+            //outStream.WriteLine("\t\t{0}(){1}", CheckForKeywords(dotnetClassName), inherits ? " : super()" : "");
+            //outStream.WriteLine("\t\t{");
 
             // Default any DateTime fields to a value.
-            for (int i = 0; i < ctorList.Count; i++)
+            /*for (int i = 0; i < ctorList.Count; i++)
             {
                 ClassConstructor ctor = (ClassConstructor)ctorList[i];
                 // make sure the datetime fields are initialized to Now if a constructor default value is not set
@@ -355,11 +368,13 @@ namespace XSDObjectGenLib
                 {
                     //outStream.WriteLine("\t\t\t{1}{0} = System.DateTime.Now;", ReplaceInvalidChars(ctor.fieldName), hiddenMemberPrefix);
                 }
-            }
+            }*/
+
+            //outStream.WriteLine("\t\t}"); // End of constructor
 
             // If some fields in the class have defaults or fixed values, add a constructor.
             // Also force creation of required attributes and elmenets, so the schema is always valid.
-            if (defaultInitialization)
+            /*if (defaultInitialization)
             {
                 for (int i = 0; i < ctorList.Count; i++)
                 {
@@ -396,14 +411,13 @@ namespace XSDObjectGenLib
                             //outStream.WriteLine("\t\t\t{0} = \"{1}\";", CheckForKeywords(ctor.fieldName), ctor.defaultValue);
                     }
                 }
-            }
+            }*/
 
-            outStream.WriteLine("\t\t}");
 
             // Add MakeSchemaCompliant code for required child classes
             if (makeSchemaCompliant)
             {
-                outStream.WriteLine();
+                /*outStream.WriteLine();
                 //outStream.WriteLine("\t\t//*********************** MakeSchemaCompliant ***********************");
                 outStream.WriteLine("\t\t{0}public void MakeSchemaCompliant()", (inherits) ? HideInheritedMethodKeyword : "");
                 outStream.WriteLine("\t\t{");
@@ -443,13 +457,13 @@ namespace XSDObjectGenLib
                     }
                 }
 
-                outStream.WriteLine("\t\t}");
+                outStream.WriteLine("\t\t}");*/
             }
 
             // Add DepthFirstTraversal hooks
             if (depthFirstTraversalHooks)
             {
-                outStream.WriteLine();
+                /*outStream.WriteLine();
                 //outStream.WriteLine("\t\t//*********************** DepthFirstTraversal Event ***********************");
                 outStream.WriteLine("\t\t{0}public static event DepthFirstTraversalDelegate DepthFirstTraversalEvent;", (inherits) ? HideInheritedMethodKeyword : "");
                 outStream.WriteLine("\t\t{0}public void DepthFirstTraversal(object parent, object context)", (inherits) ? HideInheritedMethodKeyword : "");
@@ -471,17 +485,16 @@ namespace XSDObjectGenLib
                     }
                 }
 
-                outStream.WriteLine("\t\t}");
+                outStream.WriteLine("\t\t}");*/
             }
 
-            outStream.WriteLine("\t};");
+            generator.end_class(); //End of class
         }
 
-        public override void NamespaceTrailerCode(StreamWriter outStream, string ns)
+        public override void NamespaceTrailerCode(GeneratorStream generator, string ns)
         {
-            
-            outStream.WriteLine("}");
-            outStream.WriteLine();
+            //outStream.WriteLine("}");
+            //outStream.WriteLine();
             //outStream.WriteLine("#pragma warning restore 1591 ");
         }
 

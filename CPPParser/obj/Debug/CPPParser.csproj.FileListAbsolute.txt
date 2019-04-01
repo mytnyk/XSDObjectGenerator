@@ -4,3 +4,4 @@ C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\bin\CPP
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\CPPParser\obj\Debug\CPPParser.csproj.CoreCompileInputs.cache
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\CPPParser\obj\Debug\CPPParser.exe
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\CPPParser\obj\Debug\CPPParser.pdb
+C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\CPPParser\obj\Debug\CPPParser.csprojAssemblyReference.cache
