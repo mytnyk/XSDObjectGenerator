@@ -22,7 +22,7 @@ namespace Test {
 		void Write(IXmlSerializerWriter&s);
 		bool Read(IXmlSerializerReader& s);
 		std::string title;
-		std::string note;
+		std::optional<std::string> note{ "" };
 		std::string quantity;
 		int price;
 		item() {
@@ -36,7 +36,7 @@ namespace Test {
 		std::string name;
 		std::string address;
 		std::string city;
-		std::string country;
+		std::optional<std::string> country {""};
 		shipto() {
 		}
 		~shipto() {}
@@ -44,9 +44,9 @@ namespace Test {
 	struct shiporder {
 		void Write(IXmlSerializerWriter&s);
 		bool Read(IXmlSerializerReader& s);
-		std::string orderid;
+		std::optional<std::string> orderid{ "" };
 		std::string orderperson;
-		Test::shipto shipto;
+		std::optional<std::reference_wrapper<Test::shipto>> shipto{ };
 		std::vector<Test::item> item;
 		shiporder() {
 		}
@@ -55,9 +55,9 @@ namespace Test {
 }
 void Test::shiporder::Write(IXmlSerializerWriter& s) {
 	IXmlSerializerWriter::Scope scope(s, "shiporder");
-	s.WriteAttr("orderid", orderid.c_str());
+	s.WriteAttr("orderid", orderid.value().c_str());
 	s.Write("orderperson", orderperson.c_str());
-	shipto.Write(s);
+	shipto.value().get().Write(s);
 	for (int i = 0; i < item.size(); i++)
 	{
 		item[i].Write(s);
@@ -69,7 +69,9 @@ bool Test::shiporder::Read(IXmlSerializerReader& s) {
 		return false;
 	orderid = s.ReadAttrStr("orderid");
 	s.ReadStr("orderperson", orderperson);
-	shipto.Read(s);
+	Test::shipto* __shipto = new Test::shipto();
+	__shipto->Read(s);
+	shipto = std::optional<std::reference_wrapper<Test::shipto>> { *__shipto };
 	while (true) {
 		Test::item __t;
 		if (__t.Read(s) == false)
@@ -83,7 +85,7 @@ void Test::shipto::Write(IXmlSerializerWriter& s) {
 	s.Write("name", name.c_str());
 	s.Write("address", address.c_str());
 	s.Write("city", city.c_str());
-	s.Write("country", country.c_str());
+	s.Write("country", country.value().c_str());
 }
 bool Test::shipto::Read(IXmlSerializerReader& s) {
 	IXmlSerializerReader::Scope scope(s, "shipto");
@@ -92,13 +94,13 @@ bool Test::shipto::Read(IXmlSerializerReader& s) {
 	s.ReadStr("name", name);
 	s.ReadStr("address", address);
 	s.ReadStr("city", city);
-	s.ReadStr("country", country);
+	s.ReadStr("country", country.value());
 	return true;
 }
 void Test::item::Write(IXmlSerializerWriter& s) {
 	IXmlSerializerWriter::Scope scope(s, "item");
 	s.Write("title", title.c_str());
-	s.Write("note", note.c_str());
+	s.Write("note", note.value().c_str());
 	s.Write("quantity", quantity.c_str());
 	s.Write("price", price);
 }
@@ -107,7 +109,7 @@ bool Test::item::Read(IXmlSerializerReader& s) {
 	if (scope.exist() == false)
 		return false;
 	s.ReadStr("title", title);
-	s.ReadStr("note", note);
+	s.ReadStr("note", note.value());
 	s.ReadStr("quantity", quantity);
 	s.ReadInt("price", price);
 	return true;

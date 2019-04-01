@@ -18,7 +18,6 @@ int main()
 	s.Load("text.xml");
 	Test::shiporder c;
 	c.Read(s);
-	std::cout << c.shipto.country;
 	int a;
 	std::cin >> a;
 	/*Test::shiporder c;
