@@ -22,19 +22,19 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{E97C0917-6769-4760-8981-0C7BC9399684}</ProjectGuid>
     <RootNamespace>CppTest</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -125,14 +125,41 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DeviceState.hpp" />
+    <ClInclude Include="Documentation.hpp" />
+    <ClInclude Include="DriverCapabilities.CommonTypes_2016.hpp" />
+    <ClInclude Include="DriverCapabilities.CommonTypes_2018.hpp" />
+    <ClInclude Include="DriverCapabilitiesSerialization_2016.hpp" />
+    <ClInclude Include="DriverCapabilitiesSerialization_2018.hpp" />
+    <ClInclude Include="DriverCapabilities_2016.hpp" />
+    <ClInclude Include="DriverCapabilities_2018.hpp" />
+    <ClInclude Include="DriverDefinition.hpp" />
+    <ClInclude Include="DriverMeters.hpp" />
+    <ClInclude Include="DriverPrivateCapabilities_2016.hpp" />
+    <ClInclude Include="DriverPrivateCapabilities_2018.hpp" />
+    <ClInclude Include="ExternalProperties.hpp" />
+    <ClInclude Include="Licensing.hpp" />
+    <ClInclude Include="Log.hpp" />
+    <ClInclude Include="Machine.hpp" />
+    <ClInclude Include="Meters.hpp" />
+    <ClInclude Include="MtlsBuildTicket_2016.hpp" />
+    <ClInclude Include="MtlsBuildTicket_2017.hpp" />
+    <ClInclude Include="OperationReport.hpp" />
+    <ClInclude Include="PlatformCreationParameters.hpp" />
+    <ClInclude Include="PlatformInformation.hpp" />
+    <ClInclude Include="PreprocessorCapabilities.hpp" />
+    <ClInclude Include="PreprocessorInput.hpp" />
+    <ClInclude Include="Print3D.hpp" />
+    <ClInclude Include="PrintInformation.hpp" />
+    <ClInclude Include="ProductConfig.hpp" />
     <ClInclude Include="Serializers.hpp" />
-    <ClInclude Include="test.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ClInclude Include="Tags.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

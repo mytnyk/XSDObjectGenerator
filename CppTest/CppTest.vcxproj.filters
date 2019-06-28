@@ -15,19 +15,100 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="test.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Serializers.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ClInclude Include="DeviceState.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Documentation.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DriverCapabilities.CommonTypes_2016.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DriverCapabilities.CommonTypes_2018.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DriverCapabilities_2016.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DriverCapabilities_2018.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DriverCapabilitiesSerialization_2016.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DriverCapabilitiesSerialization_2018.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DriverDefinition.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DriverMeters.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DriverPrivateCapabilities_2016.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DriverPrivateCapabilities_2018.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalProperties.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Licensing.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Machine.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Meters.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MtlsBuildTicket_2016.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MtlsBuildTicket_2017.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OperationReport.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformCreationParameters.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformInformation.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PreprocessorCapabilities.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PreprocessorInput.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Print3D.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PrintInformation.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProductConfig.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tags.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

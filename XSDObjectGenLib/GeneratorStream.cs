@@ -119,8 +119,8 @@ namespace XSDObjectGenLib
             }
             else
             {
-                structs[cur_index].write_instructions.Add(string.Format("\tfor(int i = 0;i < {0}.size();i++)\n\t{{\n\t\t{0}[i].Write(s); \n\t}}", name));
-                structs[cur_index].read_instructions.Add(string.Format("\twhile (true) {{ \n\t\t{1} __t;\n\t\tif (__t.Read(s) == false)\n\t\t\tbreak;\n\t\t{0}.push_back(__t);\n\t}}", name, correctNamespace(type)));
+                structs[cur_index].write_instructions.Add(string.Format("\tfor(int i = 0;i < {0}.size();i++)\n\t{{\n\t\t{0}[i].Write(s, \"{0}\"); \n\t}}", name));
+                structs[cur_index].read_instructions.Add(string.Format("\twhile (true) {{ \n\t\t{1} __t;\n\t\tif (__t.Read(s, \"{0}\") == false)\n\t\t\tbreak;\n\t\t{0}.push_back(__t);\n\t}}", name, correctNamespace(type)));
 			}
             if (is_required)
                 structs[cur_index].classes_used.Add(correct_type);
@@ -139,14 +139,14 @@ namespace XSDObjectGenLib
 
             if (is_required)
             {
-                structs[cur_index].write_instructions.Add(string.Format("\t{0}.Write(s);", name));
-                structs[cur_index].read_instructions.Add(string.Format("\t{0}.Read(s);", name));
+                structs[cur_index].write_instructions.Add(string.Format("\t{0}.Write(s, \"{0}\");", name));
+                structs[cur_index].read_instructions.Add(string.Format("\t{0}.Read(s, \"{0}\");", name));
             }
             else
             {
-                structs[cur_index].write_instructions.Add(string.Format("\t{0}.value().get().Write(s);", name));
+                structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\t{0}.value().get().Write(s, \"{0}\");", name));
                 structs[cur_index].read_instructions.Add(string.Format("\t{1}* __{0} = new {1}();", name, correct_type));
-                structs[cur_index].read_instructions.Add(string.Format("\t__{0}->Read(s);", name));
+                structs[cur_index].read_instructions.Add(string.Format("\t__{0}->Read(s, \"{0}\");", name));
                 structs[cur_index].read_instructions.Add(string.Format("\t{0} = std::optional<std::reference_wrapper<{1}>> {{ *__{0} }};", name, correct_type));
             }
 		}
@@ -162,14 +162,14 @@ namespace XSDObjectGenLib
             if (is_required)
             {
                 structs[cur_index].tile.Add("\t" + type + " " + name + ";");
-                structs[cur_index].write_instructions.Add(string.Format("\t{0}.Write(s);", name));
-                structs[cur_index].read_instructions.Add(string.Format("\t{0}.Read(s);", name));
+                structs[cur_index].write_instructions.Add(string.Format("\t{0}.Write(s, \"{0}\");", name));
+                structs[cur_index].read_instructions.Add(string.Format("\t{0}.Read(s, \"{0}\");", name));
             }
             else
             {
                 structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + ";");
-                structs[cur_index].write_instructions.Add(string.Format("\t{0}.value().get().Write(s);", name));
-                structs[cur_index].read_instructions.Add(string.Format("\t{0}.value().get().Read(s);", name));
+                structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\t{0}.value().get().Write(s, \"{0}\");", name));
+                structs[cur_index].read_instructions.Add(string.Format("\t{0}.value().get().Read(s, \"{0}\");", name));
             }
         }
 
@@ -185,11 +185,17 @@ namespace XSDObjectGenLib
             if (checkIsPrototype(type))
             {
                 string prefix = getPrefixByType(type);
-                structs[cur_index].write_instructions.Add(string.Format("\ts.Write(\"{0}\", {0}{2}{1});", name, type.Split('<', '>')[0] == "std::string" ? ".c_str()" : "", is_required ? "" : ".value()"));
+                if (is_required)
+                    structs[cur_index].write_instructions.Add(string.Format("\ts.Write(\"{0}\", {0}{1});", name, type.Split('<', '>')[0] == "std::string" ? ".c_str()" : ""));
+                else
+                    structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.Write(\"{0}\", {0}.value(){1});", name, type.Split('<', '>')[0] == "std::string" ? ".c_str()" : ""));
                 structs[cur_index].read_instructions.Add(string.Format("\ts.Read{1}(\"{0}\", {0}{2});", name, prefix, is_required ? "" : ".value()"));
             } else
             {
-                structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{0}\", {2}::Convert{1}ToString({0}{3}).c_str());", name, removeNamespace(type), _namespace, (is_required) ? "" : ".value()"));
+                if (is_required)
+                    structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{0}\", {2}::Convert{1}ToString({0}).c_str());", name, removeNamespace(type), _namespace));
+                else
+                    structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.WriteAttr(\"{0}\", {2}::Convert{1}ToString({0}.value()).c_str());", name, removeNamespace(type), _namespace));
                 structs[cur_index].read_instructions.Add(string.Format("\t{0} = {2}::ConvertStringTo{1}(s.ReadAttrStr(\"{0}\"));", name, removeNamespace(type), _namespace));
             }
         }
@@ -206,7 +212,7 @@ namespace XSDObjectGenLib
             else
             {
                 structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + " {\"" + (default_value ?? "") + "\"};");
-                structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{0}\", {0}.value().c_str());", name));
+                structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.WriteAttr(\"{0}\", {0}.value().c_str());", name));
                 structs[cur_index].read_instructions.Add(string.Format("\t{0} = s.ReadAttrStr(\"{0}\");", name));
             }
             
@@ -222,12 +228,19 @@ namespace XSDObjectGenLib
 			if (checkIsPrototype(type))
 			{
 				string prefix = getPrefixByType(type);
-				structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{0}\", {0}{1});", name, is_required ? "" : ".value()"));
-				structs[cur_index].read_instructions.Add(string.Format("\t{0} = s.ReadAttr{1}(\"{0}\");", name, prefix));
+                if (is_required)
+				    structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{0}\", {0});", name));
+                else
+                    structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.WriteAttr(\"{0}\", {0}.value());", name));
+                structs[cur_index].read_instructions.Add(string.Format("\t{0} = s.ReadAttr{1}(\"{0}\");", name, prefix));
 			} else
 			{
-				structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{0}\", {2}::Convert{1}ToString({0}{3}).c_str());", name, removeNamespace(type), _namespace, (is_required) ? "" : ".value()"));
-				structs[cur_index].read_instructions.Add(string.Format("\t{0} = {2}::ConvertStringTo{1}(s.ReadAttrStr(\"{0}\"));", name, removeNamespace(type), _namespace));
+                if (is_required)
+                    structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{0}\", {2}::Convert{1}ToString({0}).c_str());", name, removeNamespace(type), _namespace, (is_required) ? "" : ".value()"));
+                else
+                    structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.WriteAttr(\"{0}\", {2}::Convert{1}ToString({0}.value()).c_str());", name, removeNamespace(type), _namespace));
+
+                structs[cur_index].read_instructions.Add(string.Format("\t{0} = {2}::ConvertStringTo{1}(s.ReadAttrStr(\"{0}\"));", name, removeNamespace(type), _namespace));
 			}
 		}
 
@@ -242,13 +255,13 @@ namespace XSDObjectGenLib
                 structs[correct_name].classes_used.Add(correctNamespace(inheritance));
             }
             structs[correct_name].pre_tile.Add(is_absctract + "struct " + name + " {");
-            structs[correct_name].pre_tile.Add("\tvoid Write(IXmlSerializerWriter&s);");
-            structs[correct_name].pre_tile.Add("\tbool Read(IXmlSerializerReader& s);");
+            structs[correct_name].pre_tile.Add("\tvoid Write(IXmlSerializerWriter& s, std::string __name__);");
+            structs[correct_name].pre_tile.Add("\tbool Read(IXmlSerializerReader& s, std::string __name__);");
 
-            structs[correct_name].pre_write_instructions.Add("void " + correct_name + "::Write(IXmlSerializerWriter& s) {");
-            structs[correct_name].pre_write_instructions.Add(string.Format("\tIXmlSerializerWriter::Scope scope(s, \"{0}\");", name));
-            structs[correct_name].pre_read_instructions.Add("bool " + correct_name + "::Read(IXmlSerializerReader& s) {");
-            structs[correct_name].pre_read_instructions.Add(string.Format("\tIXmlSerializerReader::Scope scope(s, \"{0}\");", name));
+            structs[correct_name].pre_write_instructions.Add("void " + correct_name + "::Write(IXmlSerializerWriter& s, std::string __name__) {");
+            structs[correct_name].pre_write_instructions.Add(string.Format("\tIXmlSerializerWriter::Scope scope(s, __name__);"));
+            structs[correct_name].pre_read_instructions.Add("bool " + correct_name + "::Read(IXmlSerializerReader& s, std::string __name__) {");
+            structs[correct_name].pre_read_instructions.Add(string.Format("\tIXmlSerializerReader::Scope scope(s, __name__);"));
             structs[correct_name].pre_read_instructions.Add(string.Format("\tif (scope.exist() == false)\n\t\treturn false;", name));
             cur_index = correct_name;
         }
@@ -261,9 +274,13 @@ namespace XSDObjectGenLib
 			string instructions_code_from_enum = "";
 			instructions_code_to_enum += "\t" + name + " ConvertStringTo" + name + "(std::string str) {\n";
 			instructions_code_from_enum += "\tstd::string Convert" + name + "ToString(" + name + " e) {\n";
+            HashSet<string> elements_of_enum = new HashSet<string>();
 			foreach (string[] item_2 in list)
 			{
 				string item = CheckForKeywords(item_2[0], true);
+                if (elements_of_enum.Contains(item))
+                    continue;
+                elements_of_enum.Add(item);
                 code += $"\t\t{item},\n";
                 instructions_code_to_enum += "\t\tif (str == \"" + item_2[0] + "\") return " + name + "::" + item + ";\n";
 				instructions_code_from_enum += "\t\tif (e == " + name + "::" + item + ") return \"" + item_2[0] + "\";\n";

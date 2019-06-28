@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<BuildTicket>
+	<Defaults>
+		<PropertyNode Name="Name here" DisplayName="Display name here" DisplayNameContainer="Display name container here" PropertyName="" Default="Default string here" ProfileList="Profile list here" List="List here" ProfileName="" />
+		<PropertyNode Name="Name here" DisplayName="Display name here" DisplayNameContainer="Display name container here" PropertyName="" Default="Default string here" ProfileList="Profile list here" List="List here" ProfileName="" />
+	</Defaults>
+</BuildTicket>

@@ -32,8 +32,8 @@ public:
 	class Scope
 	{
 	private: IXmlSerializerWriter& _s;
-	public: Scope(IXmlSerializerWriter& s, const char* name) : _s(s) {
-		_s.AddChild(name);
+	public: Scope(IXmlSerializerWriter& s, std::string name) : _s(s) {
+		_s.AddChild(name.c_str());
 	}
 			~Scope() {
 				_s.LeaveChild();
@@ -79,8 +79,8 @@ public:
 			 const char* _name;
 			 bool is_successfull;
 	public:
-		Scope(IXmlSerializerReader& s, const char* name) : _s(s), _name(name) {
-			is_successfull = _s.EnterChild(name);
+		Scope(IXmlSerializerReader& s, std::string name) : _s(s), _name(name.c_str()) {
+			is_successfull = _s.EnterChild(name.c_str());
 		}
 		~Scope() {
 			if (is_successfull) {

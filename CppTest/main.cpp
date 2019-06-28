@@ -4,8 +4,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "test.hpp"
-
+#include <pugixml.hpp>
+#include "Serializers.hpp"
+#include "MtlsBuildTicket_2017.hpp"
+#include "DeviceState.hpp"
 
 
 //------------------- Generated code begin--------------//
@@ -14,12 +16,28 @@
 
 int main()
 {
-	PugiXmlSerializerReader s;
-	s.Load("text.xml");
-	Test::shiporder c;
-	c.Read(s);
-	int a;
-	std::cin >> a;
+	PugiXmlSerializerWriter s;
+	Materialise::BuildTicket bt;
+	Materialise::CT_PropertyTemplateTree tree;
+	Materialise::CT_PropertyTemplateNode node;
+	node.Default = "Default string here";
+	node.DisplayName = "Display name here";
+	node.DisplayNameContainer = "Display name container here";
+	node.List = "List here";
+	node.Name = "Name here";
+	node.ProfileList = "Profile list here";
+	tree.PropertyNode.push_back(node);
+	tree.PropertyNode.push_back(node);
+	bt.Defaults = tree;
+
+	bt.Write(s, "BuildTicket");
+
+	s.SaveToFile("simple_xml.xml");
+	
+	//Test::shiporder c;
+	//c.Read(s);
+	//int a;
+	//std::cin >> a;
 	/*Test::shiporder c;
 	c.orderid = "falshjje";
 	c.orderperson = "Alex";
