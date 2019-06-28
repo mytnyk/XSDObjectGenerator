@@ -38,7 +38,7 @@ namespace XSDObjectGenLib
                     "new","null","object","operator","out","override","params",
                     "private","protected","public","readonly","ref","return","sbyte",
                     "sealed","set","short","sizeof","stackalloc","static","string","struct",
-                    "switch","this","throw","Time","true","try","typeof","uint","ulong",
+                    "switch","this","throw","Time","true","try","typeof","uint","ulong", "unsigned","signed",
                     "unchecked","unsafe","ushort","using","value","virtual","void","while"};
 
 
@@ -104,9 +104,9 @@ namespace XSDObjectGenLib
 
                 string code = "";
                 code += string.Format("\tenum {0}", key) + "\n";
-                code += "{\n";
+                code += "\t{\n";
 
-               ArrayList enumValues = (ArrayList)enumerations[key];
+				ArrayList enumValues = (ArrayList)enumerations[key];
                 for (int i = 0; i < enumValues.Count; i++)
                 {
                     string[] enumValue = (string[])enumValues[i];
@@ -128,7 +128,7 @@ namespace XSDObjectGenLib
 
                 code += "\t};";
 
-                generator.put_Enum(code);
+                generator.put_Enum(key, enumValues, CheckForKeywords);
             }
 
             
@@ -191,11 +191,10 @@ namespace XSDObjectGenLib
             //outStream.Write("\t{1}{2}struct {0}", className, isAbstract ? "abstract " : "", partialClasses ? PartialKeyword : "");
 
             // setup inheritance for <xsd:extension base="class"> 
-            string inheritance = "";
+            string inheritance = String.Empty;
             if (complexTypeBaseClass != null && complexTypeBaseClass != "")
-                inheritance = string.Format(" : {0}", CheckForKeywords(complexTypeBaseClass));
-			Console.WriteLine(elementName + " " + className);
-            generator.begin_class(elementName, isAbstract ? "abstract " : "", inheritance);
+                inheritance = CheckForKeywords(complexTypeBaseClass);
+            generator.begin_class(className, isAbstract ? "abstract " : "", inheritance);
             //outStream.WriteLine();
             //outStream.WriteLine("\t{");
 
@@ -243,7 +242,7 @@ namespace XSDObjectGenLib
 
             //outStream.WriteLine("\t\t//*********************** Constructor ***********************");
 
-            generator.put_Constructor(CheckForKeywords(dotnetClassName), inherits ? " : super()" : "");
+            generator.put_Constructor(CheckForKeywords(dotnetClassName), "");
             //outStream.WriteLine("\t\t{0}(){1}", CheckForKeywords(dotnetClassName), inherits ? " : super()" : "");
             //outStream.WriteLine("\t\t{");
 
@@ -393,7 +392,7 @@ namespace XSDObjectGenLib
                 case "System.String":
                     return "std::string";
                 case "System.SByte":
-                    return "sbyte";
+                    return "signed char";
                 case "System.Byte":
                     return "char";
                 case "System.Int16":
@@ -440,9 +439,19 @@ namespace XSDObjectGenLib
         }
 
         // todo: put this into LanguageTemplate as only one line of code differs from VB
-        public override string CheckForKeywords(String keyword)
+        public override string CheckForKeywords(String keyword, bool enum_element = false)
         {
             string modifiedKeyword = keyword;
+
+            if (enum_element)
+            {
+                modifiedKeyword = ReplaceInvalidChars(modifiedKeyword);
+                if (keywordsTable.ContainsKey(modifiedKeyword.ToLower()))
+                    modifiedKeyword = "_" + modifiedKeyword;
+                if (modifiedKeyword.Length >= 1 && Char.IsDigit(modifiedKeyword[0]))
+                    modifiedKeyword = "_" + modifiedKeyword;
+                return modifiedKeyword;
+            }
 
             // if a namespace prefixes the word, check the right half of the qualified value
             string[] cct = keyword.Split('.');
@@ -453,8 +462,7 @@ namespace XSDObjectGenLib
 
             modifiedKeyword = ReplaceInvalidChars(modifiedKeyword);
             if (keywordsTable.ContainsKey(modifiedKeyword.ToLower()))
-                modifiedKeyword = "@" + modifiedKeyword;
-
+                modifiedKeyword = "_" + modifiedKeyword;
 
             if (cct != null && cct.Length >= 2 && !modifiedKeyword.StartsWith("System."))
             {

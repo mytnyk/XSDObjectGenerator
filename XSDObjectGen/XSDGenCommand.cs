@@ -11,7 +11,7 @@ namespace XSDObjectGen
 {
 	class XSDGenCommand
 	{
-		static private string language = "cs";  // default;
+		static private string language = "cpp";  // default;
 		static private string genNamespace = "";
 		static private string fileName = "";
 		static private string xsdFile = "";
@@ -102,32 +102,7 @@ namespace XSDObjectGen
                     }
                 }
 
-				if (language.ToLower() == "vb")
-				{
-					result = generator.Execute(xsdFile, Language.VB, genNamespace, fileName, null, constructRequiredSchema, depthFirstTraversalHooks,
-                        defaultInitialization, ref namespaceTable, filenameTable, partialKeyword, optionEElements, acordLookupCodes, acordLookupCodesPrivate);
-					if (result == null && namespaceTable != null)
-					{
-						GatherNamespaceInput();
-						generator = null;
-						generator = new XSDSchemaParser();
-						result = generator.Execute(xsdFile, Language.VB, genNamespace, fileName, null, constructRequiredSchema, depthFirstTraversalHooks,
-                            defaultInitialization, ref namespaceTableClone, filenameTable, partialKeyword, optionEElements, acordLookupCodes, acordLookupCodesPrivate);
-					}
-				}
-				else if (language.ToLower() == "cs")
-				{
-					result = generator.Execute(xsdFile, Language.CS, genNamespace, fileName, null, constructRequiredSchema, depthFirstTraversalHooks,
-                        defaultInitialization, ref namespaceTable, filenameTable, partialKeyword, optionEElements, acordLookupCodes, acordLookupCodesPrivate);
-					if (result == null && namespaceTable != null)
-					{
-						GatherNamespaceInput();
-						generator = null;
-						generator = new XSDSchemaParser();
-						result = generator.Execute(xsdFile, Language.CS, genNamespace, fileName, null, constructRequiredSchema, depthFirstTraversalHooks,
-                            defaultInitialization, ref namespaceTableClone, filenameTable, partialKeyword, optionEElements, acordLookupCodes, acordLookupCodesPrivate);
-					}
-				} else if (language.ToLower() == "cpp")
+				if (language.ToLower() == "cpp")
                 {
                     result = generator.Execute(xsdFile, Language.CPP, genNamespace, fileName, null, constructRequiredSchema, depthFirstTraversalHooks,
                         defaultInitialization, ref namespaceTable, filenameTable, partialKeyword, optionEElements, acordLookupCodes, acordLookupCodesPrivate);
@@ -150,6 +125,7 @@ namespace XSDObjectGen
 				{
 					Console.WriteLine(" Writing file {0}.", f);
 				}
+                Console.ReadKey();
 			}
 			catch (XSDObjectGenException e)
 			{
@@ -175,7 +151,7 @@ namespace XSDObjectGen
 		private static void OutputInstructions()
 		{
 			Console.WriteLine();
-			Console.WriteLine("XSDObjectGen: Utility to generate C# or VB.NET classes from an XSD schema.");
+			Console.WriteLine("XSDObjectGen: Utility to generate C++ classes from an XSD schema.");
 			Console.WriteLine("Version {0}", typeof(XSDGenCommand).Assembly.GetName(false).Version);
 			Console.WriteLine();
 			Console.WriteLine("XSDObjectGen.exe <schema>.xsd [/l:] [/n:] [/f] [/c] [/d] [/p] [/t] [/z] [/e]");
@@ -183,11 +159,6 @@ namespace XSDObjectGen
 			Console.WriteLine("/n:<namespace>");
 			Console.WriteLine("\tThe .NET namespace to include the generated types.  This is optional");
 			Console.WriteLine("\tfor VB. The generated file will be namespace.cs or namspace.vb.");
-			Console.WriteLine();
-			Console.WriteLine("/l:<language>");
-			Console.WriteLine("\tThe language to be generated. Optional");
-			Console.WriteLine("\t\"cs\" for CSharp (C#) -- the default if not provided");
-			Console.WriteLine("\t\"vb\" for VB.NET");
 			Console.WriteLine();
 			Console.WriteLine("/f:<fileName>");
 			Console.WriteLine("\tThe output file name generated.  Optional, except for VB if namespace");
@@ -291,9 +262,6 @@ namespace XSDObjectGen
 
 				switch (param)
 				{
-					case "/l:" : 
-						language = val.Trim(); 
-						break;
 					case "/n:" : 
 						genNamespace = val.Trim(); 
 						break;
@@ -336,12 +304,8 @@ namespace XSDObjectGen
 				}
 			}
 
-			if (language.ToLower() == "cs" && genNamespace == "")
-				throw new XSDObjectGenException("Error: Namespace /n is a required parameter for CSharp.");
             if (language.ToLower() == "cpp" && genNamespace == "")
                 throw new XSDObjectGenException("Error: Namespace /n is a required parameter for Cpp.");
-            if (language.ToLower() == "vb"  && genNamespace == "" && fileName == "")
-				throw new XSDObjectGenException("Error: Either Namespace /n or Filename /f is required for VB.");
 		}
 	}
 }

@@ -346,7 +346,7 @@ namespace XSDObjectGenLib
         /// </summary>
         /// <param name="keyword">keyword to check</param>
         /// <returns>modified form</returns>
-        public abstract string CheckForKeywords(String keyword);
+        public abstract string CheckForKeywords(String keyword, bool enum_element = false);
 
         /// <summary>
         /// Generator supports the schema "import" keyword to import in types from another schema's namespace.

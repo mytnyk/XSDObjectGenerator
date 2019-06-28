@@ -11,8 +11,16 @@ public:
 	virtual ~IXmlSerializerWriter() = default;
 	virtual void Write(const char* name, int32_t value) = 0;
 	virtual void Write(const char* name, double value) = 0;
+	virtual void Write(const char* name, float value) = 0;
 	virtual void Write(const char* name, bool value) = 0;
 	virtual void Write(const char* name, const char* value) = 0;
+	virtual void Write(const char* name, signed char value) = 0;
+	virtual void Write(const char* name, unsigned int value) = 0;
+	virtual void Write(const char* name, unsigned short int value) = 0;
+	virtual void Write(const char* name, short int value) = 0;
+	virtual void Write(const char* name, long value) = 0;
+	virtual void Write(const char* name, unsigned long value) = 0;
+	virtual void Write(const char* name, char value) = 0;
 	virtual void WriteAttr(const char* name, bool value) = 0;
 	virtual void WriteAttr(const char* name, const char* value) = 0;
 	virtual void WriteAttr(const char* name, int32_t value) = 0;
@@ -42,6 +50,14 @@ public:
 	virtual bool ReadDouble(const char* name, double& value) = 0;
 	virtual bool ReadBool(const char* name, bool& value) = 0;
 	virtual bool ReadStr(const char* name, std::string& value) = 0;
+	virtual bool ReadUnsignedInt(const char* name, unsigned int& value) = 0;
+	virtual bool ReadUnsignedShortInt(const char* name, unsigned short int& value) = 0;
+	virtual bool ReadShortInt(const char* name, short int& value) = 0;
+	virtual bool ReadLong(const char* name, long& value) = 0;
+	virtual bool ReadUnsignedLong(const char* name, unsigned long& value) = 0;
+	virtual bool ReadFloat(const char* name, float& value) = 0;
+	virtual bool ReadChar(const char* name, char& value) = 0;
+	virtual bool ReadSignedChar(const char* name, signed char& value) = 0;
 	virtual std::vector<int32_t>	 ReadVectorInt(const char* name) = 0;
 	virtual std::vector<double>		 ReadVectorDouble(const char* name) = 0;
 	virtual std::vector<bool>		 ReadVectorBool(const char* name) = 0;
@@ -92,11 +108,43 @@ public:
 		_cursor.append_child(name).text().set(value);
 	}
 
+	void Write(const char* name, float value) override {
+		_cursor.append_child(name).text().set(value);
+	}
+
 	void Write(const char* name, bool value) override {
 		_cursor.append_child(name).text().set(value);
 	}
 
 	void Write(const char* name, const char* value) override {
+		_cursor.append_child(name).text().set(value);
+	}
+
+	void Write(const char* name, signed char value) override {
+		_cursor.append_child(name).text().set(value);
+	}
+
+	void Write(const char* name, char value) override {
+		_cursor.append_child(name).text().set(value);
+	}
+
+	void Write(const char* name, long value) override {
+		_cursor.append_child(name).text().set(value);
+	}
+
+	void Write(const char* name, unsigned long value) override {
+		_cursor.append_child(name).text().set(value);
+	}
+
+	void Write(const char* name, unsigned int value) override {
+		_cursor.append_child(name).text().set(value);
+	}
+
+	void Write(const char* name, unsigned short int value) override {
+		_cursor.append_child(name).text().set(value);
+	}
+
+	void Write(const char* name, short int value) override {
 		_cursor.append_child(name).text().set(value);
 	}
 
@@ -177,6 +225,48 @@ public:
 		return true;
 	}
 
+	bool ReadFloat(const char* name, float& value) override {
+		if (!hasMember(name))
+			return false;
+		value = atof(_cursor.child(name).child_value());
+		return true;
+	}
+
+	bool ReadUnsignedInt(const char* name, unsigned int& value) override {
+		if (!hasMember(name))
+			return false;
+		value = atol(_cursor.child(name).child_value());
+		return true;
+	}
+
+	bool ReadUnsignedShortInt(const char* name, unsigned short int& value) override {
+		if (!hasMember(name))
+			return false;
+		value = atoi(_cursor.child(name).child_value());
+		return true;
+	}
+
+	bool ReadShortInt(const char* name, short int& value) override {
+		if (!hasMember(name))
+			return false;
+		value = atoi(_cursor.child(name).child_value());
+		return true;
+	}
+
+	bool ReadLong(const char* name, long& value) override {
+		if (!hasMember(name))
+			return false;
+		value = atol(_cursor.child(name).child_value());
+		return true;
+	}
+
+	bool ReadUnsignedLong(const char* name, unsigned long& value) override {
+		if (!hasMember(name))
+			return false;
+		value = atoll(_cursor.child(name).child_value());
+		return true;
+	}
+
 	bool ReadBool(const char* name, bool& value) override {
 		if (!hasMember(name))
 			return false;
@@ -188,6 +278,20 @@ public:
 		if (!hasMember(name))
 			return false;
 		value = _cursor.child(name).child_value();
+		return true;
+	}
+
+	bool ReadChar(const char* name, char& value) override {
+		if (!hasMember(name))
+			return false;
+		value = _cursor.child(name).child_value()[0];
+		return true;
+	}
+
+	bool ReadSignedChar(const char* name, signed char& value) override {
+		if (!hasMember(name))
+			return false;
+		value = _cursor.child(name).child_value()[0];
 		return true;
 	}
 

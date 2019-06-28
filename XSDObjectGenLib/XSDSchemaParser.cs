@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 
 // Note to anyone looking at this code.  Development of this utility started before .NET 1.0 shipped back in 2001 or so.  Development
@@ -83,28 +84,53 @@ namespace XSDObjectGenLib
         private XmlDocument acordLookup = null;
         private XmlDocument acordLookupPrivate = null;
 
-        #region Orchestrator
+        class XmlResolver : XmlUrlResolver
+        {
+            internal const string BaseUri = "schema://";
+            private string _directoryPath;
+            internal XmlResolver(string directoryPath)
+            {
+                _directoryPath = directoryPath;
+            }
 
-        /// <summary>
-        /// Executes the code generator.  Called from either the command line exe or the VS.NET wizard.  Only public function.
-        /// </summary>
-        /// <param name="xsdFile">Path to the XSD file stored on disk</param>
-        /// <param name="language">Language for generated code</param>
-        /// <param name="genNamespace">.NET namespace containing the generated types</param>
-        /// <param name="fileName">File to be generated.  If null, namespace name is used</param>
-        /// <param name="outputLocation">Location for the generated output file</param>
-        /// <param name="constructRequiredSchema">Build a schema compliancy function -- MakeSchemaCompliant -- into each class</param>
-        /// <param name="depthFirstTraversalHooks">Add DepthFirstTraversal hooks to fire custom DepthFirstTraversal events on each generated class</param>
-        /// <param name="defaultInitialization">Set schema default values in class constructors</param>
-        /// <param name="separateImportedNamespaces">Searate out imported namespaces into their own source files.  Default is all types in one file.</param>
-        /// <param name="namespaceTable">Namespace map table.  Null if no imported namespaces exist</param>
-        /// <param name="filenameTable">Filenames matching the namespaceTable.  Null if no imported namespaces exist -- and optional.</param>
-        /// <param name="partialKeyword">put the .NET 2.0 partial keyword on every class</param>
-        /// <param name="optionEElements"></param>
-        /// <param name="acordLookupCodesFile">ACORD lookup codes file -- public</param>
-        /// <param name="acordLookupCodesFilePrivate">ACORD lookup codes file -- private</param>
-        /// <returns>result string</returns>
-        public string[] Execute(string xsdFile, Language language, string genNamespace, string fileName,
+            public override object GetEntity(Uri absoluteUri, string role, Type ofObjectToReturn)
+			{
+				if (absoluteUri.Scheme == "file")
+				{
+                    if (!File.Exists(absoluteUri.AbsoluteUri))
+                    {
+                        var fn = Path.GetFileName(absoluteUri.AbsoluteUri);
+                        var newPath = Path.Combine(_directoryPath, fn);
+                        var newUri = new Uri(newPath);
+                        return base.GetEntity(newUri, role, ofObjectToReturn);
+                    }
+				}
+				return base.GetEntity(absoluteUri, role, ofObjectToReturn);
+			}
+		}
+
+		#region Orchestrator
+
+		/// <summary>
+		/// Executes the code generator.  Called from either the command line exe or the VS.NET wizard.  Only public function.
+		/// </summary>
+		/// <param name="xsdFile">Path to the XSD file stored on disk</param>
+		/// <param name="language">Language for generated code</param>
+		/// <param name="genNamespace">.NET namespace containing the generated types</param>
+		/// <param name="fileName">File to be generated.  If null, namespace name is used</param>
+		/// <param name="outputLocation">Location for the generated output file</param>
+		/// <param name="constructRequiredSchema">Build a schema compliancy function -- MakeSchemaCompliant -- into each class</param>
+		/// <param name="depthFirstTraversalHooks">Add DepthFirstTraversal hooks to fire custom DepthFirstTraversal events on each generated class</param>
+		/// <param name="defaultInitialization">Set schema default values in class constructors</param>
+		/// <param name="separateImportedNamespaces">Searate out imported namespaces into their own source files.  Default is all types in one file.</param>
+		/// <param name="namespaceTable">Namespace map table.  Null if no imported namespaces exist</param>
+		/// <param name="filenameTable">Filenames matching the namespaceTable.  Null if no imported namespaces exist -- and optional.</param>
+		/// <param name="partialKeyword">put the .NET 2.0 partial keyword on every class</param>
+		/// <param name="optionEElements"></param>
+		/// <param name="acordLookupCodesFile">ACORD lookup codes file -- public</param>
+		/// <param name="acordLookupCodesFilePrivate">ACORD lookup codes file -- private</param>
+		/// <returns>result string</returns>
+		public string[] Execute(string xsdFile, Language language, string genNamespace, string fileName,
             string outputLocation, bool constructRequiredSchema, bool depthFirstTraversalHooks, bool defaultInitialization,
             ref Hashtable namespaceTable, Hashtable filenameTable, bool partialKeyword, List<string> optionEElements, string acordLookupCodesFile, string acordLookupCodesFilePrivate)
         {
@@ -115,8 +141,15 @@ namespace XSDObjectGenLib
                 schemaFile = new FileStream(xsdFile, FileMode.Open, FileAccess.Read);
                 if (schemaFile == null) throw new XSDObjectGenException("Could not open the XSD schema file: " + xsdFile);
 
-                schema = XmlSchema.Read(schemaFile, new ValidationEventHandler(ShowCompileError));
-                schema.Compile(new ValidationEventHandler(ShowCompileError));
+				schema = XmlSchema.Read(schemaFile, new ValidationEventHandler(ShowCompileError));
+
+                var directoryPath = Directory.GetParent(xsdFile).ToString();
+
+				XmlSchemaSet xset = new XmlSchemaSet() { XmlResolver = new XmlResolver(directoryPath) };
+				xset.Add(schema);
+				xset.Compile();
+				
+                //schema.Compile(new ValidationEventHandler(ShowCompileError));
 
                 elementFormDefault = schema.ElementFormDefault;
                 attributeFormDefault = schema.AttributeFormDefault;
@@ -455,20 +488,8 @@ namespace XSDObjectGenLib
                     }
 
 
-                    if (language == Language.VB)
-                    {
-                        if (!codeFile.ToLower().EndsWith(".vb"))
-                            codeFile = codeFile + ".vb";
-                    }
-                    else if (language == Language.CS)
-                    {
-                        if (!codeFile.ToLower().EndsWith(".cs"))
-                            codeFile = codeFile + ".cs";
-                    } else // language == Language.CPP
-                    {
-                        if (!codeFile.ToLower().EndsWith(".hpp"))
-                            codeFile = codeFile + ".hpp";
-                    }
+                    if (!codeFile.ToLower().EndsWith(".hpp"))
+                        codeFile = codeFile + ".hpp";
 
                     outFiles[iFiles] = outFiles[iFiles] + codeFile;
                     classFile = new FileStream(outFiles[iFiles], FileMode.Create);
