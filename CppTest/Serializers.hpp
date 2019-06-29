@@ -183,13 +183,8 @@ public:
 
 	bool EnterChild(const char* name) override {
 		pugi::xml_node new_cursor;
-		std::string new_name(name);
-		std::ostream& ws = std::cout;
-		std::cout << "Before: " << std::endl;
-		_cursor.print(ws);
 		bool was_visited = false;
 		if (names.size() > 0 && names.top().second == name && names.top().first == true) {
-			std::string _name = _cursor.name();
 			new_cursor = _cursor.next_sibling(name);
 			used_hashes.insert(new_cursor.hash_value());
 			names.top().first = false;
@@ -204,8 +199,6 @@ public:
 				used_hashes.insert(new_cursor.hash_value());
 			}
 		}
-		std::cout << "After: " << std::endl;
-		_cursor.print(ws);
 		if (new_cursor == NULL || was_visited) {
 			names.pop();
 			return false;
@@ -217,8 +210,6 @@ public:
 	}
 
 	void LeaveChild(const char* cname) override {
-		std::ostream& ws = std::cout;
-		_cursor.print(ws);
 		if (names.size() > 0)
 			names.top().first = true;
 		else

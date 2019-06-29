@@ -3,4 +3,3 @@ C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObje
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGenLib\obj\Debug\XSDObjectGenLib.csproj.CoreCompileInputs.cache
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGenLib\obj\Debug\XSDObjectGenLib.dll
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGenLib\obj\Debug\XSDObjectGenLib.pdb
-C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGenLib\obj\Debug\XSDObjectGenLib.csprojAssemblyReference.cache
