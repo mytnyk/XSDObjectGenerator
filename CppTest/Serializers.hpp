@@ -187,7 +187,7 @@ public:
 		std::ostream& ws = std::cout;
 		std::cout << "Before: " << std::endl;
 		_cursor.print(ws);
-		bool was = false;
+		bool was_visited = false;
 		if (names.size() > 0 && names.top().second == name && names.top().first == true) {
 			std::string _name = _cursor.name();
 			new_cursor = _cursor.next_sibling(name);
@@ -198,7 +198,7 @@ public:
 			names.push(std::make_pair(false, name));
 			new_cursor = _cursor.child(name);
 			if (new_cursor != NULL && used_hashes.find(new_cursor.hash_value()) != used_hashes.end()) {
-				was = true;
+				was_visited = true;
 			}
 			else {
 				used_hashes.insert(new_cursor.hash_value());
@@ -206,7 +206,7 @@ public:
 		}
 		std::cout << "After: " << std::endl;
 		_cursor.print(ws);
-		if (new_cursor == NULL || was) {
+		if (new_cursor == NULL || was_visited) {
 			names.pop();
 			return false;
 		}
