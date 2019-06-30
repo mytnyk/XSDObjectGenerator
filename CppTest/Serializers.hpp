@@ -62,10 +62,10 @@ public:
 	virtual std::vector<double>		 ReadVectorDouble(const char* name) = 0;
 	virtual std::vector<bool>		 ReadVectorBool(const char* name) = 0;
 	virtual std::vector<std::string> ReadVectorStr(const char* name) = 0;
-	virtual bool		ReadAttrBool(const char* name) = 0;
-	virtual const char* ReadAttrStr(const char* name) = 0;
-	virtual double		ReadAttrDouble(const char* name) = 0;
-	virtual int32_t		ReadAttrInt(const char* name) = 0;
+	virtual bool ReadAttrBool(const char* name, bool& value) = 0;
+	virtual bool ReadAttrStr(const char* name, std::string& value) = 0;
+	virtual bool ReadAttrDouble(const char* name, double& value) = 0;
+	virtual bool ReadAttrInt(const char* name, int& value) = 0;
 private:
 	virtual void LeaveChild(const char* name) = 0;
 	virtual bool EnterChild(const char* name) = 0;
@@ -211,6 +211,12 @@ public:
 		return p != NULL;
 	}
 
+	bool hasAttribute(const char* name) {
+		auto p = _cursor.attribute(name);
+		return p != NULL;
+	}
+
+
 	bool ReadInt(const char* name, int32_t& value) override {
 		if (!hasMember(name))
 			return false;
@@ -295,12 +301,18 @@ public:
 		return true;
 	}
 
-	bool ReadAttrBool(const char* name) override {
-		return _cursor.attribute(name).as_bool();
+	bool ReadAttrBool(const char* name, bool& value) override {
+		if (!hasAttribute(name))
+			return false;
+		value = _cursor.attribute(name).as_bool();
+		return true;
 	}
 
-	const char* ReadAttrStr(const char* name) override {
-		return _cursor.attribute(name).as_string();
+	bool ReadAttrStr(const char* name, std::string& value) override {
+		if (!hasAttribute(name))
+			return false;
+		value = _cursor.attribute(name).as_string();
+		return true;
 	}
 
 	std::vector<int32_t> ReadVectorInt(const char* name) override {
@@ -339,12 +351,18 @@ public:
 		return r;
 	}
 
-	int32_t ReadAttrInt(const char* name) override {
-		return _cursor.attribute(name).as_int();
+	bool ReadAttrInt(const char* name, int& value) override {
+		if (!hasAttribute(name))
+			return false;
+		value = _cursor.attribute(name).as_int();
+		return true;
 	}
 
-	double ReadAttrDouble(const char* name) override {
-		return _cursor.attribute(name).as_double();
+	bool ReadAttrDouble(const char* name, double& value) override {
+		if (!hasAttribute(name))
+			return false;
+		value = _cursor.attribute(name).as_double();
+		return true;
 	}
 
 	void Load(const char* file_name) {

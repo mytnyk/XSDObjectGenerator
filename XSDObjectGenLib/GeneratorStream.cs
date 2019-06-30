@@ -23,6 +23,7 @@ namespace XSDObjectGenLib
             public HashSet<string> classes_used;
             public string inheritance = String.Empty;
             public string name;
+            public bool use_temp_string_variable = false;
 
             public Struct(string name) {
                 write_instructions = new List<string>();
@@ -104,7 +105,7 @@ namespace XSDObjectGenLib
             return prototypes[type];
         }
 
-        public void put_FieldCollectionTemplate(string type, string name, string default_value, bool is_required)
+        public void put_FieldCollectionTemplate(string type, string name, string original_name, string default_value, bool is_required)
         {
             name = editName(name);
             string correct_type = correctNamespace(type);
@@ -114,19 +115,19 @@ namespace XSDObjectGenLib
             if (checkIsPrototype(type))
             {
                 string prefix = getPrefixByType(type);
-                structs[cur_index].write_instructions.Add(string.Format("\tfor(int i = 0;i < {0}.size();i++)\n\t{{\n\t\ts.Write(\"{0}\", {0}[i]{1}); \n\t}}", name, type == "std::string" ? ".c_str()" : ""));
+                structs[cur_index].write_instructions.Add(string.Format("\tfor(int i = 0;i < {0}.size();i++)\n\t{{\n\t\ts.Write(\"{2}\", {0}[i]{1}); \n\t}}", name, type == "std::string" ? ".c_str()" : "", original_name));
                 structs[cur_index].read_instructions.Add(string.Format("{0} = s.ReadVector{1}(\"{0}\");", name, prefix));
             }
             else
             {
-                structs[cur_index].write_instructions.Add(string.Format("\tfor(int i = 0;i < {0}.size();i++)\n\t{{\n\t\t{0}[i].Write(s, \"{0}\"); \n\t}}", name));
-                structs[cur_index].read_instructions.Add(string.Format("\twhile (true) {{ \n\t\t{1} __t;\n\t\tif (__t.Read(s, \"{0}\") == false)\n\t\t\tbreak;\n\t\t{0}.push_back(__t);\n\t}}", name, correctNamespace(type)));
+                structs[cur_index].write_instructions.Add(string.Format("\tfor(int i = 0;i < {0}.size();i++)\n\t{{\n\t\t{0}[i].Write(s, \"{1}\"); \n\t}}", name, original_name));
+                structs[cur_index].read_instructions.Add(string.Format("\twhile (true) {{ \n\t\t{1} __t;\n\t\tif (__t.Read(s, \"{2}\") == false)\n\t\t\tbreak;\n\t\t{0}.push_back(__t);\n\t}}", name, correctNamespace(type), original_name));
 			}
             if (is_required)
                 structs[cur_index].classes_used.Add(correct_type);
         }
 
-        public void put_FieldClassTemplate(string type, string name, string default_value, bool is_required)
+        public void put_FieldClassTemplate(string type, string name, string original_name, string default_value, bool is_required)
         {
             name = editName(name);
             string correct_type = correctNamespace(type);
@@ -139,86 +140,87 @@ namespace XSDObjectGenLib
 
             if (is_required)
             {
-                structs[cur_index].write_instructions.Add(string.Format("\t{0}.Write(s, \"{0}\");", name));
-                structs[cur_index].read_instructions.Add(string.Format("\t{0}.Read(s, \"{0}\");", name));
+                structs[cur_index].write_instructions.Add(string.Format("\t{0}.Write(s, \"{1}\");", name, original_name));
+                structs[cur_index].read_instructions.Add(string.Format("\t{0}.Read(s, \"{1}\");", name, original_name));
             }
             else
             {
-                structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\t{0}.value().get().Write(s, \"{0}\");", name));
+                structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\t{0}.value().get().Write(s, \"{1}\");", name, original_name));
                 structs[cur_index].read_instructions.Add(string.Format("\t{1}* __{0} = new {1}();", name, correct_type));
-                structs[cur_index].read_instructions.Add(string.Format("\t__{0}->Read(s, \"{0}\");", name));
+                structs[cur_index].read_instructions.Add(string.Format("\t__{0}->Read(s, \"{1}\");", name, original_name));
                 structs[cur_index].read_instructions.Add(string.Format("\t{0} = std::optional<std::reference_wrapper<{1}>> {{ *__{0} }};", name, correct_type));
             }
 		}
 
-        public void put_ElementObjectTemplate(string type, string name, string default_value, bool is_required)
+        public void put_ElementObjectTemplate(string type, string name, string original_name, string default_value, bool is_required)
         {
             name = editName(name);
             if (type.Split('<', '>')[0] == "std::string")
             {
-                put_ElementValueTypeTemplate(type, name, default_value, is_required);
+                put_ElementValueTypeTemplate(type, name, original_name, default_value, is_required);
                 return;
             }
             if (is_required)
             {
                 structs[cur_index].tile.Add("\t" + type + " " + name + ";");
-                structs[cur_index].write_instructions.Add(string.Format("\t{0}.Write(s, \"{0}\");", name));
-                structs[cur_index].read_instructions.Add(string.Format("\t{0}.Read(s, \"{0}\");", name));
+                structs[cur_index].write_instructions.Add(string.Format("\t{0}.Write(s, \"{1}\");", name, original_name));
+                structs[cur_index].read_instructions.Add(string.Format("\t{0}.Read(s, \"{1}\");", name, original_name));
             }
             else
             {
                 structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + ";");
-                structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\t{0}.value().get().Write(s, \"{0}\");", name));
-                structs[cur_index].read_instructions.Add(string.Format("\t{0}.value().get().Read(s, \"{0}\");", name));
+                structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\t{0}.value().get().Write(s, \"{1}\");", name, original_name));
+                structs[cur_index].read_instructions.Add(string.Format("\t{0}.value().get().Read(s, \"{1}\");", name, original_name));
             }
         }
 
-		public void put_ElementValueTypeTemplate(string type, string name, string default_value, bool is_required)
+		public void put_ElementValueTypeTemplate(string type, string name, string original_name, string default_value, bool is_required)
         {
             name = editName(name);
             if (is_required)
 				structs[cur_index].tile.Add("\t" + type + " " + name + ";");
 			else if (type == "std::string")
-				structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + " {\"" + (default_value ?? "") +"\"};");
+				structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + (default_value == null ? "" : " {\"" + default_value + "\"}") + ";");
 			else
-				structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + " {" + (default_value ?? "0") + "};");
+				structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + (default_value == null ? "" : " {" + default_value + "}") + ";");
             if (checkIsPrototype(type))
             {
                 string prefix = getPrefixByType(type);
                 if (is_required)
-                    structs[cur_index].write_instructions.Add(string.Format("\ts.Write(\"{0}\", {0}{1});", name, type.Split('<', '>')[0] == "std::string" ? ".c_str()" : ""));
+                    structs[cur_index].write_instructions.Add(string.Format("\ts.Write(\"{2}\", {0}{1});", name, type.Split('<', '>')[0] == "std::string" ? ".c_str()" : "", original_name));
                 else
-                    structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.Write(\"{0}\", {0}.value(){1});", name, type.Split('<', '>')[0] == "std::string" ? ".c_str()" : ""));
-                structs[cur_index].read_instructions.Add(string.Format("\ts.Read{1}(\"{0}\", {0}{2});", name, prefix, is_required ? "" : ".value()"));
+                    structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.Write(\"{2}\", {0}.value(){1});", name, type.Split('<', '>')[0] == "std::string" ? ".c_str()" : "", original_name));
+                structs[cur_index].read_instructions.Add(string.Format("\ts.Read{1}(\"{3}\", {0}{2});", name, prefix, is_required ? "" : ".value()", original_name));
             } else
             {
                 if (is_required)
-                    structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{0}\", {2}::Convert{1}ToString({0}).c_str());", name, removeNamespace(type), _namespace));
+                    structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{3}\", {2}::Convert{1}ToString({0}).c_str());", name, removeNamespace(type), _namespace, original_name));
                 else
-                    structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.WriteAttr(\"{0}\", {2}::Convert{1}ToString({0}.value()).c_str());", name, removeNamespace(type), _namespace));
-                structs[cur_index].read_instructions.Add(string.Format("\t{0} = {2}::ConvertStringTo{1}(s.ReadAttrStr(\"{0}\"));", name, removeNamespace(type), _namespace));
+                    structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.WriteAttr(\"{3}\", {2}::Convert{1}ToString({0}.value()).c_str());", name, removeNamespace(type), _namespace, original_name));
+                structs[cur_index].use_temp_string_variable = true;
+                structs[cur_index].read_instructions.Add(string.Format("\tif (s.ReadAttrStr(\"{3}\", __tmp_var)) \n\t\t{0} = {2}::ConvertStringTo{1}(__tmp_var);", name, removeNamespace(type), _namespace, original_name));
             }
         }
 
-		public void put_AttributeObjectTemplate(string type, string name, string default_value, bool is_required)
+		public void put_AttributeObjectTemplate(string type, string name, string original_name, string default_value, bool is_required)
         {
             name = editName(name);
             if (is_required)
             {
                 structs[cur_index].tile.Add("\t" + type + " " + name + ";");
-                structs[cur_index].read_instructions.Add(string.Format("\t{0} = s.ReadAttrStr(\"{0}\");", name));
-                structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{0}\", {0}.c_str());", name));
+                structs[cur_index].read_instructions.Add(string.Format("\ts.ReadAttrStr(\"{1}\", {0});", name, original_name));
+                structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{1}\", {0}.c_str());", name, original_name));
             }
             else
             {
-                structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + " {\"" + (default_value ?? "") + "\"};");
-                structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.WriteAttr(\"{0}\", {0}.value().c_str());", name));
-                structs[cur_index].read_instructions.Add(string.Format("\t{0} = s.ReadAttrStr(\"{0}\");", name));
+                structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + (default_value == null ? "" : $" {{ \"{default_value}\" }}") + ";");
+                structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.WriteAttr(\"{1}\", {0}.value().c_str());", name, original_name));
+                structs[cur_index].read_instructions.Add(string.Format("\ts.ReadAttrStr(\"{1}\", {0}.value());", name, original_name));
             }
             
 		}
 
-        public void put_AttributeValueTypeTemplate(string type, string name, string default_value, bool is_required)
+        public void put_AttributeValueTypeTemplate(string type, string name, string original_name, string default_value, bool is_required)
         {
             name = editName(name);
             if (is_required)
@@ -229,18 +231,19 @@ namespace XSDObjectGenLib
 			{
 				string prefix = getPrefixByType(type);
                 if (is_required)
-				    structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{0}\", {0});", name));
+				    structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{1}\", {0});", name, original_name));
                 else
-                    structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.WriteAttr(\"{0}\", {0}.value());", name));
-                structs[cur_index].read_instructions.Add(string.Format("\t{0} = s.ReadAttr{1}(\"{0}\");", name, prefix));
+                    structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.WriteAttr(\"{1}\", {0}.value());", name, original_name));
+                structs[cur_index].read_instructions.Add(string.Format("\ts.ReadAttr{1}(\"{2}\", {0}{3});", name, prefix, original_name, is_required ? "" : ".value()"));
 			} else
 			{
                 if (is_required)
-                    structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{0}\", {2}::Convert{1}ToString({0}).c_str());", name, removeNamespace(type), _namespace, (is_required) ? "" : ".value()"));
+                    structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{4}\", {2}::Convert{1}ToString({0}).c_str());", name, removeNamespace(type), _namespace, (is_required) ? "" : ".value()", original_name));
                 else
-                    structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.WriteAttr(\"{0}\", {2}::Convert{1}ToString({0}.value()).c_str());", name, removeNamespace(type), _namespace));
+                    structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.WriteAttr(\"{3}\", {2}::Convert{1}ToString({0}.value()).c_str());", name, removeNamespace(type), _namespace, original_name));
 
-                structs[cur_index].read_instructions.Add(string.Format("\t{0} = {2}::ConvertStringTo{1}(s.ReadAttrStr(\"{0}\"));", name, removeNamespace(type), _namespace));
+                structs[cur_index].use_temp_string_variable = true;
+                structs[cur_index].read_instructions.Add(string.Format("\tif (s.ReadAttrStr(\"{3}\", __tmp_var)) \n\t\t{0} = {2}::ConvertStringTo{1}(__tmp_var);", name, removeNamespace(type), _namespace, original_name));
 			}
 		}
 
@@ -376,6 +379,7 @@ namespace XSDObjectGenLib
                     st.write_instructions.AddRange(structs[st.inheritance].write_instructions);
                     st.read_instructions.AddRange(structs[st.inheritance].read_instructions);
                     st.tile.AddRange(structs[st.inheritance].tile);
+                    st.use_temp_string_variable |= structs[st.inheritance].use_temp_string_variable;
                 }
             }
 
@@ -404,6 +408,8 @@ namespace XSDObjectGenLib
                 code.AddRange(st.Value.write_instructions);
                 code.AddRange(st.Value.post_write_instructions);
                 code.AddRange(st.Value.pre_read_instructions);
+                if (st.Value.use_temp_string_variable)
+                    code.Add("\tstd::string __tmp_var;");
                 code.AddRange(st.Value.read_instructions);
                 code.AddRange(st.Value.post_read_instructions);
             }

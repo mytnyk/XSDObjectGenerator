@@ -30,7 +30,7 @@ namespace Materialise {
 	struct PackageId {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<std::string> path {""};
+		std::optional<std::string> path;
 		PackageId() {}
 		~PackageId() {}
 	};
@@ -44,15 +44,15 @@ namespace Materialise {
 	struct LicenseFiles {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<std::string> Prerelease {""};
-		std::optional<std::string> Release {""};
+		std::optional<std::string> Prerelease;
+		std::optional<std::string> Release;
 		LicenseFiles() {}
 		~LicenseFiles() {}
 	};
 	struct ExcludeFiles {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<std::string> except {""};
+		std::optional<std::string> except;
 		ExcludeFiles() {}
 		~ExcludeFiles() {}
 	};
@@ -60,8 +60,8 @@ namespace Materialise {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
 		std::optional<std::reference_wrapper<Materialise::ExcludeFiles>> ExcludeFiles;
-		std::optional<std::string> ExcludeFolders {""};
-		std::optional<std::string> IncludeFolders {""};
+		std::optional<std::string> ExcludeFolders;
+		std::optional<std::string> IncludeFolders;
 		Filters() {}
 		~Filters() {}
 	};
@@ -230,7 +230,7 @@ bool Materialise::ExcludeFiles::Read(IXmlSerializerReader& s, std::string __name
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	except = s.ReadAttrStr("except");
+	s.ReadAttrStr("except", except.value());
 	return true;
 }
 void Materialise::LicenseFiles::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -276,7 +276,7 @@ bool Materialise::PackageId::Read(IXmlSerializerReader& s, std::string __name__)
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	path = s.ReadAttrStr("path");
+	s.ReadAttrStr("path", path.value());
 	return true;
 }
 void Materialise::BuildInfo::Write(IXmlSerializerWriter& s, std::string __name__) {

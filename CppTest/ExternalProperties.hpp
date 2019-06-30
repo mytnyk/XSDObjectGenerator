@@ -96,8 +96,10 @@ bool Materialise::PropertyElement::Read(IXmlSerializerReader& s, std::string __n
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	Name = s.ReadAttrStr("Name");
-	Type = Materialise::ConvertStringToPropertyType(s.ReadAttrStr("Type"));
+	std::string __tmp_var;
+	s.ReadAttrStr("Name", Name);
+	if (s.ReadAttrStr("Type", __tmp_var)) 
+		Type = Materialise::ConvertStringToPropertyType(__tmp_var);
 	while (true) { 
 		Materialise::PropertyElement __t;
 		if (__t.Read(s, "Property") == false)
@@ -137,7 +139,7 @@ bool Materialise::Properties::Read(IXmlSerializerReader& s, std::string __name__
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	ID = s.ReadAttrStr("ID");
+	s.ReadAttrStr("ID", ID);
 	while (true) { 
 		Materialise::PropertyElement __t;
 		if (__t.Read(s, "Property") == false)

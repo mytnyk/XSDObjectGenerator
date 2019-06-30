@@ -54,7 +54,7 @@ bool Materialise::Tag::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	name = s.ReadAttrStr("name");
-	description = s.ReadAttrStr("description");
+	s.ReadAttrStr("name", name);
+	s.ReadAttrStr("description", description);
 	return true;
 }

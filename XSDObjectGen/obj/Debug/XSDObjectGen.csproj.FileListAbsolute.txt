@@ -1,9 +1,4 @@
-C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\obj\Debug\XSDObjectGen.csprojAssemblyReference.cache
-C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\obj\Debug\XSDObjectGen.csproj.CoreCompileInputs.cache
-C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\obj\Debug\XSDObjectGen.csproj.CopyComplete
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen.exe.config
-C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\obj\Debug\XSDObjectGen.exe
-C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\obj\Debug\XSDObjectGen.pdb
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen.exe
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen.pdb
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\bin\XSDObjectGen.exe.config
@@ -14,3 +9,8 @@ C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObje
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\bin\XSDObjectGen.exe.config
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\bin\XSDObjectGen.exe
 C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\bin\XSDObjectGen.pdb
+C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\obj\Debug\XSDObjectGen.csprojAssemblyReference.cache
+C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\obj\Debug\XSDObjectGen.csproj.CoreCompileInputs.cache
+C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\obj\Debug\XSDObjectGen.csproj.CopyComplete
+C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\obj\Debug\XSDObjectGen.exe
+C:\Users\alexm\Downloads\SharpMapV2-master\BuildTools\XSDObjectGenerator\XSDObjectGen\obj\Debug\XSDObjectGen.pdb

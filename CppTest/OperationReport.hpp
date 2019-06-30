@@ -88,7 +88,7 @@ namespace Materialise {
 	struct OperationReportMeterValues {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<std::string> count {""};
+		std::optional<std::string> count;
 		std::vector<Materialise::OperationReportMeterValuesValue> Value;
 		OperationReportMeterValues() {}
 		~OperationReportMeterValues() {}
@@ -97,10 +97,10 @@ namespace Materialise {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
 		std::string Title;
-		std::optional<std::string> Description {""};
+		std::optional<std::string> Description;
 		double Progress;
-		std::optional<std::string> UploadId {""};
-		std::optional<std::string> UploadLocation {""};
+		std::optional<std::string> UploadId;
+		std::optional<std::string> UploadLocation;
 		std::optional<std::reference_wrapper<Materialise::OperationReportMeterValues>> MeterValues;
 		std::optional<std::reference_wrapper<Materialise::Log>> Log;
 		OperationReport() {}
@@ -110,9 +110,9 @@ namespace Materialise {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
 		Materialise::LogEntryType type;
-		std::optional<std::string> source {""};
-		std::optional<std::string> category {""};
-		std::optional<std::string> message {""};
+		std::optional<std::string> source;
+		std::optional<std::string> category;
+		std::optional<std::string> message;
 		std::optional<std::reference_wrapper<Materialise::MeterValues>> Meters;
 		LogEntry() {}
 		~LogEntry() {}
@@ -120,7 +120,7 @@ namespace Materialise {
 	struct Entries {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<std::string> count {""};
+		std::optional<std::string> count;
 		std::vector<Materialise::LogEntry> Entry;
 		Entries() {}
 		~Entries() {}
@@ -143,7 +143,7 @@ namespace Materialise {
 	struct MeterValues {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<std::string> count {""};
+		std::optional<std::string> count;
 		std::vector<Materialise::_Value> Value;
 		MeterValues() {}
 		~MeterValues() {}
@@ -151,7 +151,7 @@ namespace Materialise {
 	struct MeterDefinitions {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<std::string> count {""};
+		std::optional<std::string> count;
 		std::vector<Materialise::MeterDefinition> Meter;
 		MeterDefinitions() {}
 		~MeterDefinitions() {}
@@ -177,7 +177,7 @@ namespace Materialise {
 	struct Meters {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<std::string> count {""};
+		std::optional<std::string> count;
 		std::vector<Materialise::Meter> Meter;
 		Meters() {}
 		~Meters() {}
@@ -196,7 +196,7 @@ bool Materialise::Meters::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	count = s.ReadAttrStr("count");
+	s.ReadAttrStr("count", count.value());
 	while (true) { 
 		Materialise::Meter __t;
 		if (__t.Read(s, "Meter") == false)
@@ -215,9 +215,11 @@ bool Materialise::Meter::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	id = s.ReadAttrStr("id");
-	name = s.ReadAttrStr("name");
-	type = Materialise::ConvertStringToMeterType(s.ReadAttrStr("type"));
+	std::string __tmp_var;
+	s.ReadAttrStr("id", id);
+	s.ReadAttrStr("name", name);
+	if (s.ReadAttrStr("type", __tmp_var)) 
+		type = Materialise::ConvertStringToMeterType(__tmp_var);
 	return true;
 }
 void Materialise::MeterDefinition::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -230,9 +232,11 @@ bool Materialise::MeterDefinition::Read(IXmlSerializerReader& s, std::string __n
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	id = s.ReadAttrStr("id");
-	name = s.ReadAttrStr("name");
-	type = Materialise::ConvertStringToMeterType(s.ReadAttrStr("type"));
+	std::string __tmp_var;
+	s.ReadAttrStr("id", id);
+	s.ReadAttrStr("name", name);
+	if (s.ReadAttrStr("type", __tmp_var)) 
+		type = Materialise::ConvertStringToMeterType(__tmp_var);
 	return true;
 }
 void Materialise::MeterDefinitions::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -248,7 +252,7 @@ bool Materialise::MeterDefinitions::Read(IXmlSerializerReader& s, std::string __
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	count = s.ReadAttrStr("count");
+	s.ReadAttrStr("count", count.value());
 	while (true) { 
 		Materialise::MeterDefinition __t;
 		if (__t.Read(s, "Meter") == false)
@@ -270,7 +274,7 @@ bool Materialise::MeterValues::Read(IXmlSerializerReader& s, std::string __name_
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	count = s.ReadAttrStr("count");
+	s.ReadAttrStr("count", count.value());
 	while (true) { 
 		Materialise::_Value __t;
 		if (__t.Read(s, "Value") == false)
@@ -287,7 +291,7 @@ bool Materialise::_Value::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	meter = s.ReadAttrStr("meter");
+	s.ReadAttrStr("meter", meter);
 	return true;
 }
 void Materialise::Log::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -322,7 +326,7 @@ bool Materialise::Entries::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	count = s.ReadAttrStr("count");
+	s.ReadAttrStr("count", count.value());
 	while (true) { 
 		Materialise::LogEntry __t;
 		if (__t.Read(s, "Entry") == false)
@@ -347,10 +351,12 @@ bool Materialise::LogEntry::Read(IXmlSerializerReader& s, std::string __name__) 
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	type = Materialise::ConvertStringToLogEntryType(s.ReadAttrStr("type"));
-	source = s.ReadAttrStr("source");
-	category = s.ReadAttrStr("category");
-	message = s.ReadAttrStr("message");
+	std::string __tmp_var;
+	if (s.ReadAttrStr("type", __tmp_var)) 
+		type = Materialise::ConvertStringToLogEntryType(__tmp_var);
+	s.ReadAttrStr("source", source.value());
+	s.ReadAttrStr("category", category.value());
+	s.ReadAttrStr("message", message.value());
 	Materialise::MeterValues* __Meters = new Materialise::MeterValues();
 	__Meters->Read(s, "Meters");
 	Meters = std::optional<std::reference_wrapper<Materialise::MeterValues>> { *__Meters };
@@ -401,7 +407,7 @@ bool Materialise::OperationReportMeterValues::Read(IXmlSerializerReader& s, std:
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	count = s.ReadAttrStr("count");
+	s.ReadAttrStr("count", count.value());
 	while (true) { 
 		Materialise::OperationReportMeterValuesValue __t;
 		if (__t.Read(s, "Value") == false)
@@ -418,6 +424,6 @@ bool Materialise::OperationReportMeterValuesValue::Read(IXmlSerializerReader& s,
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	meter = s.ReadAttrStr("meter");
+	s.ReadAttrStr("meter", meter);
 	return true;
 }

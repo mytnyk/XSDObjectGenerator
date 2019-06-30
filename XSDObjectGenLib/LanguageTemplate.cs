@@ -137,7 +137,7 @@ namespace XSDObjectGenLib
                 case "System.Byte[]":
                 case "System.Object":
                 case "System.Xml.XmlQualifiedName":
-                    generator.put_AttributeObjectTemplate(fieldType, fieldName1, default_value, is_required);
+                    generator.put_AttributeObjectTemplate(fieldType, fieldName1, attributeName, default_value, is_required);
                     //outStream.WriteLine(AttributeObjectTemplate, fieldName1, fieldType, attributeName, schemaForm, xsdDatatype, fieldName2, nameSpace,
                     //    hiddenMemberPrefix);
                     break;
@@ -153,16 +153,16 @@ namespace XSDObjectGenLib
                     break;
                 default:
                     if (fieldType == "string")   // value types like System.Uri
-                        generator.put_AttributeObjectTemplate(fieldType, fieldName1, default_value, is_required);
+                        generator.put_AttributeObjectTemplate(fieldType, fieldName1, attributeName, default_value, is_required);
                     //outStream.WriteLine(AttributeObjectTemplate, fieldName1, fieldType, attributeName, schemaForm, xsdDatatype, fieldName2, nameSpace,
                     //    hiddenMemberPrefix);
                     else
                         if (fieldType.StartsWith("OLI_LU_"))  // special case for ACORD life
-                        generator.put_AttributeValueTypeTemplate("int", fieldName1, default_value, is_required);
+                        generator.put_AttributeValueTypeTemplate("int", fieldName1, attributeName, default_value, is_required);
                         //outStream.WriteLine(AttributeValueTypeTemplate, fieldName1, "int", attributeName, schemaForm, xsdDatatype, fieldName2, nameSpace,
                         //    hiddenMemberPrefix);
                     else
-                        generator.put_AttributeValueTypeTemplate(fieldType, fieldName1, default_value, is_required);
+                        generator.put_AttributeValueTypeTemplate(fieldType, fieldName1, attributeName, default_value, is_required);
                         //outStream.WriteLine(AttributeValueTypeTemplate, fieldName1, fieldType, attributeName, schemaForm, xsdDatatype, fieldName2, nameSpace,
                         //    hiddenMemberPrefix);
                     break;
@@ -221,7 +221,7 @@ namespace XSDObjectGenLib
                 }
                 else
                 {
-                    generator.put_FieldCollectionTemplate(fieldType, elementName, default_value, is_required);
+                    generator.put_FieldCollectionTemplate(fieldType, elementName, elementName, default_value, is_required);
                     //outStream.WriteLine(FieldCollectionTemplate, fieldName1, fieldType, elementName, schemaForm, fieldName1, xsdDatatype, nameSpace,
                     //    hiddenMemberPrefix, collectionSuffix, isElementNullable.ToString().ToLower(), fieldType);
                 }
@@ -235,7 +235,7 @@ namespace XSDObjectGenLib
                     case "System.Byte[]":
                     case "System.Object":
                     case "System.Xml.XmlQualifiedName":
-                        generator.put_ElementObjectTemplate(fieldType, fieldName1, default_value, is_required);
+                        generator.put_ElementObjectTemplate(fieldType, fieldName1, elementName, default_value, is_required);
                         //outStream.WriteLine(ElementObjectTemplate, fieldName1, fieldType, elementName, schemaForm, xsdDatatype, fieldName2, nameSpace,
                         //    hiddenMemberPrefix, isElementNullable.ToString().ToLower());
                         break;
@@ -252,16 +252,16 @@ namespace XSDObjectGenLib
                         break;
                     default:
                         if (fieldType == "string")   // value types like System.Uri
-                            generator.put_ElementObjectTemplate(fieldType, fieldName1, default_value, is_required);
+                            generator.put_ElementObjectTemplate(fieldType, fieldName1, elementName, default_value, is_required);
                         //outStream.WriteLine(ElementObjectTemplate, fieldName1, fieldType, elementName, schemaForm, xsdDatatype, fieldName2, nameSpace,
                         //    hiddenMemberPrefix, isElementNullable.ToString().ToLower());
                         else
                             if (fieldType.StartsWith("OLI_LU_"))
-                            generator.put_ElementValueTypeTemplate("int", fieldName1, default_value, is_required);
+                            generator.put_ElementValueTypeTemplate("int", fieldName1, elementName, default_value, is_required);
                             //outStream.WriteLine(ElementValueTypeTemplate, fieldName1, "int", elementName, schemaForm, xsdDatatype, fieldName2, nameSpace,
                             //hiddenMemberPrefix);
                         else
-                            generator.put_ElementValueTypeTemplate(fieldType, fieldName1, default_value, is_required);
+                            generator.put_ElementValueTypeTemplate(fieldType, fieldName1, elementName, default_value, is_required);
                             //outStream.WriteLine(ElementValueTypeTemplate, fieldName1, fieldType, elementName, schemaForm, xsdDatatype, fieldName2, nameSpace,
                                 //hiddenMemberPrefix);
                         break;
@@ -304,7 +304,7 @@ namespace XSDObjectGenLib
 
             if (particleOccurs > 1 || fieldOccurs > 1)
             {
-                generator.put_FieldCollectionTemplate(collectionContainedType, fieldName1, default_value, is_required);
+                generator.put_FieldCollectionTemplate(collectionContainedType, fieldName1, dupElementName, default_value, is_required);
                 //outStream.WriteLine(FieldCollectionTemplate, fieldType2, fieldType1, elementName, schemaForm, fieldName1, "", nameSpace,
                 //    hiddenMemberPrefix, collectionSuffix, isElementNullable.ToString().ToLower(), collectionContainedType);
             }
@@ -315,7 +315,7 @@ namespace XSDObjectGenLib
             }
             else
             {
-                generator.put_FieldClassTemplate(fieldType1, fieldName1, default_value, is_required);
+                generator.put_FieldClassTemplate(fieldType1, fieldName1, dupElementName, default_value, is_required);
                 //outStream.WriteLine(FieldClassTemplate, fieldName1, fieldType1, elementName, schemaForm, fieldName2, nameSpace, hiddenMemberPrefix,
                 //    isElementNullable.ToString().ToLower());
             }

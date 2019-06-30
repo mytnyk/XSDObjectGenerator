@@ -46,8 +46,8 @@ bool Materialise::MachineCustomProperty::Read(IXmlSerializerReader& s, std::stri
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	VariableName = s.ReadAttrStr("VariableName");
-	VariableType = s.ReadAttrStr("VariableType");
+	s.ReadAttrStr("VariableName", VariableName);
+	s.ReadAttrStr("VariableType", VariableType);
 	return true;
 }
 void Materialise::Machine::Write(IXmlSerializerWriter& s, std::string __name__) {

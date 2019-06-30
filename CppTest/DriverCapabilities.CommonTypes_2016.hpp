@@ -56,7 +56,7 @@ namespace Materialise {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
 		std::string Id;
-		std::optional<std::string> Value {""};
+		std::optional<std::string> Value;
 		Capability() {}
 		~Capability() {}
 	};
@@ -74,7 +74,7 @@ namespace Materialise {
 		bool Read(IXmlSerializerReader& s, std::string __name__);
 		Materialise::DriverIssueId Id;
 		std::string Title;
-		std::optional<std::string> Description {""};
+		std::optional<std::string> Description;
 		Materialise::DriverIssueSeverity Severity;
 		DriverIssue() {}
 		~DriverIssue() {}
@@ -99,10 +99,13 @@ bool Materialise::DriverIssue::Read(IXmlSerializerReader& s, std::string __name_
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	Id = Materialise::ConvertStringToDriverIssueId(s.ReadAttrStr("Id"));
-	Title = s.ReadAttrStr("Title");
-	Description = s.ReadAttrStr("Description");
-	Severity = Materialise::ConvertStringToDriverIssueSeverity(s.ReadAttrStr("Severity"));
+	std::string __tmp_var;
+	if (s.ReadAttrStr("Id", __tmp_var)) 
+		Id = Materialise::ConvertStringToDriverIssueId(__tmp_var);
+	s.ReadAttrStr("Title", Title);
+	s.ReadAttrStr("Description", Description.value());
+	if (s.ReadAttrStr("Severity", __tmp_var)) 
+		Severity = Materialise::ConvertStringToDriverIssueSeverity(__tmp_var);
 	return true;
 }
 void Materialise::DriverIssues::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -134,8 +137,8 @@ bool Materialise::Capability::Read(IXmlSerializerReader& s, std::string __name__
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	Id = s.ReadAttrStr("Id");
-	Value = s.ReadAttrStr("Value");
+	s.ReadAttrStr("Id", Id);
+	s.ReadAttrStr("Value", Value.value());
 	return true;
 }
 void Materialise::Capabilities::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -147,14 +150,14 @@ void Materialise::Capabilities::Write(IXmlSerializerWriter& s, std::string __nam
 	}
 	for(int i = 0;i < __Capabilities.size();i++)
 	{
-		__Capabilities[i].Write(s, "__Capabilities"); 
+		__Capabilities[i].Write(s, "Capabilities"); 
 	}
 }
 bool Materialise::Capabilities::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	Id = s.ReadAttrStr("Id");
+	s.ReadAttrStr("Id", Id);
 	while (true) { 
 		Materialise::Capability __t;
 		if (__t.Read(s, "Capability") == false)
@@ -163,7 +166,7 @@ bool Materialise::Capabilities::Read(IXmlSerializerReader& s, std::string __name
 	}
 	while (true) { 
 		Materialise::Capabilities __t;
-		if (__t.Read(s, "__Capabilities") == false)
+		if (__t.Read(s, "Capabilities") == false)
 			break;
 		__Capabilities.push_back(__t);
 	}

@@ -58,7 +58,7 @@ namespace Materialise {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
 		std::string Name;
-		std::optional<std::string> Comment {""};
+		std::optional<std::string> Comment;
 		std::optional<std::reference_wrapper<Materialise::Materials>> Materials;
 		std::optional<std::reference_wrapper<Materialise::Parameters>> Parameters;
 		PlatformInformation() {}
@@ -116,7 +116,7 @@ bool Materialise::Material::Read(IXmlSerializerReader& s, std::string __name__) 
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	name = s.ReadAttrStr("name");
+	s.ReadAttrStr("name", name);
 	return true;
 }
 void Materialise::Parameters::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -153,9 +153,9 @@ bool Materialise::Choice::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	id = s.ReadAttrStr("id");
-	name = s.ReadAttrStr("name");
-	isRequired = s.ReadAttrBool("isRequired");
+	s.ReadAttrStr("id", id);
+	s.ReadAttrStr("name", name);
+	s.ReadAttrBool("isRequired", isRequired.value());
 	while (true) { 
 		Materialise::Item __t;
 		if (__t.Read(s, "Item") == false)
@@ -175,8 +175,8 @@ bool Materialise::Item::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	id = s.ReadAttrStr("id");
-	name = s.ReadAttrStr("name");
-	isDefault = s.ReadAttrBool("isDefault");
+	s.ReadAttrStr("id", id);
+	s.ReadAttrStr("name", name);
+	s.ReadAttrBool("isDefault", isDefault.value());
 	return true;
 }

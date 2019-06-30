@@ -21,7 +21,7 @@ namespace Materialise {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
 		std::string id;
-		std::optional<std::string> FilePath {""};
+		std::optional<std::string> FilePath;
 		std::optional<std::reference_wrapper<Materialise::PartInstances>> Instances;
 		Part() {}
 		~Part() {}
@@ -116,7 +116,7 @@ bool Materialise::Instance::Read(IXmlSerializerReader& s, std::string __name__) 
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	id = s.ReadAttrStr("id");
+	s.ReadAttrStr("id", id);
 	Materialise::PartLabels* __Labels = new Materialise::PartLabels();
 	__Labels->Read(s, "Labels");
 	Labels = std::optional<std::reference_wrapper<Materialise::PartLabels>> { *__Labels };
@@ -150,8 +150,8 @@ bool Materialise::Label::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	id = s.ReadAttrStr("id");
-	value = s.ReadAttrStr("value");
+	s.ReadAttrStr("id", id);
+	s.ReadAttrStr("value", value);
 	return true;
 }
 void Materialise::PreprocessorInput::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -187,7 +187,7 @@ bool Materialise::Labelling::Read(IXmlSerializerReader& s, std::string __name__)
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	enabled = s.ReadAttrBool("enabled");
+	s.ReadAttrBool("enabled", enabled.value());
 	return true;
 }
 void Materialise::PreliminaryPass::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -199,7 +199,7 @@ bool Materialise::PreliminaryPass::Read(IXmlSerializerReader& s, std::string __n
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	enabled = s.ReadAttrBool("enabled");
+	s.ReadAttrBool("enabled", enabled.value());
 	return true;
 }
 void Materialise::Parts::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -233,7 +233,7 @@ bool Materialise::Part::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	id = s.ReadAttrStr("id");
+	s.ReadAttrStr("id", id);
 	s.ReadStr("FilePath", FilePath.value());
 	Materialise::PartInstances* __Instances = new Materialise::PartInstances();
 	__Instances->Read(s, "Instances");

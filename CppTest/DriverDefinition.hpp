@@ -40,7 +40,7 @@ namespace Materialise {
 		std::string ModelId;
 		std::string Name;
 		std::string Manufacturer;
-		std::optional<std::string> IconFile {""};
+		std::optional<std::string> IconFile;
 		std::optional<std::reference_wrapper<Materialise::DriverCapabilities>> DriverCapabilities;
 		std::optional<std::reference_wrapper<Materialise::Properties>> Properties;
 		Printer() {}
@@ -61,8 +61,8 @@ namespace Materialise {
 		std::string Provider;
 		std::string Version;
 		std::string DriverDll;
-		std::optional<std::string> MonitorDll {""};
-		std::optional<std::string> UserDriverDll {""};
+		std::optional<std::string> MonitorDll;
+		std::optional<std::string> UserDriverDll;
 		std::string SupportedApi;
 		std::optional<std::reference_wrapper<Materialise::Properties>> Properties;
 		Materialise::SupportedPrinters SupportedPrinters;
@@ -86,10 +86,10 @@ namespace Materialise {
 	struct DriverCapabilities {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<bool> CanUploadOnly {0};
-		std::optional<PrintMode> PrintMode {0};
-		std::optional<bool> NoUpload {0};
-		std::optional<bool> CanGetPrintDetails {0};
+		std::optional<bool> CanUploadOnly;
+		std::optional<PrintMode> PrintMode;
+		std::optional<bool> NoUpload;
+		std::optional<bool> CanGetPrintDetails;
 		DriverCapabilities() {}
 		~DriverCapabilities() {}
 	};
@@ -110,7 +110,7 @@ bool Materialise::Printer::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	ModelId = s.ReadAttrStr("ModelId");
+	s.ReadAttrStr("ModelId", ModelId);
 	s.ReadStr("Name", Name);
 	s.ReadStr("Manufacturer", Manufacturer);
 	s.ReadStr("IconFile", IconFile.value());
@@ -137,8 +137,10 @@ bool Materialise::DriverCapabilities::Read(IXmlSerializerReader& s, std::string 
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
+	std::string __tmp_var;
 	s.ReadBool("CanUploadOnly", CanUploadOnly.value());
-	PrintMode = Materialise::ConvertStringToPrintMode(s.ReadAttrStr("PrintMode"));
+	if (s.ReadAttrStr("PrintMode", __tmp_var)) 
+		PrintMode = Materialise::ConvertStringToPrintMode(__tmp_var);
 	s.ReadBool("NoUpload", NoUpload.value());
 	s.ReadBool("CanGetPrintDetails", CanGetPrintDetails.value());
 	return true;
@@ -170,7 +172,7 @@ bool Materialise::Property::Read(IXmlSerializerReader& s, std::string __name__) 
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	Name = s.ReadAttrStr("Name");
+	s.ReadAttrStr("Name", Name);
 	return true;
 }
 void Materialise::Driver::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -193,7 +195,7 @@ bool Materialise::Driver::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	Id = s.ReadAttrStr("Id");
+	s.ReadAttrStr("Id", Id);
 	s.ReadStr("Name", Name);
 	s.ReadStr("Provider", Provider);
 	s.ReadStr("Version", Version);

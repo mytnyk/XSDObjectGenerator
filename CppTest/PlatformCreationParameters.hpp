@@ -52,6 +52,6 @@ bool Materialise::ParameterValue::Read(IXmlSerializerReader& s, std::string __na
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	id = s.ReadAttrStr("id");
+	s.ReadAttrStr("id", id);
 	return true;
 }

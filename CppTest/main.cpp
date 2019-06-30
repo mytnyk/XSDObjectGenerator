@@ -14,8 +14,7 @@
 
 //------------------- Generated code end--------------//
 
-int main()
-{
+void write() {
 	PugiXmlSerializerWriter s;
 	Materialise::BuildTicket bt;
 	Materialise::CT_PropertyTemplateTree tree;
@@ -27,12 +26,27 @@ int main()
 	node.Name = "Name here";
 	node.ProfileList = "Profile list here";
 	tree.PropertyNode.push_back(node);
+	node.List = "List 2 here";
 	tree.PropertyNode.push_back(node);
 	bt.Defaults = tree;
 
 	bt.Write(s, "BuildTicket");
 
 	s.SaveToFile("simple_xml.xml");
+}
+
+void read() {
+	PugiXmlSerializerReader s;
+	s.Load("simple_xml.xml");
+	Materialise::BuildTicket bt;
+	bt.Read(s, "BuildTicket");
+	return;
+}
+
+int main()
+{
+	//write();
+	read();
 	
 	//Test::shiporder c;
 	//c.Read(s);

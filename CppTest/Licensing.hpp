@@ -99,11 +99,13 @@ bool Materialise::License::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	Name = s.ReadAttrStr("Name");
-	DisplayName = s.ReadAttrStr("DisplayName");
-	IsMain = s.ReadAttrBool("IsMain");
-	IsDemo = s.ReadAttrBool("IsDemo");
-	Visibility = Materialise::ConvertStringToLicenseVisibility(s.ReadAttrStr("Visibility"));
+	std::string __tmp_var;
+	s.ReadAttrStr("Name", Name);
+	s.ReadAttrStr("DisplayName", DisplayName);
+	s.ReadAttrBool("IsMain", IsMain.value());
+	s.ReadAttrBool("IsDemo", IsDemo.value());
+	if (s.ReadAttrStr("Visibility", __tmp_var)) 
+		Visibility = Materialise::ConvertStringToLicenseVisibility(__tmp_var);
 	return true;
 }
 void Materialise::Licenses::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -137,7 +139,7 @@ bool Materialise::Plugin::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	Name = s.ReadAttrStr("Name");
+	s.ReadAttrStr("Name", Name);
 	while (true) { 
 		Materialise::LicenseName __t;
 		if (__t.Read(s, "LicenseName") == false)
@@ -155,8 +157,8 @@ bool Materialise::LicenseName::Read(IXmlSerializerReader& s, std::string __name_
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	From = s.ReadAttrStr("From");
-	To = s.ReadAttrStr("To");
+	s.ReadAttrStr("From", From);
+	s.ReadAttrStr("To", To);
 	return true;
 }
 void Materialise::PluginsLicenseNameMapping::Write(IXmlSerializerWriter& s, std::string __name__) {

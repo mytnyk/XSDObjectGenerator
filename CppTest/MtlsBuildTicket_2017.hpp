@@ -136,7 +136,7 @@ namespace Materialise {
 		std::optional<double> x;
 		std::optional<double> y;
 		double z;
-		std::optional<std::string> radius {""};
+		std::optional<std::string> radius;
 		Dim() {}
 		~Dim() {}
 	};
@@ -230,7 +230,7 @@ namespace Materialise {
 	struct Source {
 		void Write(IXmlSerializerWriter& s, std::string __name__);
 		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<std::string> Id {""};
+		std::optional<std::string> Id;
 		std::optional<bool> PropertyTemplate;
 		Source() {}
 		~Source() {}
@@ -283,13 +283,13 @@ namespace Materialise {
 		bool Read(IXmlSerializerReader& s, std::string __name__);
 		std::string Name;
 		std::optional<Materialise::ST_PropertyType> Type;
-		std::optional<std::string> DisplayName {""};
-		std::optional<std::string> DisplayNameContainer {""};
-		std::optional<std::string> PropertyName {""};
-		std::optional<std::string> Default {""};
-		std::optional<std::string> ProfileList {""};
-		std::optional<std::string> List {""};
-		std::optional<std::string> ProfileName {""};
+		std::optional<std::string> DisplayName;
+		std::optional<std::string> DisplayNameContainer;
+		std::optional<std::string> PropertyName;
+		std::optional<std::string> Default;
+		std::optional<std::string> ProfileList;
+		std::optional<std::string> List;
+		std::optional<std::string> ProfileName;
 		std::vector<Materialise::CT_PropertyTemplateNode> PropertyNode;
 		CT_PropertyTemplateNode() {}
 		~CT_PropertyTemplateNode() {}
@@ -307,7 +307,7 @@ namespace Materialise {
 		bool Read(IXmlSerializerReader& s, std::string __name__);
 		std::string Name;
 		std::optional<Materialise::ST_PropertyType> Type;
-		std::optional<std::string> ProfileList {""};
+		std::optional<std::string> ProfileList;
 		std::vector<Materialise::CT_ProfileWithProperties> Profile;
 		std::vector<Materialise::CT_Property> Property;
 		CT_Property() {}
@@ -380,8 +380,10 @@ bool Materialise::CT_PropertyTreeWithUUID::Read(IXmlSerializerReader& s, std::st
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	uuid = s.ReadAttrStr("uuid");
-	type = Materialise::ConvertStringToST_PropertyTreeType(s.ReadAttrStr("type"));
+	std::string __tmp_var;
+	s.ReadAttrStr("uuid", uuid);
+	if (s.ReadAttrStr("type", __tmp_var)) 
+		type = Materialise::ConvertStringToST_PropertyTreeType(__tmp_var);
 	while (true) { 
 		Materialise::CT_Property __t;
 		if (__t.Read(s, "Property") == false)
@@ -408,14 +410,16 @@ bool Materialise::CT_PropertyTreeWithComponents::Read(IXmlSerializerReader& s, s
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
+	std::string __tmp_var;
 	while (true) { 
 		Materialise::CT_PropertyTreeWithUUID __t;
 		if (__t.Read(s, "Component") == false)
 			break;
 		Component.push_back(__t);
 	}
-	uuid = s.ReadAttrStr("uuid");
-	type = Materialise::ConvertStringToST_PropertyTreeType(s.ReadAttrStr("type"));
+	s.ReadAttrStr("uuid", uuid);
+	if (s.ReadAttrStr("type", __tmp_var)) 
+		type = Materialise::ConvertStringToST_PropertyTreeType(__tmp_var);
 	while (true) { 
 		Materialise::CT_Property __t;
 		if (__t.Read(s, "Property") == false)
@@ -440,7 +444,7 @@ bool Materialise::CT_BuildTicket::Read(IXmlSerializerReader& s, std::string __na
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	has_property_template = s.ReadAttrBool("has_property_template");
+	s.ReadAttrBool("has_property_template", has_property_template.value());
 	Info.Read(s, "Info");
 	Materialise::CT_PropertyTree* __Defaults = new Materialise::CT_PropertyTree();
 	__Defaults->Read(s, "Defaults");
@@ -475,8 +479,8 @@ bool Materialise::Source::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	Id = s.ReadAttrStr("Id");
-	PropertyTemplate = s.ReadAttrBool("PropertyTemplate");
+	s.ReadAttrStr("Id", Id.value());
+	s.ReadAttrBool("PropertyTemplate", PropertyTemplate.value());
 	return true;
 }
 void Materialise::PartOverrides::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -528,7 +532,9 @@ bool Materialise::CT_MtlsPropertyTemplate::Read(IXmlSerializerReader& s, std::st
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	version = Materialise::ConvertStringToST_Version(s.ReadAttrStr("version"));
+	std::string __tmp_var;
+	if (s.ReadAttrStr("version", __tmp_var)) 
+		version = Materialise::ConvertStringToST_Version(__tmp_var);
 	MachineParameters.Read(s, "MachineParameters");
 	BuildTicket.Read(s, "BuildTicket");
 	return true;
@@ -569,9 +575,11 @@ bool Materialise::CT_Property::Read(IXmlSerializerReader& s, std::string __name_
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	Name = s.ReadAttrStr("Name");
-	Type = Materialise::ConvertStringToST_PropertyType(s.ReadAttrStr("Type"));
-	ProfileList = s.ReadAttrStr("ProfileList");
+	std::string __tmp_var;
+	s.ReadAttrStr("Name", Name);
+	if (s.ReadAttrStr("Type", __tmp_var)) 
+		Type = Materialise::ConvertStringToST_PropertyType(__tmp_var);
+	s.ReadAttrStr("ProfileList", ProfileList.value());
 	while (true) { 
 		Materialise::CT_ProfileWithProperties __t;
 		if (__t.Read(s, "Profile") == false)
@@ -598,7 +606,7 @@ bool Materialise::CT_ProfileWithProperties::Read(IXmlSerializerReader& s, std::s
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	Name = s.ReadAttrStr("Name");
+	s.ReadAttrStr("Name", Name);
 	while (true) { 
 		Materialise::CT_Property __t;
 		if (__t.Read(s, "Property") == false)
@@ -654,15 +662,17 @@ bool Materialise::CT_PropertyTemplateNode::Read(IXmlSerializerReader& s, std::st
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	Name = s.ReadAttrStr("Name");
-	Type = Materialise::ConvertStringToST_PropertyType(s.ReadAttrStr("Type"));
-	DisplayName = s.ReadAttrStr("DisplayName");
-	DisplayNameContainer = s.ReadAttrStr("DisplayNameContainer");
-	PropertyName = s.ReadAttrStr("PropertyName");
-	Default = s.ReadAttrStr("Default");
-	ProfileList = s.ReadAttrStr("ProfileList");
-	List = s.ReadAttrStr("List");
-	ProfileName = s.ReadAttrStr("ProfileName");
+	std::string __tmp_var;
+	s.ReadAttrStr("Name", Name);
+	if (s.ReadAttrStr("Type", __tmp_var)) 
+		Type = Materialise::ConvertStringToST_PropertyType(__tmp_var);
+	s.ReadAttrStr("DisplayName", DisplayName.value());
+	s.ReadAttrStr("DisplayNameContainer", DisplayNameContainer.value());
+	s.ReadAttrStr("PropertyName", PropertyName.value());
+	s.ReadAttrStr("Default", Default.value());
+	s.ReadAttrStr("ProfileList", ProfileList.value());
+	s.ReadAttrStr("List", List.value());
+	s.ReadAttrStr("ProfileName", ProfileName.value());
 	while (true) { 
 		Materialise::CT_PropertyTemplateNode __t;
 		if (__t.Read(s, "PropertyNode") == false)
@@ -684,7 +694,9 @@ bool Materialise::CT_MtlsMachineInfo::Read(IXmlSerializerReader& s, std::string 
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	version = Materialise::ConvertStringToST_Version(s.ReadAttrStr("version"));
+	std::string __tmp_var;
+	if (s.ReadAttrStr("version", __tmp_var)) 
+		version = Materialise::ConvertStringToST_Version(__tmp_var);
 	BuildVolume.Read(s, "BuildVolume");
 	Tray.Read(s, "Tray");
 	Materialise::LockedAreas* __LockedAreas = new Materialise::LockedAreas();
@@ -718,7 +730,9 @@ bool Materialise::CT_MtlsMachineInfoComponent::Read(IXmlSerializerReader& s, std
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	Shape = Materialise::ConvertStringToShape(s.ReadAttrStr("Shape"));
+	std::string __tmp_var;
+	if (s.ReadAttrStr("Shape", __tmp_var)) 
+		Shape = Materialise::ConvertStringToShape(__tmp_var);
 	Pos.Read(s, "Pos");
 	Dim.Read(s, "Dim");
 	Materialise::Mesh* __Mesh = new Materialise::Mesh();
@@ -736,9 +750,9 @@ bool Materialise::Pos::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	x = s.ReadAttrDouble("x");
-	y = s.ReadAttrDouble("y");
-	z = s.ReadAttrDouble("z");
+	s.ReadAttrDouble("x", x);
+	s.ReadAttrDouble("y", y);
+	s.ReadAttrDouble("z", z);
 	return true;
 }
 void Materialise::Dim::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -755,10 +769,10 @@ bool Materialise::Dim::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	x = s.ReadAttrDouble("x");
-	y = s.ReadAttrDouble("y");
-	z = s.ReadAttrDouble("z");
-	radius = s.ReadAttrStr("radius");
+	s.ReadAttrDouble("x", x.value());
+	s.ReadAttrDouble("y", y.value());
+	s.ReadAttrDouble("z", z);
+	s.ReadAttrStr("radius", radius.value());
 	return true;
 }
 void Materialise::Mesh::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -769,7 +783,7 @@ bool Materialise::Mesh::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	uuid = s.ReadAttrStr("uuid");
+	s.ReadAttrStr("uuid", uuid);
 	return true;
 }
 void Materialise::MtlsBuildTicket::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -788,7 +802,7 @@ bool Materialise::MtlsBuildTicket::Read(IXmlSerializerReader& s, std::string __n
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	has_property_template = s.ReadAttrBool("has_property_template");
+	s.ReadAttrBool("has_property_template", has_property_template.value());
 	Info.Read(s, "Info");
 	Materialise::CT_PropertyTree* __Defaults = new Materialise::CT_PropertyTree();
 	__Defaults->Read(s, "Defaults");
@@ -814,7 +828,9 @@ bool Materialise::MtlsMachineParameters::Read(IXmlSerializerReader& s, std::stri
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	version = Materialise::ConvertStringToST_Version(s.ReadAttrStr("version"));
+	std::string __tmp_var;
+	if (s.ReadAttrStr("version", __tmp_var)) 
+		version = Materialise::ConvertStringToST_Version(__tmp_var);
 	while (true) { 
 		Materialise::CT_Property __t;
 		if (__t.Read(s, "Property") == false)
@@ -834,7 +850,9 @@ bool Materialise::MtlsPropertyTemplate::Read(IXmlSerializerReader& s, std::strin
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	version = Materialise::ConvertStringToST_Version(s.ReadAttrStr("version"));
+	std::string __tmp_var;
+	if (s.ReadAttrStr("version", __tmp_var)) 
+		version = Materialise::ConvertStringToST_Version(__tmp_var);
 	MachineParameters.Read(s, "MachineParameters");
 	BuildTicket.Read(s, "BuildTicket");
 	return true;
@@ -852,7 +870,9 @@ bool Materialise::MtlsMachineInfo::Read(IXmlSerializerReader& s, std::string __n
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	version = Materialise::ConvertStringToST_Version(s.ReadAttrStr("version"));
+	std::string __tmp_var;
+	if (s.ReadAttrStr("version", __tmp_var)) 
+		version = Materialise::ConvertStringToST_Version(__tmp_var);
 	BuildVolume.Read(s, "BuildVolume");
 	Tray.Read(s, "Tray");
 	Materialise::LockedAreas* __LockedAreas = new Materialise::LockedAreas();
