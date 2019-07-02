@@ -230,7 +230,9 @@ bool Materialise::ExcludeFiles::Read(IXmlSerializerReader& s, std::string __name
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	s.ReadAttrStr("except", except.value());
+	std::string* __except = new std::string();
+	if (s.ReadAttrStr("except", *__except))
+		except = std::optional<std::reference_wrapper<std::string>> { *__except };
 	return true;
 }
 void Materialise::LicenseFiles::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -276,7 +278,9 @@ bool Materialise::PackageId::Read(IXmlSerializerReader& s, std::string __name__)
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	s.ReadAttrStr("path", path.value());
+	std::string* __path = new std::string();
+	if (s.ReadAttrStr("path", *__path))
+		path = std::optional<std::reference_wrapper<std::string>> { *__path };
 	return true;
 }
 void Materialise::BuildInfo::Write(IXmlSerializerWriter& s, std::string __name__) {

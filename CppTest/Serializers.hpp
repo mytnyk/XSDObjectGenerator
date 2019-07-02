@@ -4,6 +4,7 @@
 #include <string>
 #include <pugixml.hpp>
 #include <stack>
+#include <set>
 
 class IXmlSerializerWriter
 {
@@ -66,6 +67,7 @@ public:
 	virtual bool ReadAttrStr(const char* name, std::string& value) = 0;
 	virtual bool ReadAttrDouble(const char* name, double& value) = 0;
 	virtual bool ReadAttrInt(const char* name, int& value) = 0;
+	virtual std::string getParentName() = 0;
 private:
 	virtual void LeaveChild(const char* name) = 0;
 	virtual bool EnterChild(const char* name) = 0;
@@ -84,7 +86,7 @@ public:
 		}
 		~Scope() {
 			if (is_successfull) {
-				_s.LeaveChild(_name);
+				_s.LeaveChild(_s.getParentName().c_str());
 			}
 		}
 	};
@@ -174,24 +176,38 @@ class PugiXmlSerializerReader : public IXmlSerializerReader
 private:
 	pugi::xml_document _doc;
 	pugi::xml_node _cursor;
-	std::stack<std::string> names;
+	std::stack<std::pair<bool, std::string>> names;
+	std::set<size_t> used_hashes;
 public:
-	PugiXmlSerializerReader() { _cursor = _doc; names.push(""); }
+	PugiXmlSerializerReader() { _cursor = _doc; }
 
 	bool EnterChild(const char* name) override {
 		pugi::xml_node new_cursor;
 		std::string new_name(name);
-		if (new_name == names.top()) {
-			names.pop();
-			names.push(new_name);
+		std::ostream& ws = std::cout;
+		std::cout << "Before: " << std::endl;
+		_cursor.print(ws);
+		bool was = false;
+		if (names.size() > 0 && names.top().second == name && names.top().first == true) {
+			std::string _name = _cursor.name();
 			new_cursor = _cursor.next_sibling(name);
+			used_hashes.insert(new_cursor.hash_value());
+			names.top().first = false;
 		}
 		else {
-			names.pop();
-			names.push(new_name);
+			names.push(std::make_pair(false, name));
 			new_cursor = _cursor.child(name);
+			if (new_cursor != NULL && used_hashes.find(new_cursor.hash_value()) != used_hashes.end()) {
+				was = true;
+			}
+			else {
+				used_hashes.insert(new_cursor.hash_value());
+			}
 		}
-		if (new_cursor == NULL) {
+		std::cout << "After: " << std::endl;
+		_cursor.print(ws);
+		if (new_cursor == NULL || was) {
+			names.pop();
 			return false;
 		}
 		else {
@@ -201,9 +217,20 @@ public:
 	}
 
 	void LeaveChild(const char* cname) override {
+		std::ostream& ws = std::cout;
+		_cursor.print(ws);
+		if (names.size() > 0)
+			names.top().first = true;
+		else
+			return;
 		if (_cursor.next_sibling(cname) == NULL) {
 			_cursor = _cursor.parent();
-		}
+			names.pop();
+		} 
+	}
+
+	std::string getParentName() override {
+		return _cursor.name();
 	}
 
 	bool hasMember(const char* name) {

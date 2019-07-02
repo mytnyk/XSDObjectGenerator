@@ -155,7 +155,9 @@ bool Materialise::Choice::Read(IXmlSerializerReader& s, std::string __name__) {
 		return false;
 	s.ReadAttrStr("id", id);
 	s.ReadAttrStr("name", name);
-	s.ReadAttrBool("isRequired", isRequired.value());
+	bool* __isRequired = new bool();
+	if (s.ReadAttrBool("isRequired", *__isRequired))
+		isRequired = std::optional<std::reference_wrapper<bool>> { *__isRequired };
 	while (true) { 
 		Materialise::Item __t;
 		if (__t.Read(s, "Item") == false)
@@ -177,6 +179,8 @@ bool Materialise::Item::Read(IXmlSerializerReader& s, std::string __name__) {
 		return false;
 	s.ReadAttrStr("id", id);
 	s.ReadAttrStr("name", name);
-	s.ReadAttrBool("isDefault", isDefault.value());
+	bool* __isDefault = new bool();
+	if (s.ReadAttrBool("isDefault", *__isDefault))
+		isDefault = std::optional<std::reference_wrapper<bool>> { *__isDefault };
 	return true;
 }

@@ -115,7 +115,9 @@ bool Materialise::Meters::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	s.ReadAttrStr("count", count.value());
+	std::string* __count = new std::string();
+	if (s.ReadAttrStr("count", *__count))
+		count = std::optional<std::reference_wrapper<std::string>> { *__count };
 	while (true) { 
 		Materialise::Meter __t;
 		if (__t.Read(s, "Meter") == false)
@@ -171,7 +173,9 @@ bool Materialise::MeterDefinitions::Read(IXmlSerializerReader& s, std::string __
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	s.ReadAttrStr("count", count.value());
+	std::string* __count = new std::string();
+	if (s.ReadAttrStr("count", *__count))
+		count = std::optional<std::reference_wrapper<std::string>> { *__count };
 	while (true) { 
 		Materialise::MeterDefinition __t;
 		if (__t.Read(s, "Meter") == false)
@@ -193,7 +197,9 @@ bool Materialise::MeterValues::Read(IXmlSerializerReader& s, std::string __name_
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	s.ReadAttrStr("count", count.value());
+	std::string* __count = new std::string();
+	if (s.ReadAttrStr("count", *__count))
+		count = std::optional<std::reference_wrapper<std::string>> { *__count };
 	while (true) { 
 		Materialise::_Value __t;
 		if (__t.Read(s, "Value") == false)

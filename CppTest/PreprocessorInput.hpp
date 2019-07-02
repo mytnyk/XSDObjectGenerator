@@ -187,7 +187,9 @@ bool Materialise::Labelling::Read(IXmlSerializerReader& s, std::string __name__)
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	s.ReadAttrBool("enabled", enabled.value());
+	bool* __enabled = new bool();
+	if (s.ReadAttrBool("enabled", *__enabled))
+		enabled = std::optional<std::reference_wrapper<bool>> { *__enabled };
 	return true;
 }
 void Materialise::PreliminaryPass::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -199,7 +201,9 @@ bool Materialise::PreliminaryPass::Read(IXmlSerializerReader& s, std::string __n
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	s.ReadAttrBool("enabled", enabled.value());
+	bool* __enabled = new bool();
+	if (s.ReadAttrBool("enabled", *__enabled))
+		enabled = std::optional<std::reference_wrapper<bool>> { *__enabled };
 	return true;
 }
 void Materialise::Parts::Write(IXmlSerializerWriter& s, std::string __name__) {

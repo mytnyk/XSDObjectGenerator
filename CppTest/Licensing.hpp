@@ -102,8 +102,12 @@ bool Materialise::License::Read(IXmlSerializerReader& s, std::string __name__) {
 	std::string __tmp_var;
 	s.ReadAttrStr("Name", Name);
 	s.ReadAttrStr("DisplayName", DisplayName);
-	s.ReadAttrBool("IsMain", IsMain.value());
-	s.ReadAttrBool("IsDemo", IsDemo.value());
+	bool* __IsMain = new bool();
+	if (s.ReadAttrBool("IsMain", *__IsMain))
+		IsMain = std::optional<std::reference_wrapper<bool>> { *__IsMain };
+	bool* __IsDemo = new bool();
+	if (s.ReadAttrBool("IsDemo", *__IsDemo))
+		IsDemo = std::optional<std::reference_wrapper<bool>> { *__IsDemo };
 	if (s.ReadAttrStr("Visibility", __tmp_var)) 
 		Visibility = Materialise::ConvertStringToLicenseVisibility(__tmp_var);
 	return true;

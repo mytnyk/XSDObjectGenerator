@@ -204,7 +204,9 @@ bool Materialise::DriverIssue::Read(IXmlSerializerReader& s, std::string __name_
 	if (s.ReadAttrStr("Id", __tmp_var)) 
 		Id = Materialise::ConvertStringToDriverIssueId(__tmp_var);
 	s.ReadAttrStr("Title", Title);
-	s.ReadAttrStr("Description", Description.value());
+	std::string* __Description = new std::string();
+	if (s.ReadAttrStr("Description", *__Description))
+		Description = std::optional<std::reference_wrapper<std::string>> { *__Description };
 	if (s.ReadAttrStr("Severity", __tmp_var)) 
 		Severity = Materialise::ConvertStringToDriverIssueSeverity(__tmp_var);
 	return true;
@@ -239,7 +241,9 @@ bool Materialise::Capability::Read(IXmlSerializerReader& s, std::string __name__
 	if (scope.exist() == false)
 		return false;
 	s.ReadAttrStr("Id", Id);
-	s.ReadAttrStr("Value", Value.value());
+	std::string* __Value = new std::string();
+	if (s.ReadAttrStr("Value", *__Value))
+		Value = std::optional<std::reference_wrapper<std::string>> { *__Value };
 	return true;
 }
 void Materialise::Capabilities::Write(IXmlSerializerWriter& s, std::string __name__) {

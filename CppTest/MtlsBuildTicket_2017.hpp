@@ -444,7 +444,9 @@ bool Materialise::CT_BuildTicket::Read(IXmlSerializerReader& s, std::string __na
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	s.ReadAttrBool("has_property_template", has_property_template.value());
+	bool* __has_property_template = new bool();
+	if (s.ReadAttrBool("has_property_template", *__has_property_template))
+		has_property_template = std::optional<std::reference_wrapper<bool>> { *__has_property_template };
 	Info.Read(s, "Info");
 	Materialise::CT_PropertyTree* __Defaults = new Materialise::CT_PropertyTree();
 	__Defaults->Read(s, "Defaults");
@@ -479,8 +481,12 @@ bool Materialise::Source::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	s.ReadAttrStr("Id", Id.value());
-	s.ReadAttrBool("PropertyTemplate", PropertyTemplate.value());
+	std::string* __Id = new std::string();
+	if (s.ReadAttrStr("Id", *__Id))
+		Id = std::optional<std::reference_wrapper<std::string>> { *__Id };
+	bool* __PropertyTemplate = new bool();
+	if (s.ReadAttrBool("PropertyTemplate", *__PropertyTemplate))
+		PropertyTemplate = std::optional<std::reference_wrapper<bool>> { *__PropertyTemplate };
 	return true;
 }
 void Materialise::PartOverrides::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -579,7 +585,9 @@ bool Materialise::CT_Property::Read(IXmlSerializerReader& s, std::string __name_
 	s.ReadAttrStr("Name", Name);
 	if (s.ReadAttrStr("Type", __tmp_var)) 
 		Type = Materialise::ConvertStringToST_PropertyType(__tmp_var);
-	s.ReadAttrStr("ProfileList", ProfileList.value());
+	std::string* __ProfileList = new std::string();
+	if (s.ReadAttrStr("ProfileList", *__ProfileList))
+		ProfileList = std::optional<std::reference_wrapper<std::string>> { *__ProfileList };
 	while (true) { 
 		Materialise::CT_ProfileWithProperties __t;
 		if (__t.Read(s, "Profile") == false)
@@ -666,13 +674,27 @@ bool Materialise::CT_PropertyTemplateNode::Read(IXmlSerializerReader& s, std::st
 	s.ReadAttrStr("Name", Name);
 	if (s.ReadAttrStr("Type", __tmp_var)) 
 		Type = Materialise::ConvertStringToST_PropertyType(__tmp_var);
-	s.ReadAttrStr("DisplayName", DisplayName.value());
-	s.ReadAttrStr("DisplayNameContainer", DisplayNameContainer.value());
-	s.ReadAttrStr("PropertyName", PropertyName.value());
-	s.ReadAttrStr("Default", Default.value());
-	s.ReadAttrStr("ProfileList", ProfileList.value());
-	s.ReadAttrStr("List", List.value());
-	s.ReadAttrStr("ProfileName", ProfileName.value());
+	std::string* __DisplayName = new std::string();
+	if (s.ReadAttrStr("DisplayName", *__DisplayName))
+		DisplayName = std::optional<std::reference_wrapper<std::string>> { *__DisplayName };
+	std::string* __DisplayNameContainer = new std::string();
+	if (s.ReadAttrStr("DisplayNameContainer", *__DisplayNameContainer))
+		DisplayNameContainer = std::optional<std::reference_wrapper<std::string>> { *__DisplayNameContainer };
+	std::string* __PropertyName = new std::string();
+	if (s.ReadAttrStr("PropertyName", *__PropertyName))
+		PropertyName = std::optional<std::reference_wrapper<std::string>> { *__PropertyName };
+	std::string* __Default = new std::string();
+	if (s.ReadAttrStr("Default", *__Default))
+		Default = std::optional<std::reference_wrapper<std::string>> { *__Default };
+	std::string* __ProfileList = new std::string();
+	if (s.ReadAttrStr("ProfileList", *__ProfileList))
+		ProfileList = std::optional<std::reference_wrapper<std::string>> { *__ProfileList };
+	std::string* __List = new std::string();
+	if (s.ReadAttrStr("List", *__List))
+		List = std::optional<std::reference_wrapper<std::string>> { *__List };
+	std::string* __ProfileName = new std::string();
+	if (s.ReadAttrStr("ProfileName", *__ProfileName))
+		ProfileName = std::optional<std::reference_wrapper<std::string>> { *__ProfileName };
 	while (true) { 
 		Materialise::CT_PropertyTemplateNode __t;
 		if (__t.Read(s, "PropertyNode") == false)
@@ -769,10 +791,16 @@ bool Materialise::Dim::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	s.ReadAttrDouble("x", x.value());
-	s.ReadAttrDouble("y", y.value());
+	double* __x = new double();
+	if (s.ReadAttrDouble("x", *__x))
+		x = std::optional<std::reference_wrapper<double>> { *__x };
+	double* __y = new double();
+	if (s.ReadAttrDouble("y", *__y))
+		y = std::optional<std::reference_wrapper<double>> { *__y };
 	s.ReadAttrDouble("z", z);
-	s.ReadAttrStr("radius", radius.value());
+	std::string* __radius = new std::string();
+	if (s.ReadAttrStr("radius", *__radius))
+		radius = std::optional<std::reference_wrapper<std::string>> { *__radius };
 	return true;
 }
 void Materialise::Mesh::Write(IXmlSerializerWriter& s, std::string __name__) {
@@ -802,7 +830,9 @@ bool Materialise::MtlsBuildTicket::Read(IXmlSerializerReader& s, std::string __n
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	s.ReadAttrBool("has_property_template", has_property_template.value());
+	bool* __has_property_template = new bool();
+	if (s.ReadAttrBool("has_property_template", *__has_property_template))
+		has_property_template = std::optional<std::reference_wrapper<bool>> { *__has_property_template };
 	Info.Read(s, "Info");
 	Materialise::CT_PropertyTree* __Defaults = new Materialise::CT_PropertyTree();
 	__Defaults->Read(s, "Defaults");

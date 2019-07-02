@@ -215,7 +215,12 @@ namespace XSDObjectGenLib
             {
                 structs[cur_index].tile.Add("\tstd::optional<" + type + "> " + name + (default_value == null ? "" : $" {{ \"{default_value}\" }}") + ";");
                 structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.WriteAttr(\"{1}\", {0}.value().c_str());", name, original_name));
-                structs[cur_index].read_instructions.Add(string.Format("\ts.ReadAttrStr(\"{1}\", {0}.value());", name, original_name));
+                
+                //structs[cur_index].read_instructions.Add(string.Format("\ts.ReadAttrStr(\"{1}\", {0}.value());", name, original_name));
+
+                structs[cur_index].read_instructions.Add(string.Format("\t{1}* __{0} = new {1}();", name, type));
+                structs[cur_index].read_instructions.Add(string.Format("\tif (s.ReadAttrStr(\"{1}\", *__{0}))", name, original_name));
+                structs[cur_index].read_instructions.Add(string.Format("\t\t{0} = std::optional<std::reference_wrapper<{1}>> {{ *__{0} }};", name, type));
             }
             
 		}
@@ -231,11 +236,22 @@ namespace XSDObjectGenLib
 			{
 				string prefix = getPrefixByType(type);
                 if (is_required)
-				    structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{1}\", {0});", name, original_name));
+                {
+                    structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{1}\", {0});", name, original_name));
+                    structs[cur_index].read_instructions.Add(string.Format("\ts.ReadAttr{1}(\"{2}\", {0});", name, prefix, original_name));
+
+                }
                 else
+                {
                     structs[cur_index].write_instructions.Add(string.Format("\tif ({0}.has_value())\n\t\ts.WriteAttr(\"{1}\", {0}.value());", name, original_name));
-                structs[cur_index].read_instructions.Add(string.Format("\ts.ReadAttr{1}(\"{2}\", {0}{3});", name, prefix, original_name, is_required ? "" : ".value()"));
-			} else
+
+                    //structs[cur_index].read_instructions.Add(string.Format("\n\ts.ReadAttr{1}(\"{2}\", {0}.value());", name, prefix, original_name));
+
+                    structs[cur_index].read_instructions.Add(string.Format("\t{1}* __{0} = new {1}();", name, type));
+                    structs[cur_index].read_instructions.Add(string.Format("\tif (s.ReadAttr{2}(\"{1}\", *__{0}))", name, original_name, prefix));
+                    structs[cur_index].read_instructions.Add(string.Format("\t\t{0} = std::optional<std::reference_wrapper<{1}>> {{ *__{0} }};", name, type));
+                }
+            } else
 			{
                 if (is_required)
                     structs[cur_index].write_instructions.Add(string.Format("\ts.WriteAttr(\"{4}\", {2}::Convert{1}ToString({0}).c_str());", name, removeNamespace(type), _namespace, (is_required) ? "" : ".value()", original_name));
