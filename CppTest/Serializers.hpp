@@ -26,6 +26,7 @@ public:
 	virtual void WriteAttr(const char* name, const char* value) = 0;
 	virtual void WriteAttr(const char* name, int32_t value) = 0;
 	virtual void WriteAttr(const char* name, double value) = 0;
+	virtual void SetSchemaTargetNamespace(std::string _namespace) = 0;
 private:
 	virtual void LeaveChild() = 0;
 	virtual void AddChild(const char* name) = 0;
@@ -68,6 +69,7 @@ public:
 	virtual bool ReadAttrDouble(const char* name, double& value) = 0;
 	virtual bool ReadAttrInt(const char* name, int& value) = 0;
 	virtual std::string getParentName() = 0;
+	virtual std::string getSchemaTargetNamespace() = 0;
 private:
 	virtual void LeaveChild(const char* name) = 0;
 	virtual bool EnterChild(const char* name) = 0;
@@ -168,6 +170,10 @@ public:
 
 	void SaveToFile(const char* file_name) {
 		_doc.save_file(file_name);
+	}
+
+	void SetSchemaTargetNamespace(std::string _namespace) override {
+		_doc.first_child().append_attribute("xmlns").set_value(_namespace.c_str());
 	}
 };
 
@@ -385,5 +391,9 @@ public:
 
 	void Load(const char* file_name) {
 		_doc.load_file(file_name);
+	}
+
+	std::string getSchemaTargetNamespace() override {
+		return _doc.first_child().attribute("xmlns").as_string();
 	}
 };

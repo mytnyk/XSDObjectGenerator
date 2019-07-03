@@ -10,39 +10,29 @@ namespace XSDObjectGenLib
     {
         public class Struct
         {
-            public List<string> write_instructions;
-            public List<string> pre_write_instructions;
-            public List<string> post_write_instructions;
-            public List<string> read_instructions;
-            public List<string> pre_read_instructions;
-            public List<string> post_read_instructions;
+            public List<string> write_instructions = new List<string>();
+            public List<string> pre_write_instructions = new List<string>();
+            public List<string> post_write_instructions = new List<string>();
+            public List<string> read_instructions = new List<string>();
+            public List<string> pre_read_instructions = new List<string>();
+            public List<string> post_read_instructions = new List<string>();
 
-            public List<string> tile;
-            public List<string> pre_tile;
-            public List<string> post_tile;
-            public HashSet<string> classes_used;
+            public List<string> tile = new List<string>();
+            public List<string> pre_tile = new List<string>();
+            public List<string> post_tile = new List<string>();
+            public HashSet<string> classes_used = new HashSet<string>();
             public string inheritance = String.Empty;
             public string name;
             public bool use_temp_string_variable = false;
 
             public Struct(string name) {
-                write_instructions = new List<string>();
-                pre_write_instructions = new List<string>();
-                post_write_instructions = new List<string>();
-                read_instructions = new List<string>();
-                pre_read_instructions = new List<string>();
-                post_read_instructions = new List<string>();
-				tile = new List<string>();
-                pre_tile = new List<string>();
-                post_tile = new List<string>();
-				classes_used = new HashSet<string>();
                 this.name = name;
             }
         }
 
-        private Dictionary<string, Struct> structs;
-        private List<string> enums;
-		private List<string> enums_instructions;
+        private Dictionary<string, Struct> structs = new Dictionary<string, Struct>();
+        private List<string> enums = new List<string>();
+		private List<string> enums_instructions = new List<string>();
         private Dictionary<string, string> prototypes = new Dictionary<string, string>
         {
             ["std::string"] = "Str",
@@ -59,16 +49,17 @@ namespace XSDObjectGenLib
             ["signed char"] = "SignedChar"
         };
         private string _namespace;
+        private string _target_namespace;
+        private string schema_name;
         private string cur_index;
         private string initString = "#pragma once\n// Copyright 2008, Microsoft Corporation and 2019 Alex Mytnyk\n// Sample Code - Use restricted to terms of use defined in the accompanying license agreement (EULA.doc)\n//--------------------------------------------------------------";
         private string includeString = "#include <iostream>\n#include <string>\n#include <ctime>\n#include \"Serializers.hpp\"\n#include <optional>";
 
-        public GeneratorStream(string name_space)
+        public GeneratorStream(string name_space, string target_namespace, string _schema_name)
         {
-            structs = new Dictionary<string, Struct>();
-            enums = new List<string>();
-			enums_instructions = new List<string>();
 			_namespace = name_space;
+            _target_namespace = target_namespace;
+            schema_name = _schema_name;
         }
 
 		private string removeNamespace(string name)
@@ -369,7 +360,9 @@ namespace XSDObjectGenLib
             code.Add(initString);
             code.Add(includeString);
             code.Add("namespace " + _namespace + " {");
-			foreach (var en in enums)
+            code.Add($"\tconst std::string schema_{schema_name}_namespace = \"{_target_namespace}\";");
+
+            foreach (var en in enums)
 			{
 				code.Add(en);
 			}

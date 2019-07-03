@@ -8,6 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
+	const std::string schema_generated_files2_PlatformInformation_namespace = "http://www.materialise.com/BuildProcessor/2014";
 	struct PlatformInformation;
 	struct Materials;
 	struct Material;

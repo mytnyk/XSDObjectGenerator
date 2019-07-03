@@ -8,6 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
+	const std::string schema_generated_files2_DriverCapabilities_2016_namespace = "http://schemas.materialise.com/BuildProcessor/2016";
 	enum class DriverIssueSeverity {
 		Information,
 		Warning,

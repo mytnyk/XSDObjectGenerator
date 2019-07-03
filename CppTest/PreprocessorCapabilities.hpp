@@ -8,6 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
+	const std::string schema_generated_files2_PreprocessorCapabilities_namespace = "http://www.materialise.com/BuildProcessor/2014";
 	struct PreprocessorCapabilities;
 	struct PreprocessorCapabilities {
 		void Write(IXmlSerializerWriter& s, std::string __name__);

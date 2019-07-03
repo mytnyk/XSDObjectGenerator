@@ -8,6 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
+	const std::string schema_generated_files2_MtlsBuildTicket_2017_namespace = "http://schemas.materialise.com/build_processing/2017/02";
 	enum class ST_PropertyType {
 		_bool,
 		integer,

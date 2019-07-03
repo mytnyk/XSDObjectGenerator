@@ -493,7 +493,7 @@ namespace XSDObjectGenLib
 
                     outFiles[iFiles] = outFiles[iFiles] + codeFile;
                     classFile = new FileStream(outFiles[iFiles], FileMode.Create);
-                    generator = new GeneratorStream(dotnetNamespace);
+                    generator = new GeneratorStream(dotnetNamespace, targetNamespace, fileName.Replace('\\', '_'));
                     outFinalStream = new StreamWriter(classFile);
 
                     // Add namespace, using statement, forward declarations, and enumerations

@@ -8,6 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
+	const std::string schema_generated_files2_PreprocessorInput_namespace = "http://www.materialise.com/BuildProcessor/2014";
 	struct PartInstances;
 	struct Instance;
 	struct PartLabels;

@@ -8,6 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
+	const std::string schema_generated_files2_Tags_namespace = "urn:Print3D";
 	struct Tags;
 	struct Tag;
 	struct Tag {

@@ -32,6 +32,7 @@ void write() {
 
 	bt.Write(s, "BuildTicket");
 
+	s.SetSchemaTargetNamespace(Materialise::schema_generated_files2_MtlsBuildTicket_2017_namespace);
 	s.SaveToFile("simple_xml.xml");
 }
 
@@ -40,12 +41,13 @@ void read() {
 	s.Load("simple_xml.xml");
 	Materialise::BuildTicket bt;
 	bt.Read(s, "BuildTicket");
+	std::string ns = s.getSchemaTargetNamespace();
 	return;
 }
 
 int main()
 {
-	//write();
+	write();
 	read();
 	
 	//Test::shiporder c;
