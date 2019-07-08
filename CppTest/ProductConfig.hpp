@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files2_ProductConfig_namespace = "";
+	const std::string schema_generated_files3_ProductConfig_namespace = "";
 	struct Product;
 	struct Version;
 	struct DriverDefinitionMetaData;

@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files2_Licensing_namespace = "";
+	const std::string schema_generated_files3_Licensing_namespace = "";
 	enum class LicenseVisibility {
 		Visible,
 		Hidden,

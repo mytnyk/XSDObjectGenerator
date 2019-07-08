@@ -10,7 +10,7 @@ class IXmlSerializerWriter
 {
 public:
 	virtual ~IXmlSerializerWriter() = default;
-	virtual void Write(const char* name, int32_t value) = 0;
+	virtual void Write(const char* name, int value) = 0;
 	virtual void Write(const char* name, double value) = 0;
 	virtual void Write(const char* name, float value) = 0;
 	virtual void Write(const char* name, bool value) = 0;
@@ -24,8 +24,16 @@ public:
 	virtual void Write(const char* name, char value) = 0;
 	virtual void WriteAttr(const char* name, bool value) = 0;
 	virtual void WriteAttr(const char* name, const char* value) = 0;
-	virtual void WriteAttr(const char* name, int32_t value) = 0;
+	virtual void WriteAttr(const char* name, int value) = 0;
 	virtual void WriteAttr(const char* name, double value) = 0;
+	virtual void WriteAttr(const char* name, float value) = 0;
+	virtual void WriteAttr(const char* name, signed char value) = 0;
+	virtual void WriteAttr(const char* name, unsigned int value) = 0;
+	virtual void WriteAttr(const char* name, unsigned short int value) = 0;
+	virtual void WriteAttr(const char* name, short int value) = 0;
+	virtual void WriteAttr(const char* name, unsigned long value) = 0;
+	virtual void WriteAttr(const char* name, long value) = 0;
+	virtual void WriteAttr(const char* name, char value) = 0;
 	virtual void SetSchemaTargetNamespace(std::string _namespace) = 0;
 private:
 	virtual void LeaveChild() = 0;
@@ -68,6 +76,14 @@ public:
 	virtual bool ReadAttrStr(const char* name, std::string& value) = 0;
 	virtual bool ReadAttrDouble(const char* name, double& value) = 0;
 	virtual bool ReadAttrInt(const char* name, int& value) = 0;
+	virtual bool ReadAttrUnsignedInt(const char* name, unsigned int& value) = 0;
+	virtual bool ReadAttrUnsignedShortInt(const char* name, unsigned short int& value) = 0;
+	virtual bool ReadAttrShortInt(const char* name, short int& value) = 0;
+	virtual bool ReadAttrLong(const char* name, long& value) = 0;
+	virtual bool ReadAttrUnsignedLong(const char* name, unsigned long& value) = 0;
+	virtual bool ReadAttrFloat(const char* name, float& value) = 0;
+	virtual bool ReadAttrChar(const char* name, char& value) = 0;
+	virtual bool ReadAttrSignedChar(const char* name, signed char& value) = 0;
 	virtual std::string getParentName() = 0;
 	virtual std::string getSchemaTargetNamespace() = 0;
 private:
@@ -156,11 +172,43 @@ public:
 		_cursor.append_attribute(name).set_value(value);
 	}
 
+	void WriteAttr(const char* name, float value) override {
+		_cursor.append_attribute(name).set_value(value);
+	}
+
 	void WriteAttr(const char* name, const char* value) override {
 		_cursor.append_attribute(name).set_value(value);
 	}
 
-	void WriteAttr(const char* name, int32_t value) override {
+	void WriteAttr(const char* name, int value) override {
+		_cursor.append_attribute(name).set_value(value);
+	}
+
+	void WriteAttr(const char* name, unsigned int value) override {
+		_cursor.append_attribute(name).set_value(value);
+	}
+
+	void WriteAttr(const char* name, unsigned short int value) override {
+		_cursor.append_attribute(name).set_value(value);
+	}
+
+	void WriteAttr(const char* name, short int value) override {
+		_cursor.append_attribute(name).set_value(value);
+	}
+
+	void WriteAttr(const char* name, unsigned long value) override {
+		_cursor.append_attribute(name).set_value(value);
+	}
+
+	void WriteAttr(const char* name, signed char value) override {
+		_cursor.append_attribute(name).set_value(value);
+	}
+
+	void WriteAttr(const char* name, char value) override {
+		_cursor.append_attribute(name).set_value(value);
+	}
+
+	void WriteAttr(const char* name, long value) override {
 		_cursor.append_attribute(name).set_value(value);
 	}
 
@@ -381,11 +429,66 @@ public:
 		value = _cursor.attribute(name).as_int();
 		return true;
 	}
+	bool ReadAttrUnsignedInt(const char* name, unsigned int& value) override {
+		if (!hasAttribute(name))
+			return false;
+		value = _cursor.attribute(name).as_uint();
+		return true;
+	}
+
+	bool ReadAttrUnsignedShortInt(const char* name, unsigned short int& value) override {
+		if (!hasAttribute(name))
+			return false;
+		value = _cursor.attribute(name).as_uint();
+		return true;
+	}
+
+	bool ReadAttrUnsignedLong(const char* name, unsigned long& value) override {
+		if (!hasAttribute(name))
+			return false;
+		value = _cursor.attribute(name).as_ullong();
+		return true;
+	}
+
+	bool ReadAttrChar(const char* name, char& value) override {
+		if (!hasAttribute(name))
+			return false;
+		value = _cursor.attribute(name).as_string()[0];
+		return true;
+	}
+
+	bool ReadAttrSignedChar(const char* name, signed char& value) override {
+		if (!hasAttribute(name))
+			return false;
+		value = _cursor.attribute(name).as_string()[0];
+		return true;
+	}
+
+	bool ReadAttrShortInt(const char* name, short int& value) override {
+		if (!hasAttribute(name))
+			return false;
+		value = _cursor.attribute(name).as_int();
+		return true;
+	}
+
+	bool ReadAttrLong(const char* name, long& value) override {
+		if (!hasAttribute(name))
+			return false;
+		value = _cursor.attribute(name).as_llong();
+		return true;
+	}
 
 	bool ReadAttrDouble(const char* name, double& value) override {
 		if (!hasAttribute(name))
 			return false;
 		value = _cursor.attribute(name).as_double();
+		return true;
+	}
+
+	bool ReadAttrFloat(const char* name, float& value) override {
+		if (!hasAttribute(name))
+			return false;
+		value = _cursor.attribute(name).as_float();
 		return true;
 	}
 

@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files2_DriverDefinition_namespace = "";
+	const std::string schema_generated_files3_DriverDefinition_namespace = "";
 	enum class PrintMode {
 		None,
 		Normal,

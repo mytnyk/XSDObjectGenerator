@@ -14,7 +14,7 @@
 
 //------------------- Generated code end--------------//
 
-void write() {
+void write1() {
 	PugiXmlSerializerWriter s;
 	Materialise::BuildTicket bt;
 	Materialise::CT_PropertyTemplateTree tree;
@@ -27,16 +27,20 @@ void write() {
 	node.ProfileList = "Profile list here";
 	tree.PropertyNode.push_back(node);
 	node.List = "List 2 here";
+	node.PropertyNode.push_back(node);
+	node.Name = "Name 1 here";
+	node.PropertyNode.push_back(node);
+	node.Name = "Name 4 here";
 	tree.PropertyNode.push_back(node);
 	bt.Defaults = tree;
 
 	bt.Write(s, "BuildTicket");
 
-	s.SetSchemaTargetNamespace(Materialise::schema_generated_files2_MtlsBuildTicket_2017_namespace);
+	s.SetSchemaTargetNamespace(Materialise::schema_generated_files3_MtlsBuildTicket_2017_namespace);
 	s.SaveToFile("simple_xml.xml");
 }
 
-void read() {
+void read1() {
 	PugiXmlSerializerReader s;
 	s.Load("simple_xml.xml");
 	Materialise::BuildTicket bt;
@@ -45,10 +49,55 @@ void read() {
 	return;
 }
 
+void write2() {
+	PugiXmlSerializerWriter s;
+	Materialise::DeviceState ds;
+	Materialise::Log log;
+	Materialise::Entries entries;
+	entries.count = 11;
+	Materialise::LogEntry le;
+	le.source = "AAAAA";
+	le.type = Materialise::LogEntryType::Information;
+	entries.Entry.push_back(le);
+	le.type = Materialise::LogEntryType::Warning;
+	entries.Entry.push_back(le);
+	Materialise::MeterValues mv;
+	mv.count = 1111111;
+	Materialise::_Value v;
+	v.meter = "MMM";
+	mv.Value.push_back(v);
+	v.meter = "MMMeee";
+	mv.Value.push_back(v);
+	le.Meters = mv;
+	entries.Entry.push_back(le);
+	log.Entries = entries;
+	ds.Log = log;
+	Materialise::DeviceStatus dstat;
+	dstat.description = "AA";
+	dstat.value = Materialise::DeviceStatusValue::ReadyToPrint;
+	ds.Status = dstat;
+
+
+	ds.Write(s, "DeviceState");
+
+	s.SetSchemaTargetNamespace(Materialise::schema_generated_files3_DeviceState_namespace);
+	s.SaveToFile("simple_xml.xml");
+}
+
+void read2() {
+	PugiXmlSerializerReader s;
+	s.Load("simple_xml.xml");
+	Materialise::DeviceState bt;
+	bt.Read(s, "DeviceState");
+	auto jj = bt.Log.value().get().Entries;
+	std::string ns = s.getSchemaTargetNamespace();
+	return;
+}
+
 int main()
 {
-	write();
-	read();
+	write2();
+	read2();
 	
 	//Test::shiporder c;
 	//c.Read(s);

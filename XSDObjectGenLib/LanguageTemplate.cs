@@ -488,6 +488,11 @@ namespace XSDObjectGenLib
                 case "float": return "System.Single";
                 case "hexBinary": return "System.Byte[]";
                 case "int": return "System.Int32";
+                case "integer": return "System.Int32";
+                case "positiveInteger": return "System.UInt32";
+                case "negativeInteger": return "System.Int32";
+                case "nonPositiveInteger": return "System.Int32";
+                case "nonNegativeInteger": return "System.UInt32";
                 case "long": return "System.Int64";
                 case "QName": return "System.XmlQualifiedName";
                 case "short": return "System.Int16";

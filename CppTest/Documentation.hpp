@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files2_Documentation_namespace = "";
+	const std::string schema_generated_files3_Documentation_namespace = "";
 	struct Links;
 	struct Link;
 	struct Documentation;

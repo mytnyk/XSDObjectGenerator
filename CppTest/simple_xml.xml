@@ -1,7 +1,16 @@
 <?xml version="1.0"?>
-<BuildTicket xmlns="http://schemas.materialise.com/build_processing/2017/02">
-	<Defaults>
-		<PropertyNode Name="Name here" DisplayName="Display name here" DisplayNameContainer="Display name container here" Default="Default string here" ProfileList="Profile list here" List="List here" />
-		<PropertyNode Name="Name here" DisplayName="Display name here" DisplayNameContainer="Display name container here" Default="Default string here" ProfileList="Profile list here" List="List 2 here" />
-	</Defaults>
-</BuildTicket>
+<DeviceState xmlns="urn:Print3D">
+	<Status value="ReadyToPrint" description="AA" />
+	<Log>
+		<Entries count="11">
+			<Entry type="Information" source="AAAAA" />
+			<Entry type="Warning" source="AAAAA" />
+			<Entry type="Warning" source="AAAAA">
+				<Meters count="1111111">
+					<Value meter="MMM" />
+					<Value meter="MMMeee" />
+				</Meters>
+			</Entry>
+		</Entries>
+	</Log>
+</DeviceState>
