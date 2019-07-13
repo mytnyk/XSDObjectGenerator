@@ -19,12 +19,12 @@ namespace Materialise {
 	struct Parts;
 	struct Part;
 	struct Part {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, std::string __name__); // pass parameter by reference (const std::string&)
 		bool Read(IXmlSerializerReader& s, std::string __name__);
 		std::string id;
 		std::optional<std::string> FilePath;
-		std::optional<std::reference_wrapper<Materialise::PartInstances>> Instances;
-		Part() {}
+		std::optional<std::reference_wrapper<Materialise::PartInstances>> Instances;// Materialise:: namespace here is redundant,  we are here in this namespace already
+		Part() {} // do not write ctor and dtor,  or use '= default', better first try to remove it at all
 		~Part() {}
 	};
 	struct Parts {
@@ -90,7 +90,7 @@ namespace Materialise {
 }
 void Materialise::PartInstances::Write(IXmlSerializerWriter& s, std::string __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
-	for(int i = 0;i < Instance.size();i++)
+	for(int i = 0;i < Instance.size();i++) // use range-based for loop : "for (auto inst : Instance)"
 	{
 		Instance[i].Write(s, "Instance"); 
 	}
@@ -202,7 +202,7 @@ bool Materialise::PreliminaryPass::Read(IXmlSerializerReader& s, std::string __n
 	IXmlSerializerReader::Scope scope(s, __name__);
 	if (scope.exist() == false)
 		return false;
-	bool* __enabled = new bool();
+	bool* __enabled = new bool(); // I think std::optional<bool> should work fine here
 	if (s.ReadAttrBool("enabled", *__enabled))
 		enabled = std::optional<std::reference_wrapper<bool>> { *__enabled };
 	return true;
@@ -220,9 +220,9 @@ bool Materialise::Parts::Read(IXmlSerializerReader& s, std::string __name__) {
 		return false;
 	while (true) { 
 		Materialise::Part __t;
-		if (__t.Read(s, "Part") == false)
+		if (__t.Read(s, "Part") == false) // use if (!..) everywhere
 			break;
-		Part.push_back(__t);
+		Part.push_back(__t);//use embplace_back to avoid copying
 	}
 	return true;
 }
@@ -234,12 +234,15 @@ void Materialise::Part::Write(IXmlSerializerWriter& s, std::string __name__) {
 	if (Instances.has_value())
 		Instances.value().get().Write(s, "Instances");
 }
+// add an 'inline' specifier to your functions in header files
 bool Materialise::Part::Read(IXmlSerializerReader& s, std::string __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (scope.exist() == false) // it is enough to write just "if (!scope.exist())"
 		return false;
 	s.ReadAttrStr("id", id);
 	s.ReadStr("FilePath", FilePath.value());
+  // there is a memory leak here, reference_wrapper does not hold an ownership,
+  // try to create __Instances on stack and use just emplace method of std::optional<PartInstances>
 	Materialise::PartInstances* __Instances = new Materialise::PartInstances();
 	__Instances->Read(s, "Instances");
 	Instances = std::optional<std::reference_wrapper<Materialise::PartInstances>> { *__Instances };
