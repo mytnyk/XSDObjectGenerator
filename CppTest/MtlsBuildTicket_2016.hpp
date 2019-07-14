@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files3_MtlsBuildTicket_2016_namespace = "http://schemas.materialise.com/build_processing/2016/04";
+	const std::string schema_generated_files_test2_MtlsBuildTicket_2016_namespace = "http://schemas.materialise.com/build_processing/2016/04";
 	enum class ST_PropertyType {
 		_bool,
 		integer,
@@ -124,140 +124,142 @@ namespace Materialise {
 	struct MtlsPropertyTemplate;
 	struct MtlsMachineInfo;
 	struct Dim {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		Dim(Dim&&);
+	Dim(){ }
 		std::optional<double> x;
 		std::optional<double> y;
 		double z;
 		std::optional<std::string> radius;
-		Dim() {}
-		~Dim() {}
 	};
 	struct Pos {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		Pos(Pos&&);
+	Pos(){ }
 		double x;
 		double y;
 		double z;
-		Pos() {}
-		~Pos() {}
 	};
 	struct CT_MtlsMachineInfoComponent {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		CT_MtlsMachineInfoComponent(CT_MtlsMachineInfoComponent&&);
+	CT_MtlsMachineInfoComponent(){ }
 		Shape Shape;
 		Materialise::Pos Pos;
 		Materialise::Dim Dim;
-		std::optional<std::reference_wrapper<Materialise::Mesh>> Mesh;
+		std::optional<std::unique_ptr<Mesh>> Mesh;
 		bool Visible;
-		CT_MtlsMachineInfoComponent() {}
-		~CT_MtlsMachineInfoComponent() {}
 	};
 	struct CT_MtlsMachineInfo {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<Materialise::ST_Version> version;
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		CT_MtlsMachineInfo(CT_MtlsMachineInfo&&);
+	CT_MtlsMachineInfo(){ }
+		std::optional<ST_Version> version;
 		Materialise::CT_MtlsMachineInfoComponent BuildVolume;
 		Materialise::CT_MtlsMachineInfoComponent Tray;
-		std::optional<std::reference_wrapper<Materialise::LockedAreas>> LockedAreas;
-		CT_MtlsMachineInfo() {}
-		~CT_MtlsMachineInfo() {}
+		std::optional<std::unique_ptr<LockedAreas>> LockedAreas;
 	};
 	struct MtlsMachineInfo {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<Materialise::ST_Version> version;
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		MtlsMachineInfo(MtlsMachineInfo&&);
+	MtlsMachineInfo(){ }
+		std::optional<ST_Version> version;
 		Materialise::CT_MtlsMachineInfoComponent BuildVolume;
 		Materialise::CT_MtlsMachineInfoComponent Tray;
-		std::optional<std::reference_wrapper<Materialise::LockedAreas>> LockedAreas;
-		MtlsMachineInfo() {}
-		~MtlsMachineInfo() {}
+		std::optional<std::unique_ptr<LockedAreas>> LockedAreas;
 	};
 	struct CT_PropertyTemplateTree {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::vector<Materialise::CT_PropertyTemplateNode> PropertyNode;
-		CT_PropertyTemplateTree() {}
-		~CT_PropertyTemplateTree() {}
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		CT_PropertyTemplateTree(CT_PropertyTemplateTree&&);
+	CT_PropertyTemplateTree(){ }
+		std::vector<CT_PropertyTemplateNode> PropertyNode;
 	};
 	struct BuildTicket {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		BuildTicket(BuildTicket&&);
+	BuildTicket(){ }
 		Materialise::CT_PropertyTemplateTree Defaults;
-		std::optional<std::reference_wrapper<Materialise::CT_PropertyTemplateTree>> PartOverrides;
-		BuildTicket() {}
-		~BuildTicket() {}
+		std::optional<std::unique_ptr<CT_PropertyTemplateTree>> PartOverrides;
 	};
 	struct CT_MtlsPropertyTemplate {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<Materialise::ST_Version> version;
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		CT_MtlsPropertyTemplate(CT_MtlsPropertyTemplate&&);
+	CT_MtlsPropertyTemplate(){ }
+		std::optional<ST_Version> version;
 		Materialise::CT_PropertyTemplateTree MachineParameters;
 		Materialise::BuildTicket BuildTicket;
-		CT_MtlsPropertyTemplate() {}
-		~CT_MtlsPropertyTemplate() {}
 	};
 	struct MtlsPropertyTemplate {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<Materialise::ST_Version> version;
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		MtlsPropertyTemplate(MtlsPropertyTemplate&&);
+	MtlsPropertyTemplate(){ }
+		std::optional<ST_Version> version;
 		Materialise::CT_PropertyTemplateTree MachineParameters;
 		Materialise::BuildTicket BuildTicket;
-		MtlsPropertyTemplate() {}
-		~MtlsPropertyTemplate() {}
 	};
 	struct CT_PropertyTree {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::vector<Materialise::CT_Property> Property;
-		CT_PropertyTree() {}
-		~CT_PropertyTree() {}
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		CT_PropertyTree(CT_PropertyTree&&);
+	CT_PropertyTree(){ }
+		std::vector<CT_Property> Property;
 	};
 	struct MtlsMachineParameters {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<Materialise::ST_Version> version;
-		std::vector<Materialise::CT_Property> Property;
-		MtlsMachineParameters() {}
-		~MtlsMachineParameters() {}
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		MtlsMachineParameters(MtlsMachineParameters&&);
+	MtlsMachineParameters(){ }
+		std::optional<ST_Version> version;
+		std::vector<CT_Property> Property;
 	};
 	struct CT_BuildTicket {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<std::reference_wrapper<Materialise::CT_PropertyTree>> Defaults;
-		std::optional<std::reference_wrapper<Materialise::PartOverrides>> PartOverrides;
-		std::optional<std::reference_wrapper<Materialise::ObjectProperties>> ObjectProperties;
-		CT_BuildTicket() {}
-		~CT_BuildTicket() {}
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		CT_BuildTicket(CT_BuildTicket&&);
+	CT_BuildTicket(){ }
+		std::optional<std::unique_ptr<CT_PropertyTree>> Defaults;
+		std::optional<std::unique_ptr<PartOverrides>> PartOverrides;
+		std::optional<std::unique_ptr<ObjectProperties>> ObjectProperties;
 	};
 	struct MtlsBuildTicket {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<std::reference_wrapper<Materialise::CT_PropertyTree>> Defaults;
-		std::optional<std::reference_wrapper<Materialise::PartOverrides>> PartOverrides;
-		std::optional<std::reference_wrapper<Materialise::ObjectProperties>> ObjectProperties;
-		MtlsBuildTicket() {}
-		~MtlsBuildTicket() {}
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		MtlsBuildTicket(MtlsBuildTicket&&);
+	MtlsBuildTicket(){ }
+		std::optional<std::unique_ptr<CT_PropertyTree>> Defaults;
+		std::optional<std::unique_ptr<PartOverrides>> PartOverrides;
+		std::optional<std::unique_ptr<ObjectProperties>> ObjectProperties;
 	};
 	struct Mesh {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		Mesh(Mesh&&);
+	Mesh(){ }
 		std::string uuid;
-		Mesh() {}
-		~Mesh() {}
 	};
 	struct LockedAreas {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		LockedAreas(LockedAreas&&);
+	LockedAreas(){ }
 		std::vector<std::string> Area;
-		LockedAreas() {}
-		~LockedAreas() {}
 	};
 	struct CT_PropertyTemplateNode {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		CT_PropertyTemplateNode(CT_PropertyTemplateNode&&);
+	CT_PropertyTemplateNode(){ }
 		std::string Name;
-		std::optional<Materialise::ST_PropertyType> Type;
+		std::optional<ST_PropertyType> Type;
 		std::optional<std::string> DisplayName;
 		std::optional<std::string> DisplayNameContainer;
 		std::optional<std::string> PropertyName;
@@ -265,95 +267,101 @@ namespace Materialise {
 		std::optional<std::string> ProfileList;
 		std::optional<std::string> List;
 		std::optional<std::string> ProfileName;
-		std::vector<Materialise::CT_PropertyTemplateNode> PropertyNode;
-		CT_PropertyTemplateNode() {}
-		~CT_PropertyTemplateNode() {}
+		std::vector<CT_PropertyTemplateNode> PropertyNode;
 	};
 	struct CT_ProfileWithProperties {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		CT_ProfileWithProperties(CT_ProfileWithProperties&&);
+	CT_ProfileWithProperties(){ }
 		std::string Name;
-		std::vector<Materialise::CT_Property> Property;
-		CT_ProfileWithProperties() {}
-		~CT_ProfileWithProperties() {}
+		std::vector<CT_Property> Property;
 	};
 	struct CT_Property {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		CT_Property(CT_Property&&);
+	CT_Property(){ }
 		std::string Name;
-		std::optional<Materialise::ST_PropertyType> Type;
+		std::optional<ST_PropertyType> Type;
 		std::optional<std::string> ProfileList;
-		std::vector<Materialise::CT_ProfileWithProperties> Profile;
-		std::vector<Materialise::CT_Property> Property;
-		CT_Property() {}
-		~CT_Property() {}
+		std::vector<CT_ProfileWithProperties> Profile;
+		std::vector<CT_Property> Property;
 	};
 	struct ObjectProperties {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::vector<Materialise::CT_PropertyTreeWithUUID> Instance;
-		ObjectProperties() {}
-		~ObjectProperties() {}
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		ObjectProperties(ObjectProperties&&);
+	ObjectProperties(){ }
+		std::vector<CT_PropertyTreeWithUUID> Instance;
 	};
 	struct PartOverrides {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::vector<Materialise::CT_PropertyTreeWithComponents> Instance;
-		PartOverrides() {}
-		~PartOverrides() {}
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		PartOverrides(PartOverrides&&);
+	PartOverrides(){ }
+		std::vector<CT_PropertyTreeWithComponents> Instance;
 	};
 	struct CT_PropertyTreeWithUUID {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		CT_PropertyTreeWithUUID(CT_PropertyTreeWithUUID&&);
+	CT_PropertyTreeWithUUID(){ }
 		std::string uuid;
-		std::optional<Materialise::ST_PropertyTreeType> type;
-		std::vector<Materialise::CT_Property> Property;
-		CT_PropertyTreeWithUUID() {}
-		~CT_PropertyTreeWithUUID() {}
+		std::optional<ST_PropertyTreeType> type;
+		std::vector<CT_Property> Property;
 	};
 	struct CT_PropertyTreeWithComponents {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::vector<Materialise::CT_PropertyTreeWithUUID> Component;
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		CT_PropertyTreeWithComponents(CT_PropertyTreeWithComponents&&);
+	CT_PropertyTreeWithComponents(){ }
+		std::vector<CT_PropertyTreeWithUUID> Component;
 		std::string uuid;
-		std::optional<Materialise::ST_PropertyTreeType> type;
-		std::vector<Materialise::CT_Property> Property;
-		CT_PropertyTreeWithComponents() {}
-		~CT_PropertyTreeWithComponents() {}
+		std::optional<ST_PropertyTreeType> type;
+		std::vector<CT_Property> Property;
 	};
 }
-void Materialise::CT_PropertyTree::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::CT_PropertyTree::CT_PropertyTree(Materialise::CT_PropertyTree &&___CT_PropertyTree)
+	: Property(std::move(___CT_PropertyTree.Property))
+{ }
+void Materialise::CT_PropertyTree::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
-	for(int i = 0;i < Property.size();i++)
+	for(auto&& element : Property)
 	{
-		Property[i].Write(s, "Property"); 
+		element.Write(s, "Property"); 
 	}
 }
-bool Materialise::CT_PropertyTree::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::CT_PropertyTree::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	while (true) { 
 		Materialise::CT_Property __t;
-		if (__t.Read(s, "Property") == false)
+		if (!__t.Read(s, "Property"))
 			break;
-		Property.push_back(__t);
+		Property.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::CT_PropertyTreeWithUUID::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::CT_PropertyTreeWithUUID::CT_PropertyTreeWithUUID(Materialise::CT_PropertyTreeWithUUID &&___CT_PropertyTreeWithUUID)
+	: uuid(std::move(___CT_PropertyTreeWithUUID.uuid))
+	, type(std::move(___CT_PropertyTreeWithUUID.type))
+	, Property(std::move(___CT_PropertyTreeWithUUID.Property))
+{ }
+void Materialise::CT_PropertyTreeWithUUID::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("uuid", uuid.c_str());
 	if (type.has_value())
 		s.WriteAttr("type", Materialise::ConvertST_PropertyTreeTypeToString(type.value()).c_str());
-	for(int i = 0;i < Property.size();i++)
+	for(auto&& element : Property)
 	{
-		Property[i].Write(s, "Property"); 
+		element.Write(s, "Property"); 
 	}
 }
-bool Materialise::CT_PropertyTreeWithUUID::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::CT_PropertyTreeWithUUID::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	std::string __tmp_var;
 	s.ReadAttrStr("uuid", uuid);
@@ -361,120 +369,142 @@ bool Materialise::CT_PropertyTreeWithUUID::Read(IXmlSerializerReader& s, std::st
 		type = Materialise::ConvertStringToST_PropertyTreeType(__tmp_var);
 	while (true) { 
 		Materialise::CT_Property __t;
-		if (__t.Read(s, "Property") == false)
+		if (!__t.Read(s, "Property"))
 			break;
-		Property.push_back(__t);
+		Property.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::CT_PropertyTreeWithComponents::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::CT_PropertyTreeWithComponents::CT_PropertyTreeWithComponents(Materialise::CT_PropertyTreeWithComponents &&___CT_PropertyTreeWithComponents)
+	: Component(std::move(___CT_PropertyTreeWithComponents.Component))
+	, uuid(std::move(___CT_PropertyTreeWithComponents.uuid))
+	, type(std::move(___CT_PropertyTreeWithComponents.type))
+	, Property(std::move(___CT_PropertyTreeWithComponents.Property))
+{ }
+void Materialise::CT_PropertyTreeWithComponents::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
-	for(int i = 0;i < Component.size();i++)
+	for(auto&& element : Component)
 	{
-		Component[i].Write(s, "Component"); 
+		element.Write(s, "Component"); 
 	}
 	s.WriteAttr("uuid", uuid.c_str());
 	if (type.has_value())
 		s.WriteAttr("type", Materialise::ConvertST_PropertyTreeTypeToString(type.value()).c_str());
-	for(int i = 0;i < Property.size();i++)
+	for(auto&& element : Property)
 	{
-		Property[i].Write(s, "Property"); 
+		element.Write(s, "Property"); 
 	}
 }
-bool Materialise::CT_PropertyTreeWithComponents::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::CT_PropertyTreeWithComponents::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	std::string __tmp_var;
 	while (true) { 
 		Materialise::CT_PropertyTreeWithUUID __t;
-		if (__t.Read(s, "Component") == false)
+		if (!__t.Read(s, "Component"))
 			break;
-		Component.push_back(__t);
+		Component.push_back(std::move(__t));
 	}
 	s.ReadAttrStr("uuid", uuid);
 	if (s.ReadAttrStr("type", __tmp_var)) 
 		type = Materialise::ConvertStringToST_PropertyTreeType(__tmp_var);
 	while (true) { 
 		Materialise::CT_Property __t;
-		if (__t.Read(s, "Property") == false)
+		if (!__t.Read(s, "Property"))
 			break;
-		Property.push_back(__t);
+		Property.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::CT_BuildTicket::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::CT_BuildTicket::CT_BuildTicket(Materialise::CT_BuildTicket &&___CT_BuildTicket)
+	: Defaults(std::move(___CT_BuildTicket.Defaults))
+	, PartOverrides(std::move(___CT_BuildTicket.PartOverrides))
+	, ObjectProperties(std::move(___CT_BuildTicket.ObjectProperties))
+{ }
+void Materialise::CT_BuildTicket::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	if (Defaults.has_value())
-		Defaults.value().get().Write(s, "Defaults");
+		Defaults.value().get()->Write(s, "Defaults");
 	if (PartOverrides.has_value())
-		PartOverrides.value().get().Write(s, "PartOverrides");
+		PartOverrides.value().get()->Write(s, "PartOverrides");
 	if (ObjectProperties.has_value())
-		ObjectProperties.value().get().Write(s, "ObjectProperties");
+		ObjectProperties.value().get()->Write(s, "ObjectProperties");
 }
-bool Materialise::CT_BuildTicket::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::CT_BuildTicket::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	Materialise::CT_PropertyTree* __Defaults = new Materialise::CT_PropertyTree();
-	__Defaults->Read(s, "Defaults");
-	Defaults = std::optional<std::reference_wrapper<Materialise::CT_PropertyTree>> { *__Defaults };
+	if (__Defaults->Read(s, "Defaults"))
+		Defaults = std::optional<std::unique_ptr<Materialise::CT_PropertyTree>> { __Defaults };
 	Materialise::PartOverrides* __PartOverrides = new Materialise::PartOverrides();
-	__PartOverrides->Read(s, "PartOverrides");
-	PartOverrides = std::optional<std::reference_wrapper<Materialise::PartOverrides>> { *__PartOverrides };
+	if (__PartOverrides->Read(s, "PartOverrides"))
+		PartOverrides = std::optional<std::unique_ptr<Materialise::PartOverrides>> { __PartOverrides };
 	Materialise::ObjectProperties* __ObjectProperties = new Materialise::ObjectProperties();
-	__ObjectProperties->Read(s, "ObjectProperties");
-	ObjectProperties = std::optional<std::reference_wrapper<Materialise::ObjectProperties>> { *__ObjectProperties };
+	if (__ObjectProperties->Read(s, "ObjectProperties"))
+		ObjectProperties = std::optional<std::unique_ptr<Materialise::ObjectProperties>> { __ObjectProperties };
 	return true;
 }
-void Materialise::PartOverrides::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::PartOverrides::PartOverrides(Materialise::PartOverrides &&___PartOverrides)
+	: Instance(std::move(___PartOverrides.Instance))
+{ }
+void Materialise::PartOverrides::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
-	for(int i = 0;i < Instance.size();i++)
+	for(auto&& element : Instance)
 	{
-		Instance[i].Write(s, "Instance"); 
+		element.Write(s, "Instance"); 
 	}
 }
-bool Materialise::PartOverrides::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::PartOverrides::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	while (true) { 
 		Materialise::CT_PropertyTreeWithComponents __t;
-		if (__t.Read(s, "Instance") == false)
+		if (!__t.Read(s, "Instance"))
 			break;
-		Instance.push_back(__t);
+		Instance.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::ObjectProperties::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::ObjectProperties::ObjectProperties(Materialise::ObjectProperties &&___ObjectProperties)
+	: Instance(std::move(___ObjectProperties.Instance))
+{ }
+void Materialise::ObjectProperties::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
-	for(int i = 0;i < Instance.size();i++)
+	for(auto&& element : Instance)
 	{
-		Instance[i].Write(s, "Instance"); 
+		element.Write(s, "Instance"); 
 	}
 }
-bool Materialise::ObjectProperties::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::ObjectProperties::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	while (true) { 
 		Materialise::CT_PropertyTreeWithUUID __t;
-		if (__t.Read(s, "Instance") == false)
+		if (!__t.Read(s, "Instance"))
 			break;
-		Instance.push_back(__t);
+		Instance.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::CT_MtlsPropertyTemplate::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::CT_MtlsPropertyTemplate::CT_MtlsPropertyTemplate(Materialise::CT_MtlsPropertyTemplate &&___CT_MtlsPropertyTemplate)
+	: version(std::move(___CT_MtlsPropertyTemplate.version))
+	, MachineParameters(std::move(___CT_MtlsPropertyTemplate.MachineParameters))
+	, BuildTicket(std::move(___CT_MtlsPropertyTemplate.BuildTicket))
+{ }
+void Materialise::CT_MtlsPropertyTemplate::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	if (version.has_value())
 		s.WriteAttr("version", Materialise::ConvertST_VersionToString(version.value()).c_str());
 	MachineParameters.Write(s, "MachineParameters");
 	BuildTicket.Write(s, "BuildTicket");
 }
-bool Materialise::CT_MtlsPropertyTemplate::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::CT_MtlsPropertyTemplate::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	std::string __tmp_var;
 	if (s.ReadAttrStr("version", __tmp_var)) 
@@ -483,104 +513,134 @@ bool Materialise::CT_MtlsPropertyTemplate::Read(IXmlSerializerReader& s, std::st
 	BuildTicket.Read(s, "BuildTicket");
 	return true;
 }
-void Materialise::BuildTicket::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::BuildTicket::BuildTicket(Materialise::BuildTicket &&___BuildTicket)
+	: Defaults(std::move(___BuildTicket.Defaults))
+	, PartOverrides(std::move(___BuildTicket.PartOverrides))
+{ }
+void Materialise::BuildTicket::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	Defaults.Write(s, "Defaults");
 	if (PartOverrides.has_value())
-		PartOverrides.value().get().Write(s, "PartOverrides");
+		PartOverrides.value().get()->Write(s, "PartOverrides");
 }
-bool Materialise::BuildTicket::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::BuildTicket::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	Defaults.Read(s, "Defaults");
 	Materialise::CT_PropertyTemplateTree* __PartOverrides = new Materialise::CT_PropertyTemplateTree();
-	__PartOverrides->Read(s, "PartOverrides");
-	PartOverrides = std::optional<std::reference_wrapper<Materialise::CT_PropertyTemplateTree>> { *__PartOverrides };
+	if (__PartOverrides->Read(s, "PartOverrides"))
+		PartOverrides = std::optional<std::unique_ptr<Materialise::CT_PropertyTemplateTree>> { __PartOverrides };
 	return true;
 }
-void Materialise::CT_Property::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::CT_Property::CT_Property(Materialise::CT_Property &&___CT_Property)
+	: Name(std::move(___CT_Property.Name))
+	, Type(std::move(___CT_Property.Type))
+	, ProfileList(std::move(___CT_Property.ProfileList))
+	, Profile(std::move(___CT_Property.Profile))
+	, Property(std::move(___CT_Property.Property))
+{ }
+void Materialise::CT_Property::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("Name", Name.c_str());
 	if (Type.has_value())
 		s.WriteAttr("Type", Materialise::ConvertST_PropertyTypeToString(Type.value()).c_str());
 	if (ProfileList.has_value())
 		s.WriteAttr("ProfileList", ProfileList.value().c_str());
-	for(int i = 0;i < Profile.size();i++)
+	for(auto&& element : Profile)
 	{
-		Profile[i].Write(s, "Profile"); 
+		element.Write(s, "Profile"); 
 	}
-	for(int i = 0;i < Property.size();i++)
+	for(auto&& element : Property)
 	{
-		Property[i].Write(s, "Property"); 
+		element.Write(s, "Property"); 
 	}
 }
-bool Materialise::CT_Property::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::CT_Property::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	std::string __tmp_var;
 	s.ReadAttrStr("Name", Name);
 	if (s.ReadAttrStr("Type", __tmp_var)) 
 		Type = Materialise::ConvertStringToST_PropertyType(__tmp_var);
-	std::string* __ProfileList = new std::string();
-	if (s.ReadAttrStr("ProfileList", *__ProfileList))
-		ProfileList = std::optional<std::reference_wrapper<std::string>> { *__ProfileList };
+	std::string __ProfileList;
+	if (s.ReadAttrStr("ProfileList", __ProfileList))
+		ProfileList = std::optional<std::string> { __ProfileList };
 	while (true) { 
 		Materialise::CT_ProfileWithProperties __t;
-		if (__t.Read(s, "Profile") == false)
+		if (!__t.Read(s, "Profile"))
 			break;
-		Profile.push_back(__t);
+		Profile.push_back(std::move(__t));
 	}
 	while (true) { 
 		Materialise::CT_Property __t;
-		if (__t.Read(s, "Property") == false)
+		if (!__t.Read(s, "Property"))
 			break;
-		Property.push_back(__t);
+		Property.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::CT_ProfileWithProperties::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::CT_ProfileWithProperties::CT_ProfileWithProperties(Materialise::CT_ProfileWithProperties &&___CT_ProfileWithProperties)
+	: Name(std::move(___CT_ProfileWithProperties.Name))
+	, Property(std::move(___CT_ProfileWithProperties.Property))
+{ }
+void Materialise::CT_ProfileWithProperties::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("Name", Name.c_str());
-	for(int i = 0;i < Property.size();i++)
+	for(auto&& element : Property)
 	{
-		Property[i].Write(s, "Property"); 
+		element.Write(s, "Property"); 
 	}
 }
-bool Materialise::CT_ProfileWithProperties::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::CT_ProfileWithProperties::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	s.ReadAttrStr("Name", Name);
 	while (true) { 
 		Materialise::CT_Property __t;
-		if (__t.Read(s, "Property") == false)
+		if (!__t.Read(s, "Property"))
 			break;
-		Property.push_back(__t);
+		Property.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::CT_PropertyTemplateTree::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::CT_PropertyTemplateTree::CT_PropertyTemplateTree(Materialise::CT_PropertyTemplateTree &&___CT_PropertyTemplateTree)
+	: PropertyNode(std::move(___CT_PropertyTemplateTree.PropertyNode))
+{ }
+void Materialise::CT_PropertyTemplateTree::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
-	for(int i = 0;i < PropertyNode.size();i++)
+	for(auto&& element : PropertyNode)
 	{
-		PropertyNode[i].Write(s, "PropertyNode"); 
+		element.Write(s, "PropertyNode"); 
 	}
 }
-bool Materialise::CT_PropertyTemplateTree::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::CT_PropertyTemplateTree::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	while (true) { 
 		Materialise::CT_PropertyTemplateNode __t;
-		if (__t.Read(s, "PropertyNode") == false)
+		if (!__t.Read(s, "PropertyNode"))
 			break;
-		PropertyNode.push_back(__t);
+		PropertyNode.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::CT_PropertyTemplateNode::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::CT_PropertyTemplateNode::CT_PropertyTemplateNode(Materialise::CT_PropertyTemplateNode &&___CT_PropertyTemplateNode)
+	: Name(std::move(___CT_PropertyTemplateNode.Name))
+	, Type(std::move(___CT_PropertyTemplateNode.Type))
+	, DisplayName(std::move(___CT_PropertyTemplateNode.DisplayName))
+	, DisplayNameContainer(std::move(___CT_PropertyTemplateNode.DisplayNameContainer))
+	, PropertyName(std::move(___CT_PropertyTemplateNode.PropertyName))
+	, Default(std::move(___CT_PropertyTemplateNode.Default))
+	, ProfileList(std::move(___CT_PropertyTemplateNode.ProfileList))
+	, List(std::move(___CT_PropertyTemplateNode.List))
+	, ProfileName(std::move(___CT_PropertyTemplateNode.ProfileName))
+	, PropertyNode(std::move(___CT_PropertyTemplateNode.PropertyNode))
+{ }
+void Materialise::CT_PropertyTemplateNode::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("Name", Name.c_str());
 	if (Type.has_value())
@@ -599,60 +659,66 @@ void Materialise::CT_PropertyTemplateNode::Write(IXmlSerializerWriter& s, std::s
 		s.WriteAttr("List", List.value().c_str());
 	if (ProfileName.has_value())
 		s.WriteAttr("ProfileName", ProfileName.value().c_str());
-	for(int i = 0;i < PropertyNode.size();i++)
+	for(auto&& element : PropertyNode)
 	{
-		PropertyNode[i].Write(s, "PropertyNode"); 
+		element.Write(s, "PropertyNode"); 
 	}
 }
-bool Materialise::CT_PropertyTemplateNode::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::CT_PropertyTemplateNode::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	std::string __tmp_var;
 	s.ReadAttrStr("Name", Name);
 	if (s.ReadAttrStr("Type", __tmp_var)) 
 		Type = Materialise::ConvertStringToST_PropertyType(__tmp_var);
-	std::string* __DisplayName = new std::string();
-	if (s.ReadAttrStr("DisplayName", *__DisplayName))
-		DisplayName = std::optional<std::reference_wrapper<std::string>> { *__DisplayName };
-	std::string* __DisplayNameContainer = new std::string();
-	if (s.ReadAttrStr("DisplayNameContainer", *__DisplayNameContainer))
-		DisplayNameContainer = std::optional<std::reference_wrapper<std::string>> { *__DisplayNameContainer };
-	std::string* __PropertyName = new std::string();
-	if (s.ReadAttrStr("PropertyName", *__PropertyName))
-		PropertyName = std::optional<std::reference_wrapper<std::string>> { *__PropertyName };
-	std::string* __Default = new std::string();
-	if (s.ReadAttrStr("Default", *__Default))
-		Default = std::optional<std::reference_wrapper<std::string>> { *__Default };
-	std::string* __ProfileList = new std::string();
-	if (s.ReadAttrStr("ProfileList", *__ProfileList))
-		ProfileList = std::optional<std::reference_wrapper<std::string>> { *__ProfileList };
-	std::string* __List = new std::string();
-	if (s.ReadAttrStr("List", *__List))
-		List = std::optional<std::reference_wrapper<std::string>> { *__List };
-	std::string* __ProfileName = new std::string();
-	if (s.ReadAttrStr("ProfileName", *__ProfileName))
-		ProfileName = std::optional<std::reference_wrapper<std::string>> { *__ProfileName };
+	std::string __DisplayName;
+	if (s.ReadAttrStr("DisplayName", __DisplayName))
+		DisplayName = std::optional<std::string> { __DisplayName };
+	std::string __DisplayNameContainer;
+	if (s.ReadAttrStr("DisplayNameContainer", __DisplayNameContainer))
+		DisplayNameContainer = std::optional<std::string> { __DisplayNameContainer };
+	std::string __PropertyName;
+	if (s.ReadAttrStr("PropertyName", __PropertyName))
+		PropertyName = std::optional<std::string> { __PropertyName };
+	std::string __Default;
+	if (s.ReadAttrStr("Default", __Default))
+		Default = std::optional<std::string> { __Default };
+	std::string __ProfileList;
+	if (s.ReadAttrStr("ProfileList", __ProfileList))
+		ProfileList = std::optional<std::string> { __ProfileList };
+	std::string __List;
+	if (s.ReadAttrStr("List", __List))
+		List = std::optional<std::string> { __List };
+	std::string __ProfileName;
+	if (s.ReadAttrStr("ProfileName", __ProfileName))
+		ProfileName = std::optional<std::string> { __ProfileName };
 	while (true) { 
 		Materialise::CT_PropertyTemplateNode __t;
-		if (__t.Read(s, "PropertyNode") == false)
+		if (!__t.Read(s, "PropertyNode"))
 			break;
-		PropertyNode.push_back(__t);
+		PropertyNode.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::CT_MtlsMachineInfo::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::CT_MtlsMachineInfo::CT_MtlsMachineInfo(Materialise::CT_MtlsMachineInfo &&___CT_MtlsMachineInfo)
+	: version(std::move(___CT_MtlsMachineInfo.version))
+	, BuildVolume(std::move(___CT_MtlsMachineInfo.BuildVolume))
+	, Tray(std::move(___CT_MtlsMachineInfo.Tray))
+	, LockedAreas(std::move(___CT_MtlsMachineInfo.LockedAreas))
+{ }
+void Materialise::CT_MtlsMachineInfo::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	if (version.has_value())
 		s.WriteAttr("version", Materialise::ConvertST_VersionToString(version.value()).c_str());
 	BuildVolume.Write(s, "BuildVolume");
 	Tray.Write(s, "Tray");
 	if (LockedAreas.has_value())
-		LockedAreas.value().get().Write(s, "LockedAreas");
+		LockedAreas.value().get()->Write(s, "LockedAreas");
 }
-bool Materialise::CT_MtlsMachineInfo::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::CT_MtlsMachineInfo::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	std::string __tmp_var;
 	if (s.ReadAttrStr("version", __tmp_var)) 
@@ -660,36 +726,46 @@ bool Materialise::CT_MtlsMachineInfo::Read(IXmlSerializerReader& s, std::string 
 	BuildVolume.Read(s, "BuildVolume");
 	Tray.Read(s, "Tray");
 	Materialise::LockedAreas* __LockedAreas = new Materialise::LockedAreas();
-	__LockedAreas->Read(s, "LockedAreas");
-	LockedAreas = std::optional<std::reference_wrapper<Materialise::LockedAreas>> { *__LockedAreas };
+	if (__LockedAreas->Read(s, "LockedAreas"))
+		LockedAreas = std::optional<std::unique_ptr<Materialise::LockedAreas>> { __LockedAreas };
 	return true;
 }
-void Materialise::LockedAreas::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::LockedAreas::LockedAreas(Materialise::LockedAreas &&___LockedAreas)
+	: Area(std::move(___LockedAreas.Area))
+{ }
+void Materialise::LockedAreas::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
-	for(int i = 0;i < Area.size();i++)
+	for(auto&& element : Area)
 	{
-		s.Write("Area", Area[i].c_str()); 
+		s.Write("Area", element.c_str()); 
 	}
 }
-bool Materialise::LockedAreas::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::LockedAreas::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 Area = s.ReadVectorStr("Area");
 	return true;
 }
-void Materialise::CT_MtlsMachineInfoComponent::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::CT_MtlsMachineInfoComponent::CT_MtlsMachineInfoComponent(Materialise::CT_MtlsMachineInfoComponent &&___CT_MtlsMachineInfoComponent)
+	: Shape(std::move(___CT_MtlsMachineInfoComponent.Shape))
+	, Pos(std::move(___CT_MtlsMachineInfoComponent.Pos))
+	, Dim(std::move(___CT_MtlsMachineInfoComponent.Dim))
+	, Mesh(std::move(___CT_MtlsMachineInfoComponent.Mesh))
+	, Visible(std::move(___CT_MtlsMachineInfoComponent.Visible))
+{ }
+void Materialise::CT_MtlsMachineInfoComponent::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("Shape", Materialise::ConvertShapeToString(Shape).c_str());
 	Pos.Write(s, "Pos");
 	Dim.Write(s, "Dim");
 	if (Mesh.has_value())
-		Mesh.value().get().Write(s, "Mesh");
+		Mesh.value().get()->Write(s, "Mesh");
 	s.Write("Visible", Visible);
 }
-bool Materialise::CT_MtlsMachineInfoComponent::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::CT_MtlsMachineInfoComponent::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	std::string __tmp_var;
 	if (s.ReadAttrStr("Shape", __tmp_var)) 
@@ -697,27 +773,38 @@ bool Materialise::CT_MtlsMachineInfoComponent::Read(IXmlSerializerReader& s, std
 	Pos.Read(s, "Pos");
 	Dim.Read(s, "Dim");
 	Materialise::Mesh* __Mesh = new Materialise::Mesh();
-	__Mesh->Read(s, "Mesh");
-	Mesh = std::optional<std::reference_wrapper<Materialise::Mesh>> { *__Mesh };
+	if (__Mesh->Read(s, "Mesh"))
+		Mesh = std::optional<std::unique_ptr<Materialise::Mesh>> { __Mesh };
 	s.ReadBool("Visible", Visible);
 	return true;
 }
-void Materialise::Pos::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::Pos::Pos(Materialise::Pos &&___Pos)
+	: x(std::move(___Pos.x))
+	, y(std::move(___Pos.y))
+	, z(std::move(___Pos.z))
+{ }
+void Materialise::Pos::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("x", x);
 	s.WriteAttr("y", y);
 	s.WriteAttr("z", z);
 }
-bool Materialise::Pos::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::Pos::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	s.ReadAttrDouble("x", x);
 	s.ReadAttrDouble("y", y);
 	s.ReadAttrDouble("z", z);
 	return true;
 }
-void Materialise::Dim::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::Dim::Dim(Materialise::Dim &&___Dim)
+	: x(std::move(___Dim.x))
+	, y(std::move(___Dim.y))
+	, z(std::move(___Dim.z))
+	, radius(std::move(___Dim.radius))
+{ }
+void Materialise::Dim::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	if (x.has_value())
 		s.WriteAttr("x", x.value());
@@ -727,91 +814,108 @@ void Materialise::Dim::Write(IXmlSerializerWriter& s, std::string __name__) {
 	if (radius.has_value())
 		s.WriteAttr("radius", radius.value().c_str());
 }
-bool Materialise::Dim::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::Dim::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
-	double* __x = new double();
-	if (s.ReadAttrDouble("x", *__x))
-		x = std::optional<std::reference_wrapper<double>> { *__x };
-	double* __y = new double();
-	if (s.ReadAttrDouble("y", *__y))
-		y = std::optional<std::reference_wrapper<double>> { *__y };
+	double __x;
+	if (s.ReadAttrDouble("x", __x))
+		x = std::optional<double> { __x };
+	double __y;
+	if (s.ReadAttrDouble("y", __y))
+		y = std::optional<double> { __y };
 	s.ReadAttrDouble("z", z);
-	std::string* __radius = new std::string();
-	if (s.ReadAttrStr("radius", *__radius))
-		radius = std::optional<std::reference_wrapper<std::string>> { *__radius };
+	std::string __radius;
+	if (s.ReadAttrStr("radius", __radius))
+		radius = std::optional<std::string> { __radius };
 	return true;
 }
-void Materialise::Mesh::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::Mesh::Mesh(Materialise::Mesh &&___Mesh)
+	: uuid(std::move(___Mesh.uuid))
+{ }
+void Materialise::Mesh::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("uuid", uuid.c_str());
 }
-bool Materialise::Mesh::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::Mesh::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	s.ReadAttrStr("uuid", uuid);
 	return true;
 }
-void Materialise::MtlsBuildTicket::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::MtlsBuildTicket::MtlsBuildTicket(Materialise::MtlsBuildTicket &&___MtlsBuildTicket)
+	: Defaults(std::move(___MtlsBuildTicket.Defaults))
+	, PartOverrides(std::move(___MtlsBuildTicket.PartOverrides))
+	, ObjectProperties(std::move(___MtlsBuildTicket.ObjectProperties))
+{ }
+void Materialise::MtlsBuildTicket::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	if (Defaults.has_value())
-		Defaults.value().get().Write(s, "Defaults");
+		Defaults.value().get()->Write(s, "Defaults");
 	if (PartOverrides.has_value())
-		PartOverrides.value().get().Write(s, "PartOverrides");
+		PartOverrides.value().get()->Write(s, "PartOverrides");
 	if (ObjectProperties.has_value())
-		ObjectProperties.value().get().Write(s, "ObjectProperties");
+		ObjectProperties.value().get()->Write(s, "ObjectProperties");
 }
-bool Materialise::MtlsBuildTicket::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::MtlsBuildTicket::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	Materialise::CT_PropertyTree* __Defaults = new Materialise::CT_PropertyTree();
-	__Defaults->Read(s, "Defaults");
-	Defaults = std::optional<std::reference_wrapper<Materialise::CT_PropertyTree>> { *__Defaults };
+	if (__Defaults->Read(s, "Defaults"))
+		Defaults = std::optional<std::unique_ptr<Materialise::CT_PropertyTree>> { __Defaults };
 	Materialise::PartOverrides* __PartOverrides = new Materialise::PartOverrides();
-	__PartOverrides->Read(s, "PartOverrides");
-	PartOverrides = std::optional<std::reference_wrapper<Materialise::PartOverrides>> { *__PartOverrides };
+	if (__PartOverrides->Read(s, "PartOverrides"))
+		PartOverrides = std::optional<std::unique_ptr<Materialise::PartOverrides>> { __PartOverrides };
 	Materialise::ObjectProperties* __ObjectProperties = new Materialise::ObjectProperties();
-	__ObjectProperties->Read(s, "ObjectProperties");
-	ObjectProperties = std::optional<std::reference_wrapper<Materialise::ObjectProperties>> { *__ObjectProperties };
+	if (__ObjectProperties->Read(s, "ObjectProperties"))
+		ObjectProperties = std::optional<std::unique_ptr<Materialise::ObjectProperties>> { __ObjectProperties };
 	return true;
 }
-void Materialise::MtlsMachineParameters::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::MtlsMachineParameters::MtlsMachineParameters(Materialise::MtlsMachineParameters &&___MtlsMachineParameters)
+	: version(std::move(___MtlsMachineParameters.version))
+	, Property(std::move(___MtlsMachineParameters.Property))
+{ }
+void Materialise::MtlsMachineParameters::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	if (version.has_value())
 		s.WriteAttr("version", Materialise::ConvertST_VersionToString(version.value()).c_str());
-	for(int i = 0;i < Property.size();i++)
+	for(auto&& element : Property)
 	{
-		Property[i].Write(s, "Property"); 
+		element.Write(s, "Property"); 
 	}
 }
-bool Materialise::MtlsMachineParameters::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::MtlsMachineParameters::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	std::string __tmp_var;
 	if (s.ReadAttrStr("version", __tmp_var)) 
 		version = Materialise::ConvertStringToST_Version(__tmp_var);
 	while (true) { 
 		Materialise::CT_Property __t;
-		if (__t.Read(s, "Property") == false)
+		if (!__t.Read(s, "Property"))
 			break;
-		Property.push_back(__t);
+		Property.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::MtlsPropertyTemplate::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::MtlsPropertyTemplate::MtlsPropertyTemplate(Materialise::MtlsPropertyTemplate &&___MtlsPropertyTemplate)
+	: version(std::move(___MtlsPropertyTemplate.version))
+	, MachineParameters(std::move(___MtlsPropertyTemplate.MachineParameters))
+	, BuildTicket(std::move(___MtlsPropertyTemplate.BuildTicket))
+{ }
+void Materialise::MtlsPropertyTemplate::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	if (version.has_value())
 		s.WriteAttr("version", Materialise::ConvertST_VersionToString(version.value()).c_str());
 	MachineParameters.Write(s, "MachineParameters");
 	BuildTicket.Write(s, "BuildTicket");
 }
-bool Materialise::MtlsPropertyTemplate::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::MtlsPropertyTemplate::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	std::string __tmp_var;
 	if (s.ReadAttrStr("version", __tmp_var)) 
@@ -820,18 +924,24 @@ bool Materialise::MtlsPropertyTemplate::Read(IXmlSerializerReader& s, std::strin
 	BuildTicket.Read(s, "BuildTicket");
 	return true;
 }
-void Materialise::MtlsMachineInfo::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::MtlsMachineInfo::MtlsMachineInfo(Materialise::MtlsMachineInfo &&___MtlsMachineInfo)
+	: version(std::move(___MtlsMachineInfo.version))
+	, BuildVolume(std::move(___MtlsMachineInfo.BuildVolume))
+	, Tray(std::move(___MtlsMachineInfo.Tray))
+	, LockedAreas(std::move(___MtlsMachineInfo.LockedAreas))
+{ }
+void Materialise::MtlsMachineInfo::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	if (version.has_value())
 		s.WriteAttr("version", Materialise::ConvertST_VersionToString(version.value()).c_str());
 	BuildVolume.Write(s, "BuildVolume");
 	Tray.Write(s, "Tray");
 	if (LockedAreas.has_value())
-		LockedAreas.value().get().Write(s, "LockedAreas");
+		LockedAreas.value().get()->Write(s, "LockedAreas");
 }
-bool Materialise::MtlsMachineInfo::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::MtlsMachineInfo::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	std::string __tmp_var;
 	if (s.ReadAttrStr("version", __tmp_var)) 
@@ -839,7 +949,7 @@ bool Materialise::MtlsMachineInfo::Read(IXmlSerializerReader& s, std::string __n
 	BuildVolume.Read(s, "BuildVolume");
 	Tray.Read(s, "Tray");
 	Materialise::LockedAreas* __LockedAreas = new Materialise::LockedAreas();
-	__LockedAreas->Read(s, "LockedAreas");
-	LockedAreas = std::optional<std::reference_wrapper<Materialise::LockedAreas>> { *__LockedAreas };
+	if (__LockedAreas->Read(s, "LockedAreas"))
+		LockedAreas = std::optional<std::unique_ptr<Materialise::LockedAreas>> { __LockedAreas };
 	return true;
 }

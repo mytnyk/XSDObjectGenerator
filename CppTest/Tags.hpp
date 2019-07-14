@@ -8,52 +8,59 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files3_Tags_namespace = "urn:Print3D";
+	const std::string schema_generated_files_test2_Tags_namespace = "urn:Print3D";
 	struct Tags;
 	struct Tag;
 	struct Tag {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		Tag(Tag&&);
+	Tag(){ }
 		std::string name;
 		std::string description;
-		Tag() {}
-		~Tag() {}
 	};
 	struct Tags {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::vector<Materialise::Tag> Tag;
-		Tags() {}
-		~Tags() {}
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		Tags(Tags&&);
+	Tags(){ }
+		std::vector<Tag> Tag;
 	};
 }
-void Materialise::Tags::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::Tags::Tags(Materialise::Tags &&___Tags)
+	: Tag(std::move(___Tags.Tag))
+{ }
+void Materialise::Tags::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
-	for(int i = 0;i < Tag.size();i++)
+	for(auto&& element : Tag)
 	{
-		Tag[i].Write(s, "Tag"); 
+		element.Write(s, "Tag"); 
 	}
 }
-bool Materialise::Tags::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::Tags::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	while (true) { 
 		Materialise::Tag __t;
-		if (__t.Read(s, "Tag") == false)
+		if (!__t.Read(s, "Tag"))
 			break;
-		Tag.push_back(__t);
+		Tag.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::Tag::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::Tag::Tag(Materialise::Tag &&___Tag)
+	: name(std::move(___Tag.name))
+	, description(std::move(___Tag.description))
+{ }
+void Materialise::Tag::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("name", name.c_str());
 	s.WriteAttr("description", description.c_str());
 }
-bool Materialise::Tag::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::Tag::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	s.ReadAttrStr("name", name);
 	s.ReadAttrStr("description", description);
