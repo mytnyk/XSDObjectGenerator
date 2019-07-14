@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files3_ExternalProperties_namespace = "";
+	const std::string schema_generated_files_test2_ExternalProperties_namespace = "";
 	enum class PropertyType {
 		_bool,
 		integer,
@@ -60,42 +60,47 @@ namespace Materialise {
 	struct ExternalPropertyFile;
 	struct Properties;
 	struct Properties {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		Properties(Properties&&);
+	Properties(){ }
 		std::string ID;
-		std::vector<Materialise::PropertyElement> Property;
-		Properties() {}
-		~Properties() {}
+		std::vector<PropertyElement> Property;
 	};
 	struct ExternalPropertyFile {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::vector<Materialise::Properties> Properties;
-		ExternalPropertyFile() {}
-		~ExternalPropertyFile() {}
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		ExternalPropertyFile(ExternalPropertyFile&&);
+	ExternalPropertyFile(){ }
+		std::vector<Properties> Properties;
 	};
 	struct PropertyElement {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		PropertyElement(PropertyElement&&);
+	PropertyElement(){ }
 		std::string Name;
 		Materialise::PropertyType Type;
-		std::vector<Materialise::PropertyElement> Property;
-		PropertyElement() {}
-		~PropertyElement() {}
+		std::vector<PropertyElement> Property;
 	};
 }
-void Materialise::PropertyElement::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::PropertyElement::PropertyElement(Materialise::PropertyElement &&___PropertyElement)
+	: Name(std::move(___PropertyElement.Name))
+	, Type(std::move(___PropertyElement.Type))
+	, Property(std::move(___PropertyElement.Property))
+{ }
+void Materialise::PropertyElement::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("Name", Name.c_str());
 	s.WriteAttr("Type", Materialise::ConvertPropertyTypeToString(Type).c_str());
-	for(int i = 0;i < Property.size();i++)
+	for(auto&& element : Property)
 	{
-		Property[i].Write(s, "Property"); 
+		element.Write(s, "Property"); 
 	}
 }
-bool Materialise::PropertyElement::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::PropertyElement::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	std::string __tmp_var;
 	s.ReadAttrStr("Name", Name);
@@ -103,49 +108,56 @@ bool Materialise::PropertyElement::Read(IXmlSerializerReader& s, std::string __n
 		Type = Materialise::ConvertStringToPropertyType(__tmp_var);
 	while (true) { 
 		Materialise::PropertyElement __t;
-		if (__t.Read(s, "Property") == false)
+		if (!__t.Read(s, "Property"))
 			break;
-		Property.push_back(__t);
+		Property.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::ExternalPropertyFile::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::ExternalPropertyFile::ExternalPropertyFile(Materialise::ExternalPropertyFile &&___ExternalPropertyFile)
+	: Properties(std::move(___ExternalPropertyFile.Properties))
+{ }
+void Materialise::ExternalPropertyFile::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
-	for(int i = 0;i < Properties.size();i++)
+	for(auto&& element : Properties)
 	{
-		Properties[i].Write(s, "Properties"); 
+		element.Write(s, "Properties"); 
 	}
 }
-bool Materialise::ExternalPropertyFile::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::ExternalPropertyFile::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	while (true) { 
 		Materialise::Properties __t;
-		if (__t.Read(s, "Properties") == false)
+		if (!__t.Read(s, "Properties"))
 			break;
-		Properties.push_back(__t);
+		Properties.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::Properties::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::Properties::Properties(Materialise::Properties &&___Properties)
+	: ID(std::move(___Properties.ID))
+	, Property(std::move(___Properties.Property))
+{ }
+void Materialise::Properties::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("ID", ID.c_str());
-	for(int i = 0;i < Property.size();i++)
+	for(auto&& element : Property)
 	{
-		Property[i].Write(s, "Property"); 
+		element.Write(s, "Property"); 
 	}
 }
-bool Materialise::Properties::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::Properties::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	s.ReadAttrStr("ID", ID);
 	while (true) { 
 		Materialise::PropertyElement __t;
-		if (__t.Read(s, "Property") == false)
+		if (!__t.Read(s, "Property"))
 			break;
-		Property.push_back(__t);
+		Property.push_back(std::move(__t));
 	}
 	return true;
 }

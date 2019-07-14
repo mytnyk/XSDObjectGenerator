@@ -16,7 +16,7 @@
 
 void write1() {
 	PugiXmlSerializerWriter s;
-	Materialise::BuildTicket bt;
+	/*Materialise::BuildTicket bt;
 	Materialise::CT_PropertyTemplateTree tree;
 	Materialise::CT_PropertyTemplateNode node;
 	node.Default = "Default string here";
@@ -36,8 +36,8 @@ void write1() {
 
 	bt.Write(s, "BuildTicket");
 
-	s.SetSchemaTargetNamespace(Materialise::schema_generated_files3_MtlsBuildTicket_2017_namespace);
-	s.SaveToFile("simple_xml.xml");
+	s.SetSchemaTargetNamespace(Materialise::schema_generated_files_test2_MtlsBuildTicket_2017_namespace);
+	s.SaveToFile("simple_xml.xml");*/
 }
 
 void read1() {
@@ -52,35 +52,35 @@ void read1() {
 void write2() {
 	PugiXmlSerializerWriter s;
 	Materialise::DeviceState ds;
-	Materialise::Log log;
-	Materialise::Entries entries;
-	entries.count = 11;
+
+	ds.Log = std::make_unique<Materialise::Log>();// new Materialise::Log());
+	ds.Log.value()->Entries = std::make_unique<Materialise::Entries>();//(entries);
+	ds.Log.value()->Entries.value()->count = 23786238;
+
 	Materialise::LogEntry le;
 	le.source = "AAAAA";
 	le.type = Materialise::LogEntryType::Information;
-	entries.Entry.push_back(le);
-	le.type = Materialise::LogEntryType::Warning;
-	entries.Entry.push_back(le);
-	Materialise::MeterValues mv;
-	mv.count = 1111111;
-	Materialise::_Value v;
-	v.meter = "MMM";
-	mv.Value.push_back(v);
-	v.meter = "MMMeee";
-	mv.Value.push_back(v);
-	le.Meters = mv;
-	entries.Entry.push_back(le);
-	log.Entries = entries;
-	ds.Log = log;
-	Materialise::DeviceStatus dstat;
-	dstat.description = "AA";
-	dstat.value = Materialise::DeviceStatusValue::ReadyToPrint;
-	ds.Status = dstat;
+	ds.Log.value()->Entries.value()->Entry.push_back(std::move(le));
 
+
+	Materialise::LogEntry le2;
+	le2.source = "BB";
+	le2.message = "Hi";
+	le2.type = Materialise::LogEntryType::Warning;
+	ds.Log.value()->Entries.value()->Entry.push_back(std::move(le2));
+
+	Materialise::LogEntry le3;
+	le3.source = "AAAAA";
+	le3.message = "Hi2";
+	le3.type = Materialise::LogEntryType::Error;
+	ds.Log.value()->Entries.value()->Entry.push_back(std::move(le3));
+
+	ds.Status.description = "AA";
+	ds.Status.value = Materialise::DeviceStatusValue::ReadyToPrint;
 
 	ds.Write(s, "DeviceState");
 
-	s.SetSchemaTargetNamespace(Materialise::schema_generated_files3_DeviceState_namespace);
+	s.SetSchemaTargetNamespace(Materialise::schema_generated_files_test2_DeviceState_namespace);
 	s.SaveToFile("simple_xml.xml");
 }
 
@@ -89,7 +89,8 @@ void read2() {
 	s.Load("simple_xml.xml");
 	Materialise::DeviceState bt;
 	bt.Read(s, "DeviceState");
-	auto jj = bt.Log.value().get().Entries;
+	auto g = bt.Log.value().get();
+	auto jj = bt.Log.value()->Entries.value().get();
 	std::string ns = s.getSchemaTargetNamespace();
 	return;
 }

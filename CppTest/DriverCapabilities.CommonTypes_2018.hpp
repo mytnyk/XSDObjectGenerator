@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files3_DriverCapabilities.CommonTypes_2018_namespace = "http://schemas.materialise.com/BuildProcessor/2018";
+	const std::string schema_generated_files_test2_DriverCapabilities.CommonTypes_2018_namespace = "http://schemas.materialise.com/BuildProcessor/2018";
 	enum class DriverIssueSeverity {
 		Information,
 		Warning,
@@ -54,41 +54,47 @@ namespace Materialise {
 	struct Capability;
 	struct Capabilities;
 	struct Capability {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		Capability(Capability&&);
+	Capability(){ }
 		std::string Id;
 		std::optional<std::string> Value;
-		Capability() {}
-		~Capability() {}
 	};
 	struct Capabilities {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		Capabilities(Capabilities&&);
+	Capabilities(){ }
 		std::string Id;
-		std::vector<Materialise::Capability> Capability;
-		std::vector<Materialise::Capabilities> __Capabilities;
-		Capabilities() {}
-		~Capabilities() {}
+		std::vector<Capability> Capability;
+		std::vector<Capabilities> __Capabilities;
 	};
 	struct DriverIssue {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		DriverIssue(DriverIssue&&);
+	DriverIssue(){ }
 		Materialise::DriverIssueId Id;
 		std::string Title;
 		std::optional<std::string> Description;
 		Materialise::DriverIssueSeverity Severity;
-		DriverIssue() {}
-		~DriverIssue() {}
 	};
 	struct DriverIssues {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::vector<Materialise::DriverIssue> DriverIssue;
-		DriverIssues() {}
-		~DriverIssues() {}
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		DriverIssues(DriverIssues&&);
+	DriverIssues(){ }
+		std::vector<DriverIssue> DriverIssue;
 	};
 }
-void Materialise::DriverIssue::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::DriverIssue::DriverIssue(Materialise::DriverIssue &&___DriverIssue)
+	: Id(std::move(___DriverIssue.Id))
+	, Title(std::move(___DriverIssue.Title))
+	, Description(std::move(___DriverIssue.Description))
+	, Severity(std::move(___DriverIssue.Severity))
+{ }
+void Materialise::DriverIssue::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("Id", Materialise::ConvertDriverIssueIdToString(Id).c_str());
 	s.WriteAttr("Title", Title.c_str());
@@ -96,84 +102,96 @@ void Materialise::DriverIssue::Write(IXmlSerializerWriter& s, std::string __name
 		s.WriteAttr("Description", Description.value().c_str());
 	s.WriteAttr("Severity", Materialise::ConvertDriverIssueSeverityToString(Severity).c_str());
 }
-bool Materialise::DriverIssue::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::DriverIssue::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	std::string __tmp_var;
 	if (s.ReadAttrStr("Id", __tmp_var)) 
 		Id = Materialise::ConvertStringToDriverIssueId(__tmp_var);
 	s.ReadAttrStr("Title", Title);
-	std::string* __Description = new std::string();
-	if (s.ReadAttrStr("Description", *__Description))
-		Description = std::optional<std::reference_wrapper<std::string>> { *__Description };
+	std::string __Description;
+	if (s.ReadAttrStr("Description", __Description))
+		Description = std::optional<std::string> { __Description };
 	if (s.ReadAttrStr("Severity", __tmp_var)) 
 		Severity = Materialise::ConvertStringToDriverIssueSeverity(__tmp_var);
 	return true;
 }
-void Materialise::DriverIssues::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::DriverIssues::DriverIssues(Materialise::DriverIssues &&___DriverIssues)
+	: DriverIssue(std::move(___DriverIssues.DriverIssue))
+{ }
+void Materialise::DriverIssues::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
-	for(int i = 0;i < DriverIssue.size();i++)
+	for(auto&& element : DriverIssue)
 	{
-		DriverIssue[i].Write(s, "DriverIssue"); 
+		element.Write(s, "DriverIssue"); 
 	}
 }
-bool Materialise::DriverIssues::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::DriverIssues::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	while (true) { 
 		Materialise::DriverIssue __t;
-		if (__t.Read(s, "DriverIssue") == false)
+		if (!__t.Read(s, "DriverIssue"))
 			break;
-		DriverIssue.push_back(__t);
+		DriverIssue.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::Capability::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::Capability::Capability(Materialise::Capability &&___Capability)
+	: Id(std::move(___Capability.Id))
+	, Value(std::move(___Capability.Value))
+{ }
+void Materialise::Capability::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("Id", Id.c_str());
 	if (Value.has_value())
 		s.WriteAttr("Value", Value.value().c_str());
 }
-bool Materialise::Capability::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::Capability::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	s.ReadAttrStr("Id", Id);
-	std::string* __Value = new std::string();
-	if (s.ReadAttrStr("Value", *__Value))
-		Value = std::optional<std::reference_wrapper<std::string>> { *__Value };
+	std::string __Value;
+	if (s.ReadAttrStr("Value", __Value))
+		Value = std::optional<std::string> { __Value };
 	return true;
 }
-void Materialise::Capabilities::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::Capabilities::Capabilities(Materialise::Capabilities &&___Capabilities)
+	: Id(std::move(___Capabilities.Id))
+	, Capability(std::move(___Capabilities.Capability))
+	, __Capabilities(std::move(___Capabilities.__Capabilities))
+{ }
+void Materialise::Capabilities::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("Id", Id.c_str());
-	for(int i = 0;i < Capability.size();i++)
+	for(auto&& element : Capability)
 	{
-		Capability[i].Write(s, "Capability"); 
+		element.Write(s, "Capability"); 
 	}
-	for(int i = 0;i < __Capabilities.size();i++)
+	for(auto&& element : __Capabilities)
 	{
-		__Capabilities[i].Write(s, "Capabilities"); 
+		element.Write(s, "Capabilities"); 
 	}
 }
-bool Materialise::Capabilities::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::Capabilities::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	s.ReadAttrStr("Id", Id);
 	while (true) { 
 		Materialise::Capability __t;
-		if (__t.Read(s, "Capability") == false)
+		if (!__t.Read(s, "Capability"))
 			break;
-		Capability.push_back(__t);
+		Capability.push_back(std::move(__t));
 	}
 	while (true) { 
 		Materialise::Capabilities __t;
-		if (__t.Read(s, "Capabilities") == false)
+		if (!__t.Read(s, "Capabilities"))
 			break;
-		__Capabilities.push_back(__t);
+		__Capabilities.push_back(std::move(__t));
 	}
 	return true;
 }

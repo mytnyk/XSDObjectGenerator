@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files3_PreprocessorInput_namespace = "http://www.materialise.com/BuildProcessor/2014";
+	const std::string schema_generated_files_test2_PreprocessorInput_namespace = "http://www.materialise.com/BuildProcessor/2014";
 	struct PartInstances;
 	struct Instance;
 	struct PartLabels;
@@ -19,232 +19,262 @@ namespace Materialise {
 	struct Parts;
 	struct Part;
 	struct Part {
-		void Write(IXmlSerializerWriter& s, std::string __name__); // pass parameter by reference (const std::string&)
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		Part(Part&&);
+	Part(){ }
 		std::string id;
 		std::optional<std::string> FilePath;
-		std::optional<std::reference_wrapper<Materialise::PartInstances>> Instances;// Materialise:: namespace here is redundant,  we are here in this namespace already
-		Part() {} // do not write ctor and dtor,  or use '= default', better first try to remove it at all
-		~Part() {}
+		std::optional<std::unique_ptr<PartInstances>> Instances;
 	};
 	struct Parts {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::vector<Materialise::Part> Part;
-		Parts() {}
-		~Parts() {}
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		Parts(Parts&&);
+	Parts(){ }
+		std::vector<Part> Part;
 	};
 	struct PreliminaryPass {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		PreliminaryPass(PreliminaryPass&&);
+	PreliminaryPass(){ }
 		std::optional<bool> enabled;
-		PreliminaryPass() {}
-		~PreliminaryPass() {}
 	};
 	struct Labelling {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		Labelling(Labelling&&);
+	Labelling(){ }
 		std::optional<bool> enabled;
-		Labelling() {}
-		~Labelling() {}
 	};
 	struct PreprocessorInput {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::optional<std::reference_wrapper<Materialise::Labelling>> Labelling;
-		std::optional<std::reference_wrapper<Materialise::PreliminaryPass>> PreliminaryPass;
-		std::optional<std::reference_wrapper<Materialise::Parts>> Parts;
-		PreprocessorInput() {}
-		~PreprocessorInput() {}
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		PreprocessorInput(PreprocessorInput&&);
+	PreprocessorInput(){ }
+		std::optional<std::unique_ptr<Labelling>> Labelling;
+		std::optional<std::unique_ptr<PreliminaryPass>> PreliminaryPass;
+		std::optional<std::unique_ptr<Parts>> Parts;
 	};
 	struct Label {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		Label(Label&&);
+	Label(){ }
 		std::string id;
 		std::string value;
-		Label() {}
-		~Label() {}
 	};
 	struct PartLabels {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::vector<Materialise::Label> Label;
-		PartLabels() {}
-		~PartLabels() {}
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		PartLabels(PartLabels&&);
+	PartLabels(){ }
+		std::vector<Label> Label;
 	};
 	struct Instance {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		Instance(Instance&&);
+	Instance(){ }
 		std::string id;
-		std::optional<std::reference_wrapper<Materialise::PartLabels>> Labels;
-		Instance() {}
-		~Instance() {}
+		std::optional<std::unique_ptr<PartLabels>> Labels;
 	};
 	struct PartInstances {
-		void Write(IXmlSerializerWriter& s, std::string __name__);
-		bool Read(IXmlSerializerReader& s, std::string __name__);
-		std::vector<Materialise::Instance> Instance;
-		PartInstances() {}
-		~PartInstances() {}
+		void Write(IXmlSerializerWriter& s, const std::string& __name__);
+		bool Read(IXmlSerializerReader& s, const std::string& __name__);
+		PartInstances(PartInstances&&);
+	PartInstances(){ }
+		std::vector<Instance> Instance;
 	};
 }
-void Materialise::PartInstances::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::PartInstances::PartInstances(Materialise::PartInstances &&___PartInstances)
+	: Instance(std::move(___PartInstances.Instance))
+{ }
+void Materialise::PartInstances::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
-	for(int i = 0;i < Instance.size();i++) // use range-based for loop : "for (auto inst : Instance)"
+	for(auto&& element : Instance)
 	{
-		Instance[i].Write(s, "Instance"); 
+		element.Write(s, "Instance"); 
 	}
 }
-bool Materialise::PartInstances::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::PartInstances::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	while (true) { 
 		Materialise::Instance __t;
-		if (__t.Read(s, "Instance") == false)
+		if (!__t.Read(s, "Instance"))
 			break;
-		Instance.push_back(__t);
+		Instance.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::Instance::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::Instance::Instance(Materialise::Instance &&___Instance)
+	: id(std::move(___Instance.id))
+	, Labels(std::move(___Instance.Labels))
+{ }
+void Materialise::Instance::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("id", id.c_str());
 	if (Labels.has_value())
-		Labels.value().get().Write(s, "Labels");
+		Labels.value().get()->Write(s, "Labels");
 }
-bool Materialise::Instance::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::Instance::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	s.ReadAttrStr("id", id);
 	Materialise::PartLabels* __Labels = new Materialise::PartLabels();
-	__Labels->Read(s, "Labels");
-	Labels = std::optional<std::reference_wrapper<Materialise::PartLabels>> { *__Labels };
+	if (__Labels->Read(s, "Labels"))
+		Labels = std::optional<std::unique_ptr<Materialise::PartLabels>> { __Labels };
 	return true;
 }
-void Materialise::PartLabels::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::PartLabels::PartLabels(Materialise::PartLabels &&___PartLabels)
+	: Label(std::move(___PartLabels.Label))
+{ }
+void Materialise::PartLabels::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
-	for(int i = 0;i < Label.size();i++)
+	for(auto&& element : Label)
 	{
-		Label[i].Write(s, "Label"); 
+		element.Write(s, "Label"); 
 	}
 }
-bool Materialise::PartLabels::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::PartLabels::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	while (true) { 
 		Materialise::Label __t;
-		if (__t.Read(s, "Label") == false)
+		if (!__t.Read(s, "Label"))
 			break;
-		Label.push_back(__t);
+		Label.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::Label::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::Label::Label(Materialise::Label &&___Label)
+	: id(std::move(___Label.id))
+	, value(std::move(___Label.value))
+{ }
+void Materialise::Label::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("id", id.c_str());
 	s.WriteAttr("value", value.c_str());
 }
-bool Materialise::Label::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::Label::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	s.ReadAttrStr("id", id);
 	s.ReadAttrStr("value", value);
 	return true;
 }
-void Materialise::PreprocessorInput::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::PreprocessorInput::PreprocessorInput(Materialise::PreprocessorInput &&___PreprocessorInput)
+	: Labelling(std::move(___PreprocessorInput.Labelling))
+	, PreliminaryPass(std::move(___PreprocessorInput.PreliminaryPass))
+	, Parts(std::move(___PreprocessorInput.Parts))
+{ }
+void Materialise::PreprocessorInput::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	if (Labelling.has_value())
-		Labelling.value().get().Write(s, "Labelling");
+		Labelling.value().get()->Write(s, "Labelling");
 	if (PreliminaryPass.has_value())
-		PreliminaryPass.value().get().Write(s, "PreliminaryPass");
+		PreliminaryPass.value().get()->Write(s, "PreliminaryPass");
 	if (Parts.has_value())
-		Parts.value().get().Write(s, "Parts");
+		Parts.value().get()->Write(s, "Parts");
 }
-bool Materialise::PreprocessorInput::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::PreprocessorInput::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	Materialise::Labelling* __Labelling = new Materialise::Labelling();
-	__Labelling->Read(s, "Labelling");
-	Labelling = std::optional<std::reference_wrapper<Materialise::Labelling>> { *__Labelling };
+	if (__Labelling->Read(s, "Labelling"))
+		Labelling = std::optional<std::unique_ptr<Materialise::Labelling>> { __Labelling };
 	Materialise::PreliminaryPass* __PreliminaryPass = new Materialise::PreliminaryPass();
-	__PreliminaryPass->Read(s, "PreliminaryPass");
-	PreliminaryPass = std::optional<std::reference_wrapper<Materialise::PreliminaryPass>> { *__PreliminaryPass };
+	if (__PreliminaryPass->Read(s, "PreliminaryPass"))
+		PreliminaryPass = std::optional<std::unique_ptr<Materialise::PreliminaryPass>> { __PreliminaryPass };
 	Materialise::Parts* __Parts = new Materialise::Parts();
-	__Parts->Read(s, "Parts");
-	Parts = std::optional<std::reference_wrapper<Materialise::Parts>> { *__Parts };
+	if (__Parts->Read(s, "Parts"))
+		Parts = std::optional<std::unique_ptr<Materialise::Parts>> { __Parts };
 	return true;
 }
-void Materialise::Labelling::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::Labelling::Labelling(Materialise::Labelling &&___Labelling)
+	: enabled(std::move(___Labelling.enabled))
+{ }
+void Materialise::Labelling::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	if (enabled.has_value())
 		s.WriteAttr("enabled", enabled.value());
 }
-bool Materialise::Labelling::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::Labelling::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
-	bool* __enabled = new bool();
-	if (s.ReadAttrBool("enabled", *__enabled))
-		enabled = std::optional<std::reference_wrapper<bool>> { *__enabled };
+	bool __enabled;
+	if (s.ReadAttrBool("enabled", __enabled))
+		enabled = std::optional<bool> { __enabled };
 	return true;
 }
-void Materialise::PreliminaryPass::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::PreliminaryPass::PreliminaryPass(Materialise::PreliminaryPass &&___PreliminaryPass)
+	: enabled(std::move(___PreliminaryPass.enabled))
+{ }
+void Materialise::PreliminaryPass::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	if (enabled.has_value())
 		s.WriteAttr("enabled", enabled.value());
 }
-bool Materialise::PreliminaryPass::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::PreliminaryPass::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
-	bool* __enabled = new bool(); // I think std::optional<bool> should work fine here
-	if (s.ReadAttrBool("enabled", *__enabled))
-		enabled = std::optional<std::reference_wrapper<bool>> { *__enabled };
+	bool __enabled;
+	if (s.ReadAttrBool("enabled", __enabled))
+		enabled = std::optional<bool> { __enabled };
 	return true;
 }
-void Materialise::Parts::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::Parts::Parts(Materialise::Parts &&___Parts)
+	: Part(std::move(___Parts.Part))
+{ }
+void Materialise::Parts::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
-	for(int i = 0;i < Part.size();i++)
+	for(auto&& element : Part)
 	{
-		Part[i].Write(s, "Part"); 
+		element.Write(s, "Part"); 
 	}
 }
-bool Materialise::Parts::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::Parts::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false)
+	if (!scope.exist())
 		return false;
 	while (true) { 
 		Materialise::Part __t;
-		if (__t.Read(s, "Part") == false) // use if (!..) everywhere
+		if (!__t.Read(s, "Part"))
 			break;
-		Part.push_back(__t);//use embplace_back to avoid copying
+		Part.push_back(std::move(__t));
 	}
 	return true;
 }
-void Materialise::Part::Write(IXmlSerializerWriter& s, std::string __name__) {
+Materialise::Part::Part(Materialise::Part &&___Part)
+	: id(std::move(___Part.id))
+	, FilePath(std::move(___Part.FilePath))
+	, Instances(std::move(___Part.Instances))
+{ }
+void Materialise::Part::Write(IXmlSerializerWriter& s, const std::string& __name__) {
 	IXmlSerializerWriter::Scope scope(s, __name__);
 	s.WriteAttr("id", id.c_str());
 	if (FilePath.has_value())
 		s.Write("FilePath", FilePath.value().c_str());
 	if (Instances.has_value())
-		Instances.value().get().Write(s, "Instances");
+		Instances.value().get()->Write(s, "Instances");
 }
-// add an 'inline' specifier to your functions in header files
-bool Materialise::Part::Read(IXmlSerializerReader& s, std::string __name__) {
+bool Materialise::Part::Read(IXmlSerializerReader& s, const std::string& __name__) {
 	IXmlSerializerReader::Scope scope(s, __name__);
-	if (scope.exist() == false) // it is enough to write just "if (!scope.exist())"
+	if (!scope.exist())
 		return false;
 	s.ReadAttrStr("id", id);
 	s.ReadStr("FilePath", FilePath.value());
-  // there is a memory leak here, reference_wrapper does not hold an ownership,
-  // try to create __Instances on stack and use just emplace method of std::optional<PartInstances>
 	Materialise::PartInstances* __Instances = new Materialise::PartInstances();
-	__Instances->Read(s, "Instances");
-	Instances = std::optional<std::reference_wrapper<Materialise::PartInstances>> { *__Instances };
+	if (__Instances->Read(s, "Instances"))
+		Instances = std::optional<std::unique_ptr<Materialise::PartInstances>> { __Instances };
 	return true;
 }

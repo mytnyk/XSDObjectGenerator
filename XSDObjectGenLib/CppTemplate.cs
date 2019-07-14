@@ -12,20 +12,6 @@ namespace XSDObjectGenLib
     /// </summary>
     internal class CppTemplate : LanguageBase
     {
-        static string sElementAnyTemplate =
-@"		[XmlAnyElement({6})]
-		public System.Xml.XmlElement {5};";
-
-        static string sElementAnyMaxOccursTemplate =
-@"		[XmlAnyElement({6})]
-		public System.Xml.XmlElement[] {5};";
-	
-        static string sAttributeAnyTemplate =
-@"		[XmlAnyAttribute()]
-		public System.Xml.XmlAttribute[] {5};";
-
-     
-        static string sClassEnumerabilityTemplate = "";
 
         private Hashtable keywordsTable;
 

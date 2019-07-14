@@ -2,15 +2,10 @@
 <DeviceState xmlns="urn:Print3D">
 	<Status value="ReadyToPrint" description="AA" />
 	<Log>
-		<Entries count="11">
+		<Entries count="23786238">
 			<Entry type="Information" source="AAAAA" />
-			<Entry type="Warning" source="AAAAA" />
-			<Entry type="Warning" source="AAAAA">
-				<Meters count="1111111">
-					<Value meter="MMM" />
-					<Value meter="MMMeee" />
-				</Meters>
-			</Entry>
+			<Entry type="Warning" source="BB" message="Hi" />
+			<Entry type="Error" source="AAAAA" message="Hi2" />
 		</Entries>
 	</Log>
 </DeviceState>
