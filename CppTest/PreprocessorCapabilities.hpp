@@ -8,18 +8,22 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files_test2_PreprocessorCapabilities_namespace = "http://www.materialise.com/BuildProcessor/2014";
+	const std::string schema_CppTest_PreprocessorCapabilities_namespace = "http://www.materialise.com/BuildProcessor/2014";
 	struct PreprocessorCapabilities;
 	struct PreprocessorCapabilities {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		PreprocessorCapabilities(PreprocessorCapabilities&&);
-	PreprocessorCapabilities(){ }
+		PreprocessorCapabilities(const PreprocessorCapabilities&) = delete;
+		PreprocessorCapabilities& operator=(PreprocessorCapabilities&&) = delete;
+		PreprocessorCapabilities& operator=(PreprocessorCapabilities&) = delete;
+		PreprocessorCapabilities(PreprocessorCapabilities&&) noexcept;
+		PreprocessorCapabilities() = default;
+		~PreprocessorCapabilities() = default;
 		std::optional<bool> Labelling {false};
 		std::optional<bool> DeferredLabelling {false};
 	};
 }
-Materialise::PreprocessorCapabilities::PreprocessorCapabilities(Materialise::PreprocessorCapabilities &&___PreprocessorCapabilities)
+Materialise::PreprocessorCapabilities::PreprocessorCapabilities(Materialise::PreprocessorCapabilities &&___PreprocessorCapabilities) noexcept
 	: Labelling(std::move(___PreprocessorCapabilities.Labelling))
 	, DeferredLabelling(std::move(___PreprocessorCapabilities.DeferredLabelling))
 { }

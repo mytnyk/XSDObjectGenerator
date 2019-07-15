@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files_test2_PreprocessorInput_namespace = "http://www.materialise.com/BuildProcessor/2014";
+	const std::string schema_CppTest_PreprocessorInput_namespace = "http://www.materialise.com/BuildProcessor/2014";
 	struct PartInstances;
 	struct Instance;
 	struct PartLabels;
@@ -21,8 +21,12 @@ namespace Materialise {
 	struct Part {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Part(Part&&);
-	Part(){ }
+		Part(const Part&) = delete;
+		Part& operator=(Part&&) = delete;
+		Part& operator=(Part&) = delete;
+		Part(Part&&) noexcept;
+		Part() = default;
+		~Part() = default;
 		std::string id;
 		std::optional<std::string> FilePath;
 		std::optional<std::unique_ptr<PartInstances>> Instances;
@@ -30,29 +34,45 @@ namespace Materialise {
 	struct Parts {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Parts(Parts&&);
-	Parts(){ }
+		Parts(const Parts&) = delete;
+		Parts& operator=(Parts&&) = delete;
+		Parts& operator=(Parts&) = delete;
+		Parts(Parts&&) noexcept;
+		Parts() = default;
+		~Parts() = default;
 		std::vector<Part> Part;
 	};
 	struct PreliminaryPass {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		PreliminaryPass(PreliminaryPass&&);
-	PreliminaryPass(){ }
+		PreliminaryPass(const PreliminaryPass&) = delete;
+		PreliminaryPass& operator=(PreliminaryPass&&) = delete;
+		PreliminaryPass& operator=(PreliminaryPass&) = delete;
+		PreliminaryPass(PreliminaryPass&&) noexcept;
+		PreliminaryPass() = default;
+		~PreliminaryPass() = default;
 		std::optional<bool> enabled;
 	};
 	struct Labelling {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Labelling(Labelling&&);
-	Labelling(){ }
+		Labelling(const Labelling&) = delete;
+		Labelling& operator=(Labelling&&) = delete;
+		Labelling& operator=(Labelling&) = delete;
+		Labelling(Labelling&&) noexcept;
+		Labelling() = default;
+		~Labelling() = default;
 		std::optional<bool> enabled;
 	};
 	struct PreprocessorInput {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		PreprocessorInput(PreprocessorInput&&);
-	PreprocessorInput(){ }
+		PreprocessorInput(const PreprocessorInput&) = delete;
+		PreprocessorInput& operator=(PreprocessorInput&&) = delete;
+		PreprocessorInput& operator=(PreprocessorInput&) = delete;
+		PreprocessorInput(PreprocessorInput&&) noexcept;
+		PreprocessorInput() = default;
+		~PreprocessorInput() = default;
 		std::optional<std::unique_ptr<Labelling>> Labelling;
 		std::optional<std::unique_ptr<PreliminaryPass>> PreliminaryPass;
 		std::optional<std::unique_ptr<Parts>> Parts;
@@ -60,35 +80,51 @@ namespace Materialise {
 	struct Label {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Label(Label&&);
-	Label(){ }
+		Label(const Label&) = delete;
+		Label& operator=(Label&&) = delete;
+		Label& operator=(Label&) = delete;
+		Label(Label&&) noexcept;
+		Label() = default;
+		~Label() = default;
 		std::string id;
 		std::string value;
 	};
 	struct PartLabels {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		PartLabels(PartLabels&&);
-	PartLabels(){ }
+		PartLabels(const PartLabels&) = delete;
+		PartLabels& operator=(PartLabels&&) = delete;
+		PartLabels& operator=(PartLabels&) = delete;
+		PartLabels(PartLabels&&) noexcept;
+		PartLabels() = default;
+		~PartLabels() = default;
 		std::vector<Label> Label;
 	};
 	struct Instance {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Instance(Instance&&);
-	Instance(){ }
+		Instance(const Instance&) = delete;
+		Instance& operator=(Instance&&) = delete;
+		Instance& operator=(Instance&) = delete;
+		Instance(Instance&&) noexcept;
+		Instance() = default;
+		~Instance() = default;
 		std::string id;
 		std::optional<std::unique_ptr<PartLabels>> Labels;
 	};
 	struct PartInstances {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		PartInstances(PartInstances&&);
-	PartInstances(){ }
+		PartInstances(const PartInstances&) = delete;
+		PartInstances& operator=(PartInstances&&) = delete;
+		PartInstances& operator=(PartInstances&) = delete;
+		PartInstances(PartInstances&&) noexcept;
+		PartInstances() = default;
+		~PartInstances() = default;
 		std::vector<Instance> Instance;
 	};
 }
-Materialise::PartInstances::PartInstances(Materialise::PartInstances &&___PartInstances)
+Materialise::PartInstances::PartInstances(Materialise::PartInstances &&___PartInstances) noexcept
 	: Instance(std::move(___PartInstances.Instance))
 { }
 void Materialise::PartInstances::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -110,7 +146,7 @@ bool Materialise::PartInstances::Read(IXmlSerializerReader& s, const std::string
 	}
 	return true;
 }
-Materialise::Instance::Instance(Materialise::Instance &&___Instance)
+Materialise::Instance::Instance(Materialise::Instance &&___Instance) noexcept
 	: id(std::move(___Instance.id))
 	, Labels(std::move(___Instance.Labels))
 { }
@@ -130,7 +166,7 @@ bool Materialise::Instance::Read(IXmlSerializerReader& s, const std::string& __n
 		Labels = std::optional<std::unique_ptr<Materialise::PartLabels>> { __Labels };
 	return true;
 }
-Materialise::PartLabels::PartLabels(Materialise::PartLabels &&___PartLabels)
+Materialise::PartLabels::PartLabels(Materialise::PartLabels &&___PartLabels) noexcept
 	: Label(std::move(___PartLabels.Label))
 { }
 void Materialise::PartLabels::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -152,7 +188,7 @@ bool Materialise::PartLabels::Read(IXmlSerializerReader& s, const std::string& _
 	}
 	return true;
 }
-Materialise::Label::Label(Materialise::Label &&___Label)
+Materialise::Label::Label(Materialise::Label &&___Label) noexcept
 	: id(std::move(___Label.id))
 	, value(std::move(___Label.value))
 { }
@@ -169,7 +205,7 @@ bool Materialise::Label::Read(IXmlSerializerReader& s, const std::string& __name
 	s.ReadAttrStr("value", value);
 	return true;
 }
-Materialise::PreprocessorInput::PreprocessorInput(Materialise::PreprocessorInput &&___PreprocessorInput)
+Materialise::PreprocessorInput::PreprocessorInput(Materialise::PreprocessorInput &&___PreprocessorInput) noexcept
 	: Labelling(std::move(___PreprocessorInput.Labelling))
 	, PreliminaryPass(std::move(___PreprocessorInput.PreliminaryPass))
 	, Parts(std::move(___PreprocessorInput.Parts))
@@ -198,7 +234,7 @@ bool Materialise::PreprocessorInput::Read(IXmlSerializerReader& s, const std::st
 		Parts = std::optional<std::unique_ptr<Materialise::Parts>> { __Parts };
 	return true;
 }
-Materialise::Labelling::Labelling(Materialise::Labelling &&___Labelling)
+Materialise::Labelling::Labelling(Materialise::Labelling &&___Labelling) noexcept
 	: enabled(std::move(___Labelling.enabled))
 { }
 void Materialise::Labelling::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -215,7 +251,7 @@ bool Materialise::Labelling::Read(IXmlSerializerReader& s, const std::string& __
 		enabled = std::optional<bool> { __enabled };
 	return true;
 }
-Materialise::PreliminaryPass::PreliminaryPass(Materialise::PreliminaryPass &&___PreliminaryPass)
+Materialise::PreliminaryPass::PreliminaryPass(Materialise::PreliminaryPass &&___PreliminaryPass) noexcept
 	: enabled(std::move(___PreliminaryPass.enabled))
 { }
 void Materialise::PreliminaryPass::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -232,7 +268,7 @@ bool Materialise::PreliminaryPass::Read(IXmlSerializerReader& s, const std::stri
 		enabled = std::optional<bool> { __enabled };
 	return true;
 }
-Materialise::Parts::Parts(Materialise::Parts &&___Parts)
+Materialise::Parts::Parts(Materialise::Parts &&___Parts) noexcept
 	: Part(std::move(___Parts.Part))
 { }
 void Materialise::Parts::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -254,7 +290,7 @@ bool Materialise::Parts::Read(IXmlSerializerReader& s, const std::string& __name
 	}
 	return true;
 }
-Materialise::Part::Part(Materialise::Part &&___Part)
+Materialise::Part::Part(Materialise::Part &&___Part) noexcept
 	: id(std::move(___Part.id))
 	, FilePath(std::move(___Part.FilePath))
 	, Instances(std::move(___Part.Instances))

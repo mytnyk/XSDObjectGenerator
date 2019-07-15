@@ -125,7 +125,6 @@ namespace XSDObjectGen
 				{
 					Console.WriteLine(" Writing file {0}.", f);
 				}
-                Console.ReadKey();
 			}
 			catch (XSDObjectGenException e)
 			{

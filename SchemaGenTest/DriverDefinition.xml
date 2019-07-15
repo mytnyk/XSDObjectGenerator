@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Driver Id="8384a237-f57e-45af-bde2-9feaaf3fe06c">
+  <Name>DMG MORI Build Processor</Name>
+  <Provider>Materialise N.V.</Provider>
+  <Version>1.0.0.0</Version>
+  <DriverDll>ABSOLUTE-PATH-PLACEHOLDER-306762F5-F824-42FF-A3B3-B91F957B4734\Materialise.BuildProcessor.DriverFramework.Driver.dll</DriverDll>
+  <UserDriverDll>ABSOLUTE-PATH-PLACEHOLDER-306762F5-F824-42FF-A3B3-B91F957B4734\UserDriver.dll</UserDriverDll>
+  <Date>2018-12-14</Date>
+  <SupportedApi>1.5</SupportedApi>
+  <Properties>
+    <Property Name="BP.JobIO">true</Property>
+    <Property Name="BP.HelpLink.Name.1">Third Party Licenses</Property>
+    <Property Name="BP.HelpLink.Description.1">View third party licenses</Property>
+    <Property Name="BP.HelpLink.Link.1">ABSOLUTE-PATH-PLACEHOLDER-306762F5-F824-42FF-A3B3-B91F957B4734\Documentation\third_party_licenses.txt</Property>
+    <Property Name="BP.HelpLink.Name.2">Help</Property>
+    <Property Name="BP.HelpLink.Description.2">BP user manual</Property>
+    <Property Name="BP.HelpLink.Link.2">ABSOLUTE-PATH-PLACEHOLDER-306762F5-F824-42FF-A3B3-B91F957B4734\Documentation\BP_UserManual.pdf</Property>
+  </Properties>
+  <SupportedPrinters>
+    <Printer ModelId="1ac14048-e049-473a-81cc-3eb107ca3065">
+      <Name>DMG MORI Lasertec 12 SLM</Name>
+      <Manufacturer>DMG MORI AG</Manufacturer>
+      <IconFile>ABSOLUTE-PATH-PLACEHOLDER-306762F5-F824-42FF-A3B3-B91F957B4734\Configuration\Machines\1AC14048-E049-473A-81CC-3EB107CA3065\LASERTEC_12_SLM.png</IconFile>
+      <DriverCapabilities>
+        <CanUploadOnly>true</CanUploadOnly>
+      </DriverCapabilities>
+      <Properties>
+        <Property Name="LowEnd">true</Property>
+      </Properties>
+    </Printer>
+    <Printer ModelId="50b1979f-79a1-41dd-973f-a0d8c49f54fe">
+      <Name>DMG MORI Lasertec 30 SLM 2nd Generation</Name>
+      <Manufacturer>DMG MORI AG</Manufacturer>
+      <IconFile>ABSOLUTE-PATH-PLACEHOLDER-306762F5-F824-42FF-A3B3-B91F957B4734\Configuration\Machines\50B1979F-79A1-41DD-973F-A0D8C49F54FE\LASERTEC_30_SLM.png</IconFile>
+      <DriverCapabilities>
+        <CanUploadOnly>true</CanUploadOnly>
+      </DriverCapabilities>
+      <Properties>
+        <Property Name="LowEnd">true</Property>
+      </Properties>
+    </Printer>
+  </SupportedPrinters>
+</Driver>

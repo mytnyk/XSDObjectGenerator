@@ -8,26 +8,34 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files_test2_Tags_namespace = "urn:Print3D";
+	const std::string schema_CppTest_Tags_namespace = "urn:Print3D";
 	struct Tags;
 	struct Tag;
 	struct Tag {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Tag(Tag&&);
-	Tag(){ }
+		Tag(const Tag&) = delete;
+		Tag& operator=(Tag&&) = delete;
+		Tag& operator=(Tag&) = delete;
+		Tag(Tag&&) noexcept;
+		Tag() = default;
+		~Tag() = default;
 		std::string name;
 		std::string description;
 	};
 	struct Tags {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Tags(Tags&&);
-	Tags(){ }
+		Tags(const Tags&) = delete;
+		Tags& operator=(Tags&&) = delete;
+		Tags& operator=(Tags&) = delete;
+		Tags(Tags&&) noexcept;
+		Tags() = default;
+		~Tags() = default;
 		std::vector<Tag> Tag;
 	};
 }
-Materialise::Tags::Tags(Materialise::Tags &&___Tags)
+Materialise::Tags::Tags(Materialise::Tags &&___Tags) noexcept
 	: Tag(std::move(___Tags.Tag))
 { }
 void Materialise::Tags::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -49,7 +57,7 @@ bool Materialise::Tags::Read(IXmlSerializerReader& s, const std::string& __name_
 	}
 	return true;
 }
-Materialise::Tag::Tag(Materialise::Tag &&___Tag)
+Materialise::Tag::Tag(Materialise::Tag &&___Tag) noexcept
 	: name(std::move(___Tag.name))
 	, description(std::move(___Tag.description))
 { }

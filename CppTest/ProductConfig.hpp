@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files_test2_ProductConfig_namespace = "";
+	const std::string schema_CppTest_ProductConfig_namespace = "";
 	struct Product;
 	struct Version;
 	struct DriverDefinitionMetaData;
@@ -22,8 +22,12 @@ namespace Materialise {
 	struct BuildInfo {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		BuildInfo(BuildInfo&&);
-	BuildInfo(){ }
+		BuildInfo(const BuildInfo&) = delete;
+		BuildInfo& operator=(BuildInfo&&) = delete;
+		BuildInfo& operator=(BuildInfo&) = delete;
+		BuildInfo(BuildInfo&&) noexcept;
+		BuildInfo() = default;
+		~BuildInfo() = default;
 		std::string Prerelease;
 		std::string Branch;
 		std::string VcsNumber;
@@ -31,37 +35,57 @@ namespace Materialise {
 	struct PackageId {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		PackageId(PackageId&&);
-	PackageId(){ }
+		PackageId(const PackageId&) = delete;
+		PackageId& operator=(PackageId&&) = delete;
+		PackageId& operator=(PackageId&) = delete;
+		PackageId(PackageId&&) noexcept;
+		PackageId() = default;
+		~PackageId() = default;
 		std::optional<std::string> path;
 	};
 	struct BundlePackages {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		BundlePackages(BundlePackages&&);
-	BundlePackages(){ }
+		BundlePackages(const BundlePackages&) = delete;
+		BundlePackages& operator=(BundlePackages&&) = delete;
+		BundlePackages& operator=(BundlePackages&) = delete;
+		BundlePackages(BundlePackages&&) noexcept;
+		BundlePackages() = default;
+		~BundlePackages() = default;
 		std::vector<PackageId> PackageId;
 	};
 	struct LicenseFiles {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		LicenseFiles(LicenseFiles&&);
-	LicenseFiles(){ }
+		LicenseFiles(const LicenseFiles&) = delete;
+		LicenseFiles& operator=(LicenseFiles&&) = delete;
+		LicenseFiles& operator=(LicenseFiles&) = delete;
+		LicenseFiles(LicenseFiles&&) noexcept;
+		LicenseFiles() = default;
+		~LicenseFiles() = default;
 		std::optional<std::string> Prerelease;
 		std::optional<std::string> Release;
 	};
 	struct ExcludeFiles {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		ExcludeFiles(ExcludeFiles&&);
-	ExcludeFiles(){ }
+		ExcludeFiles(const ExcludeFiles&) = delete;
+		ExcludeFiles& operator=(ExcludeFiles&&) = delete;
+		ExcludeFiles& operator=(ExcludeFiles&) = delete;
+		ExcludeFiles(ExcludeFiles&&) noexcept;
+		ExcludeFiles() = default;
+		~ExcludeFiles() = default;
 		std::optional<std::string> except;
 	};
 	struct Filters {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Filters(Filters&&);
-	Filters(){ }
+		Filters(const Filters&) = delete;
+		Filters& operator=(Filters&&) = delete;
+		Filters& operator=(Filters&) = delete;
+		Filters(Filters&&) noexcept;
+		Filters() = default;
+		~Filters() = default;
 		std::optional<std::unique_ptr<ExcludeFiles>> ExcludeFiles;
 		std::optional<std::string> ExcludeFolders;
 		std::optional<std::string> IncludeFolders;
@@ -69,21 +93,29 @@ namespace Materialise {
 	struct Installer {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Installer(Installer&&);
-	Installer(){ }
+		Installer(const Installer&) = delete;
+		Installer& operator=(Installer&&) = delete;
+		Installer& operator=(Installer&) = delete;
+		Installer(Installer&&) noexcept;
+		Installer() = default;
+		~Installer() = default;
 		std::string Binaries;
 		std::string UpgradeId;
 		std::string BundleUpgradeId;
 		std::string Name;
 		std::optional<std::unique_ptr<Filters>> Filters;
 		std::optional<std::unique_ptr<LicenseFiles>> LicenseFiles;
-		Materialise::BundlePackages BundlePackages;
+		BundlePackages BundlePackages;
 	};
 	struct DriverDefinitionMetaData {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		DriverDefinitionMetaData(DriverDefinitionMetaData&&);
-	DriverDefinitionMetaData(){ }
+		DriverDefinitionMetaData(const DriverDefinitionMetaData&) = delete;
+		DriverDefinitionMetaData& operator=(DriverDefinitionMetaData&&) = delete;
+		DriverDefinitionMetaData& operator=(DriverDefinitionMetaData&) = delete;
+		DriverDefinitionMetaData(DriverDefinitionMetaData&&) noexcept;
+		DriverDefinitionMetaData() = default;
+		~DriverDefinitionMetaData() = default;
 		std::string FileNameForBuildDirectory;
 		std::string FileNameWithPlaceHolders;
 		std::string AbsolutePathPlaceHolder;
@@ -91,8 +123,12 @@ namespace Materialise {
 	struct Version {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Version(Version&&);
-	Version(){ }
+		Version(const Version&) = delete;
+		Version& operator=(Version&&) = delete;
+		Version& operator=(Version&) = delete;
+		Version(Version&&) noexcept;
+		Version() = default;
+		~Version() = default;
 		char Major;
 		char Minor;
 		unsigned short int Build;
@@ -101,20 +137,24 @@ namespace Materialise {
 	struct Product {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Product(Product&&);
-	Product(){ }
+		Product(const Product&) = delete;
+		Product& operator=(Product&&) = delete;
+		Product& operator=(Product&) = delete;
+		Product(Product&&) noexcept;
+		Product() = default;
+		~Product() = default;
 		std::string Title;
 		std::string ShortName;
 		std::string Company;
 		std::string Copyright;
-		Materialise::Version Version;
+		Version Version;
 		std::string DriverId;
-		Materialise::DriverDefinitionMetaData DriverDefinitionMetaData;
-		Materialise::Installer Installer;
-		Materialise::BuildInfo BuildInfo;
+		DriverDefinitionMetaData DriverDefinitionMetaData;
+		Installer Installer;
+		BuildInfo BuildInfo;
 	};
 }
-Materialise::Product::Product(Materialise::Product &&___Product)
+Materialise::Product::Product(Materialise::Product &&___Product) noexcept
 	: Title(std::move(___Product.Title))
 	, ShortName(std::move(___Product.ShortName))
 	, Company(std::move(___Product.Company))
@@ -152,7 +192,7 @@ bool Materialise::Product::Read(IXmlSerializerReader& s, const std::string& __na
 	BuildInfo.Read(s, "BuildInfo");
 	return true;
 }
-Materialise::Version::Version(Materialise::Version &&___Version)
+Materialise::Version::Version(Materialise::Version &&___Version) noexcept
 	: Major(std::move(___Version.Major))
 	, Minor(std::move(___Version.Minor))
 	, Build(std::move(___Version.Build))
@@ -175,7 +215,7 @@ bool Materialise::Version::Read(IXmlSerializerReader& s, const std::string& __na
 	s.ReadUnsignedShortInt("Revision", Revision);
 	return true;
 }
-Materialise::DriverDefinitionMetaData::DriverDefinitionMetaData(Materialise::DriverDefinitionMetaData &&___DriverDefinitionMetaData)
+Materialise::DriverDefinitionMetaData::DriverDefinitionMetaData(Materialise::DriverDefinitionMetaData &&___DriverDefinitionMetaData) noexcept
 	: FileNameForBuildDirectory(std::move(___DriverDefinitionMetaData.FileNameForBuildDirectory))
 	, FileNameWithPlaceHolders(std::move(___DriverDefinitionMetaData.FileNameWithPlaceHolders))
 	, AbsolutePathPlaceHolder(std::move(___DriverDefinitionMetaData.AbsolutePathPlaceHolder))
@@ -195,7 +235,7 @@ bool Materialise::DriverDefinitionMetaData::Read(IXmlSerializerReader& s, const 
 	s.ReadStr("AbsolutePathPlaceHolder", AbsolutePathPlaceHolder);
 	return true;
 }
-Materialise::Installer::Installer(Materialise::Installer &&___Installer)
+Materialise::Installer::Installer(Materialise::Installer &&___Installer) noexcept
 	: Binaries(std::move(___Installer.Binaries))
 	, UpgradeId(std::move(___Installer.UpgradeId))
 	, BundleUpgradeId(std::move(___Installer.BundleUpgradeId))
@@ -233,7 +273,7 @@ bool Materialise::Installer::Read(IXmlSerializerReader& s, const std::string& __
 	BundlePackages.Read(s, "BundlePackages");
 	return true;
 }
-Materialise::Filters::Filters(Materialise::Filters &&___Filters)
+Materialise::Filters::Filters(Materialise::Filters &&___Filters) noexcept
 	: ExcludeFiles(std::move(___Filters.ExcludeFiles))
 	, ExcludeFolders(std::move(___Filters.ExcludeFolders))
 	, IncludeFolders(std::move(___Filters.IncludeFolders))
@@ -258,7 +298,7 @@ bool Materialise::Filters::Read(IXmlSerializerReader& s, const std::string& __na
 	s.ReadStr("IncludeFolders", IncludeFolders.value());
 	return true;
 }
-Materialise::ExcludeFiles::ExcludeFiles(Materialise::ExcludeFiles &&___ExcludeFiles)
+Materialise::ExcludeFiles::ExcludeFiles(Materialise::ExcludeFiles &&___ExcludeFiles) noexcept
 	: except(std::move(___ExcludeFiles.except))
 { }
 void Materialise::ExcludeFiles::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -275,7 +315,7 @@ bool Materialise::ExcludeFiles::Read(IXmlSerializerReader& s, const std::string&
 		except = std::optional<std::string> { __except };
 	return true;
 }
-Materialise::LicenseFiles::LicenseFiles(Materialise::LicenseFiles &&___LicenseFiles)
+Materialise::LicenseFiles::LicenseFiles(Materialise::LicenseFiles &&___LicenseFiles) noexcept
 	: Prerelease(std::move(___LicenseFiles.Prerelease))
 	, Release(std::move(___LicenseFiles.Release))
 { }
@@ -294,7 +334,7 @@ bool Materialise::LicenseFiles::Read(IXmlSerializerReader& s, const std::string&
 	s.ReadStr("Release", Release.value());
 	return true;
 }
-Materialise::BundlePackages::BundlePackages(Materialise::BundlePackages &&___BundlePackages)
+Materialise::BundlePackages::BundlePackages(Materialise::BundlePackages &&___BundlePackages) noexcept
 	: PackageId(std::move(___BundlePackages.PackageId))
 { }
 void Materialise::BundlePackages::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -316,7 +356,7 @@ bool Materialise::BundlePackages::Read(IXmlSerializerReader& s, const std::strin
 	}
 	return true;
 }
-Materialise::PackageId::PackageId(Materialise::PackageId &&___PackageId)
+Materialise::PackageId::PackageId(Materialise::PackageId &&___PackageId) noexcept
 	: path(std::move(___PackageId.path))
 { }
 void Materialise::PackageId::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -333,7 +373,7 @@ bool Materialise::PackageId::Read(IXmlSerializerReader& s, const std::string& __
 		path = std::optional<std::string> { __path };
 	return true;
 }
-Materialise::BuildInfo::BuildInfo(Materialise::BuildInfo &&___BuildInfo)
+Materialise::BuildInfo::BuildInfo(Materialise::BuildInfo &&___BuildInfo) noexcept
 	: Prerelease(std::move(___BuildInfo.Prerelease))
 	, Branch(std::move(___BuildInfo.Branch))
 	, VcsNumber(std::move(___BuildInfo.VcsNumber))

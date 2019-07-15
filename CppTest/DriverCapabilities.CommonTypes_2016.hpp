@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files_test2_DriverCapabilities.CommonTypes_2016_namespace = "http://schemas.materialise.com/BuildProcessor/2016";
+	const std::string schema_CppTest_DriverCapabilities.CommonTypes_2016_namespace = "http://schemas.materialise.com/BuildProcessor/2016";
 	enum class DriverIssueSeverity {
 		Information,
 		Warning,
@@ -56,16 +56,24 @@ namespace Materialise {
 	struct Capability {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Capability(Capability&&);
-	Capability(){ }
+		Capability(const Capability&) = delete;
+		Capability& operator=(Capability&&) = delete;
+		Capability& operator=(Capability&) = delete;
+		Capability(Capability&&) noexcept;
+		Capability() = default;
+		~Capability() = default;
 		std::string Id;
 		std::optional<std::string> Value;
 	};
 	struct Capabilities {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Capabilities(Capabilities&&);
-	Capabilities(){ }
+		Capabilities(const Capabilities&) = delete;
+		Capabilities& operator=(Capabilities&&) = delete;
+		Capabilities& operator=(Capabilities&) = delete;
+		Capabilities(Capabilities&&) noexcept;
+		Capabilities() = default;
+		~Capabilities() = default;
 		std::string Id;
 		std::vector<Capability> Capability;
 		std::vector<Capabilities> __Capabilities;
@@ -73,8 +81,12 @@ namespace Materialise {
 	struct DriverIssue {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		DriverIssue(DriverIssue&&);
-	DriverIssue(){ }
+		DriverIssue(const DriverIssue&) = delete;
+		DriverIssue& operator=(DriverIssue&&) = delete;
+		DriverIssue& operator=(DriverIssue&) = delete;
+		DriverIssue(DriverIssue&&) noexcept;
+		DriverIssue() = default;
+		~DriverIssue() = default;
 		Materialise::DriverIssueId Id;
 		std::string Title;
 		std::optional<std::string> Description;
@@ -83,12 +95,16 @@ namespace Materialise {
 	struct DriverIssues {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		DriverIssues(DriverIssues&&);
-	DriverIssues(){ }
+		DriverIssues(const DriverIssues&) = delete;
+		DriverIssues& operator=(DriverIssues&&) = delete;
+		DriverIssues& operator=(DriverIssues&) = delete;
+		DriverIssues(DriverIssues&&) noexcept;
+		DriverIssues() = default;
+		~DriverIssues() = default;
 		std::vector<DriverIssue> DriverIssue;
 	};
 }
-Materialise::DriverIssue::DriverIssue(Materialise::DriverIssue &&___DriverIssue)
+Materialise::DriverIssue::DriverIssue(Materialise::DriverIssue &&___DriverIssue) noexcept
 	: Id(std::move(___DriverIssue.Id))
 	, Title(std::move(___DriverIssue.Title))
 	, Description(std::move(___DriverIssue.Description))
@@ -117,7 +133,7 @@ bool Materialise::DriverIssue::Read(IXmlSerializerReader& s, const std::string& 
 		Severity = Materialise::ConvertStringToDriverIssueSeverity(__tmp_var);
 	return true;
 }
-Materialise::DriverIssues::DriverIssues(Materialise::DriverIssues &&___DriverIssues)
+Materialise::DriverIssues::DriverIssues(Materialise::DriverIssues &&___DriverIssues) noexcept
 	: DriverIssue(std::move(___DriverIssues.DriverIssue))
 { }
 void Materialise::DriverIssues::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -139,7 +155,7 @@ bool Materialise::DriverIssues::Read(IXmlSerializerReader& s, const std::string&
 	}
 	return true;
 }
-Materialise::Capability::Capability(Materialise::Capability &&___Capability)
+Materialise::Capability::Capability(Materialise::Capability &&___Capability) noexcept
 	: Id(std::move(___Capability.Id))
 	, Value(std::move(___Capability.Value))
 { }
@@ -159,7 +175,7 @@ bool Materialise::Capability::Read(IXmlSerializerReader& s, const std::string& _
 		Value = std::optional<std::string> { __Value };
 	return true;
 }
-Materialise::Capabilities::Capabilities(Materialise::Capabilities &&___Capabilities)
+Materialise::Capabilities::Capabilities(Materialise::Capabilities &&___Capabilities) noexcept
 	: Id(std::move(___Capabilities.Id))
 	, Capability(std::move(___Capabilities.Capability))
 	, __Capabilities(std::move(___Capabilities.__Capabilities))

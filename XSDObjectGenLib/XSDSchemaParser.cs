@@ -105,7 +105,8 @@ namespace XSDObjectGenLib
                         return base.GetEntity(newUri, role, ofObjectToReturn);
                     }
 				}
-				return base.GetEntity(absoluteUri, role, ofObjectToReturn);
+                var ret = base.GetEntity(absoluteUri, role, ofObjectToReturn);
+                return ret;
 			}
 		}
 
@@ -1273,6 +1274,11 @@ namespace XSDObjectGenLib
                     XmlSchemaAttribute attribute = (XmlSchemaAttribute)schema.Attributes[attributeRef.QualifiedName];
                     if (attribute == null) attribute = attributeRef;  //locally definied attributes
 
+                    if (attribute.Name == null)
+                    {
+                        attribute = attribute.AttributeSchemaType.Parent as XmlSchemaAttribute;
+                    }
+
                     object o = null;
                     try
                     {
@@ -1958,6 +1964,11 @@ namespace XSDObjectGenLib
                         //attributeForm = XmlSchemaForm.Unqualified;  // use unqualified for locally scoped attributes
                     }
 
+                    if (attribute.Name == null)
+                    {
+                        attribute = attribute.AttributeSchemaType.Parent as XmlSchemaAttribute;
+                    }
+
                     string ns = attribute.QualifiedName.Namespace != "" ? attribute.QualifiedName.Namespace : parentNamespace;
                     string dotnetAttributeName = CalculateUniqueTypeOrFieldName(attribute.Name, "", dotnetFieldList);
                     dotnetFieldList.Add(dotnetAttributeName, attribute.QualifiedName);
@@ -1999,7 +2010,7 @@ namespace XSDObjectGenLib
                 string ns = CalculateAnyNamespace(anyAttribute.Namespace, parentNamespace);
                 code.ClassAttributeFieldCode(generator,
                     "System.Xml.XmlAttribute[]", "", "AnyAttr", dotnetElementName, XmlSchemaForm.Unqualified, false, ns, "", false); // Not implemented
-				throw new NotImplementedException();
+				//throw new NotImplementedException();
 			}
         }
 

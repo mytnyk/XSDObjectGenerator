@@ -8,25 +8,33 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files_test2_PlatformCreationParameters_namespace = "http://www.materialise.com/BuildProcessor/2014";
+	const std::string schema_CppTest_PlatformCreationParameters_namespace = "http://www.materialise.com/BuildProcessor/2014";
 	struct PlatformCreationParameters;
 	struct ParameterValue;
 	struct ParameterValue {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		ParameterValue(ParameterValue&&);
-	ParameterValue(){ }
+		ParameterValue(const ParameterValue&) = delete;
+		ParameterValue& operator=(ParameterValue&&) = delete;
+		ParameterValue& operator=(ParameterValue&) = delete;
+		ParameterValue(ParameterValue&&) noexcept;
+		ParameterValue() = default;
+		~ParameterValue() = default;
 		std::string id;
 	};
 	struct PlatformCreationParameters {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		PlatformCreationParameters(PlatformCreationParameters&&);
-	PlatformCreationParameters(){ }
+		PlatformCreationParameters(const PlatformCreationParameters&) = delete;
+		PlatformCreationParameters& operator=(PlatformCreationParameters&&) = delete;
+		PlatformCreationParameters& operator=(PlatformCreationParameters&) = delete;
+		PlatformCreationParameters(PlatformCreationParameters&&) noexcept;
+		PlatformCreationParameters() = default;
+		~PlatformCreationParameters() = default;
 		std::vector<ParameterValue> ParameterValue;
 	};
 }
-Materialise::PlatformCreationParameters::PlatformCreationParameters(Materialise::PlatformCreationParameters &&___PlatformCreationParameters)
+Materialise::PlatformCreationParameters::PlatformCreationParameters(Materialise::PlatformCreationParameters &&___PlatformCreationParameters) noexcept
 	: ParameterValue(std::move(___PlatformCreationParameters.ParameterValue))
 { }
 void Materialise::PlatformCreationParameters::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -48,7 +56,7 @@ bool Materialise::PlatformCreationParameters::Read(IXmlSerializerReader& s, cons
 	}
 	return true;
 }
-Materialise::ParameterValue::ParameterValue(Materialise::ParameterValue &&___ParameterValue)
+Materialise::ParameterValue::ParameterValue(Materialise::ParameterValue &&___ParameterValue) noexcept
 	: id(std::move(___ParameterValue.id))
 { }
 void Materialise::ParameterValue::Write(IXmlSerializerWriter& s, const std::string& __name__) {

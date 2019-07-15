@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files_test2_DriverMeters_namespace = "urn:Print3D";
+	const std::string schema_CppTest_DriverMeters_namespace = "urn:Print3D";
 	enum class MeterType {
 		undefined,
 		boolean,
@@ -57,38 +57,58 @@ namespace Materialise {
 	struct MeterDefinitions {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		MeterDefinitions(MeterDefinitions&&);
-	MeterDefinitions(){ }
+		MeterDefinitions(const MeterDefinitions&) = delete;
+		MeterDefinitions& operator=(MeterDefinitions&&) = delete;
+		MeterDefinitions& operator=(MeterDefinitions&) = delete;
+		MeterDefinitions(MeterDefinitions&&) noexcept;
+		MeterDefinitions() = default;
+		~MeterDefinitions() = default;
 		std::optional<unsigned int> count;
 		std::vector<MeterDefinition> Meter;
 	};
 	struct DriverMeters {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		DriverMeters(DriverMeters&&);
-	DriverMeters(){ }
-		Materialise::MeterDefinitions Meters;
+		DriverMeters(const DriverMeters&) = delete;
+		DriverMeters& operator=(DriverMeters&&) = delete;
+		DriverMeters& operator=(DriverMeters&) = delete;
+		DriverMeters(DriverMeters&&) noexcept;
+		DriverMeters() = default;
+		~DriverMeters() = default;
+		MeterDefinitions Meters;
 	};
 	struct _Value {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		_Value(_Value&&);
-	_Value(){ }
+		_Value(const _Value&) = delete;
+		_Value& operator=(_Value&&) = delete;
+		_Value& operator=(_Value&) = delete;
+		_Value(_Value&&) noexcept;
+		_Value() = default;
+		~_Value() = default;
 		std::string meter;
 	};
 	struct MeterValues {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		MeterValues(MeterValues&&);
-	MeterValues(){ }
+		MeterValues(const MeterValues&) = delete;
+		MeterValues& operator=(MeterValues&&) = delete;
+		MeterValues& operator=(MeterValues&) = delete;
+		MeterValues(MeterValues&&) noexcept;
+		MeterValues() = default;
+		~MeterValues() = default;
 		std::optional<unsigned int> count;
 		std::vector<_Value> Value;
 	};
 	struct MeterDefinition {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		MeterDefinition(MeterDefinition&&);
-	MeterDefinition(){ }
+		MeterDefinition(const MeterDefinition&) = delete;
+		MeterDefinition& operator=(MeterDefinition&&) = delete;
+		MeterDefinition& operator=(MeterDefinition&) = delete;
+		MeterDefinition(MeterDefinition&&) noexcept;
+		MeterDefinition() = default;
+		~MeterDefinition() = default;
 		std::string id;
 		std::string name;
 		Materialise::MeterType type;
@@ -96,8 +116,12 @@ namespace Materialise {
 	struct Meter {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Meter(Meter&&);
-	Meter(){ }
+		Meter(const Meter&) = delete;
+		Meter& operator=(Meter&&) = delete;
+		Meter& operator=(Meter&) = delete;
+		Meter(Meter&&) noexcept;
+		Meter() = default;
+		~Meter() = default;
 		std::string id;
 		std::string name;
 		Materialise::MeterType type;
@@ -105,13 +129,17 @@ namespace Materialise {
 	struct Meters {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Meters(Meters&&);
-	Meters(){ }
+		Meters(const Meters&) = delete;
+		Meters& operator=(Meters&&) = delete;
+		Meters& operator=(Meters&) = delete;
+		Meters(Meters&&) noexcept;
+		Meters() = default;
+		~Meters() = default;
 		std::optional<unsigned int> count;
 		std::vector<Meter> Meter;
 	};
 }
-Materialise::Meters::Meters(Materialise::Meters &&___Meters)
+Materialise::Meters::Meters(Materialise::Meters &&___Meters) noexcept
 	: count(std::move(___Meters.count))
 	, Meter(std::move(___Meters.Meter))
 { }
@@ -139,7 +167,7 @@ bool Materialise::Meters::Read(IXmlSerializerReader& s, const std::string& __nam
 	}
 	return true;
 }
-Materialise::Meter::Meter(Materialise::Meter &&___Meter)
+Materialise::Meter::Meter(Materialise::Meter &&___Meter) noexcept
 	: id(std::move(___Meter.id))
 	, name(std::move(___Meter.name))
 	, type(std::move(___Meter.type))
@@ -161,7 +189,7 @@ bool Materialise::Meter::Read(IXmlSerializerReader& s, const std::string& __name
 		type = Materialise::ConvertStringToMeterType(__tmp_var);
 	return true;
 }
-Materialise::MeterDefinition::MeterDefinition(Materialise::MeterDefinition &&___MeterDefinition)
+Materialise::MeterDefinition::MeterDefinition(Materialise::MeterDefinition &&___MeterDefinition) noexcept
 	: id(std::move(___MeterDefinition.id))
 	, name(std::move(___MeterDefinition.name))
 	, type(std::move(___MeterDefinition.type))
@@ -183,7 +211,7 @@ bool Materialise::MeterDefinition::Read(IXmlSerializerReader& s, const std::stri
 		type = Materialise::ConvertStringToMeterType(__tmp_var);
 	return true;
 }
-Materialise::MeterDefinitions::MeterDefinitions(Materialise::MeterDefinitions &&___MeterDefinitions)
+Materialise::MeterDefinitions::MeterDefinitions(Materialise::MeterDefinitions &&___MeterDefinitions) noexcept
 	: count(std::move(___MeterDefinitions.count))
 	, Meter(std::move(___MeterDefinitions.Meter))
 { }
@@ -211,7 +239,7 @@ bool Materialise::MeterDefinitions::Read(IXmlSerializerReader& s, const std::str
 	}
 	return true;
 }
-Materialise::MeterValues::MeterValues(Materialise::MeterValues &&___MeterValues)
+Materialise::MeterValues::MeterValues(Materialise::MeterValues &&___MeterValues) noexcept
 	: count(std::move(___MeterValues.count))
 	, Value(std::move(___MeterValues.Value))
 { }
@@ -239,7 +267,7 @@ bool Materialise::MeterValues::Read(IXmlSerializerReader& s, const std::string& 
 	}
 	return true;
 }
-Materialise::_Value::_Value(Materialise::_Value &&____Value)
+Materialise::_Value::_Value(Materialise::_Value &&____Value) noexcept
 	: meter(std::move(____Value.meter))
 { }
 void Materialise::_Value::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -253,7 +281,7 @@ bool Materialise::_Value::Read(IXmlSerializerReader& s, const std::string& __nam
 	s.ReadAttrStr("meter", meter);
 	return true;
 }
-Materialise::DriverMeters::DriverMeters(Materialise::DriverMeters &&___DriverMeters)
+Materialise::DriverMeters::DriverMeters(Materialise::DriverMeters &&___DriverMeters) noexcept
 	: Meters(std::move(___DriverMeters.Meters))
 { }
 void Materialise::DriverMeters::Write(IXmlSerializerWriter& s, const std::string& __name__) {

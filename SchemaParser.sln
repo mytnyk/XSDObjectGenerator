@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSDObjectGenAll", "XSDObjec
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppTest", "CppTest\CppTest.vcxproj", "{E97C0917-6769-4760-8981-0C7BC9399684}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SchemaGenTest", "SchemaGenTest\SchemaGenTest.vcxproj", "{484B7445-5AEA-48E1-BAC3-EC6CC3E1472A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,16 @@ Global
 		{E97C0917-6769-4760-8981-0C7BC9399684}.Release|x64.Build.0 = Release|x64
 		{E97C0917-6769-4760-8981-0C7BC9399684}.Release|x86.ActiveCfg = Release|Win32
 		{E97C0917-6769-4760-8981-0C7BC9399684}.Release|x86.Build.0 = Release|Win32
+		{484B7445-5AEA-48E1-BAC3-EC6CC3E1472A}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{484B7445-5AEA-48E1-BAC3-EC6CC3E1472A}.Debug|x64.ActiveCfg = Debug|x64
+		{484B7445-5AEA-48E1-BAC3-EC6CC3E1472A}.Debug|x64.Build.0 = Debug|x64
+		{484B7445-5AEA-48E1-BAC3-EC6CC3E1472A}.Debug|x86.ActiveCfg = Debug|Win32
+		{484B7445-5AEA-48E1-BAC3-EC6CC3E1472A}.Debug|x86.Build.0 = Debug|Win32
+		{484B7445-5AEA-48E1-BAC3-EC6CC3E1472A}.Release|Any CPU.ActiveCfg = Release|Win32
+		{484B7445-5AEA-48E1-BAC3-EC6CC3E1472A}.Release|x64.ActiveCfg = Release|x64
+		{484B7445-5AEA-48E1-BAC3-EC6CC3E1472A}.Release|x64.Build.0 = Release|x64
+		{484B7445-5AEA-48E1-BAC3-EC6CC3E1472A}.Release|x86.ActiveCfg = Release|Win32
+		{484B7445-5AEA-48E1-BAC3-EC6CC3E1472A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
