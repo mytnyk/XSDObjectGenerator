@@ -8,37 +8,49 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files_test2_Machine_namespace = "";
+	const std::string schema_CppTest_Machine_namespace = "";
 	struct MachineCustomProperty;
 	struct Machine;
 	struct CustomProperties;
 	struct MachineCustomProperty {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		MachineCustomProperty(MachineCustomProperty&&);
-	MachineCustomProperty(){ }
+		MachineCustomProperty(const MachineCustomProperty&) = delete;
+		MachineCustomProperty& operator=(MachineCustomProperty&&) = delete;
+		MachineCustomProperty& operator=(MachineCustomProperty&) = delete;
+		MachineCustomProperty(MachineCustomProperty&&) noexcept;
+		MachineCustomProperty() = default;
+		~MachineCustomProperty() = default;
 		std::string VariableName;
 		std::string VariableType;
 	};
 	struct CustomProperties {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		CustomProperties(CustomProperties&&);
-	CustomProperties(){ }
+		CustomProperties(const CustomProperties&) = delete;
+		CustomProperties& operator=(CustomProperties&&) = delete;
+		CustomProperties& operator=(CustomProperties&) = delete;
+		CustomProperties(CustomProperties&&) noexcept;
+		CustomProperties() = default;
+		~CustomProperties() = default;
 		std::vector<MachineCustomProperty> Property;
 	};
 	struct Machine {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Machine(Machine&&);
-	Machine(){ }
+		Machine(const Machine&) = delete;
+		Machine& operator=(Machine&&) = delete;
+		Machine& operator=(Machine&) = delete;
+		Machine(Machine&&) noexcept;
+		Machine() = default;
+		~Machine() = default;
 		std::string Name;
 		std::string Manufacturer;
 		std::string RequiredLicenseName;
 		std::optional<std::unique_ptr<CustomProperties>> CustomProperties;
 	};
 }
-Materialise::MachineCustomProperty::MachineCustomProperty(Materialise::MachineCustomProperty &&___MachineCustomProperty)
+Materialise::MachineCustomProperty::MachineCustomProperty(Materialise::MachineCustomProperty &&___MachineCustomProperty) noexcept
 	: VariableName(std::move(___MachineCustomProperty.VariableName))
 	, VariableType(std::move(___MachineCustomProperty.VariableType))
 { }
@@ -55,7 +67,7 @@ bool Materialise::MachineCustomProperty::Read(IXmlSerializerReader& s, const std
 	s.ReadAttrStr("VariableType", VariableType);
 	return true;
 }
-Materialise::Machine::Machine(Materialise::Machine &&___Machine)
+Materialise::Machine::Machine(Materialise::Machine &&___Machine) noexcept
 	: Name(std::move(___Machine.Name))
 	, Manufacturer(std::move(___Machine.Manufacturer))
 	, RequiredLicenseName(std::move(___Machine.RequiredLicenseName))
@@ -81,7 +93,7 @@ bool Materialise::Machine::Read(IXmlSerializerReader& s, const std::string& __na
 		CustomProperties = std::optional<std::unique_ptr<Materialise::CustomProperties>> { __CustomProperties };
 	return true;
 }
-Materialise::CustomProperties::CustomProperties(Materialise::CustomProperties &&___CustomProperties)
+Materialise::CustomProperties::CustomProperties(Materialise::CustomProperties &&___CustomProperties) noexcept
 	: Property(std::move(___CustomProperties.Property))
 { }
 void Materialise::CustomProperties::Write(IXmlSerializerWriter& s, const std::string& __name__) {

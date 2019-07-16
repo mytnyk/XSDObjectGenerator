@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<DeviceState xmlns="urn:Print3D">
+	<Status value="ReadyToPrint" description="AA" />
+	<Log>
+		<Entries count="23786238">
+			<Entry type="Information" source="AAAAA" />
+			<Entry type="Warning" source="BB" message="Hi" />
+			<Entry type="Error" source="AAAAA" message="Hi2" />
+		</Entries>
+	</Log>
+</DeviceState>

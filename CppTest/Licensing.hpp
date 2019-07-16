@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files_test2_Licensing_namespace = "";
+	const std::string schema_CppTest_Licensing_namespace = "";
 	enum class LicenseVisibility {
 		Visible,
 		Hidden,
@@ -38,8 +38,12 @@ namespace Materialise {
 	struct License {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		License(License&&);
-	License(){ }
+		License(const License&) = delete;
+		License& operator=(License&&) = delete;
+		License& operator=(License&) = delete;
+		License(License&&) noexcept;
+		License() = default;
+		~License() = default;
 		std::string Name;
 		std::string DisplayName;
 		std::optional<bool> IsMain;
@@ -49,43 +53,63 @@ namespace Materialise {
 	struct Licenses {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Licenses(Licenses&&);
-	Licenses(){ }
+		Licenses(const Licenses&) = delete;
+		Licenses& operator=(Licenses&&) = delete;
+		Licenses& operator=(Licenses&) = delete;
+		Licenses(Licenses&&) noexcept;
+		Licenses() = default;
+		~Licenses() = default;
 		std::vector<License> License;
 	};
 	struct Licensing {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Licensing(Licensing&&);
-	Licensing(){ }
-		Materialise::Licenses Licenses;
+		Licensing(const Licensing&) = delete;
+		Licensing& operator=(Licensing&&) = delete;
+		Licensing& operator=(Licensing&) = delete;
+		Licensing(Licensing&&) noexcept;
+		Licensing() = default;
+		~Licensing() = default;
+		Licenses Licenses;
 		std::optional<std::unique_ptr<PluginsLicenseNameMapping>> PluginsLicenseNameMapping;
 	};
 	struct LicenseName {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		LicenseName(LicenseName&&);
-	LicenseName(){ }
+		LicenseName(const LicenseName&) = delete;
+		LicenseName& operator=(LicenseName&&) = delete;
+		LicenseName& operator=(LicenseName&) = delete;
+		LicenseName(LicenseName&&) noexcept;
+		LicenseName() = default;
+		~LicenseName() = default;
 		std::string From;
 		std::string To;
 	};
 	struct Plugin {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Plugin(Plugin&&);
-	Plugin(){ }
+		Plugin(const Plugin&) = delete;
+		Plugin& operator=(Plugin&&) = delete;
+		Plugin& operator=(Plugin&) = delete;
+		Plugin(Plugin&&) noexcept;
+		Plugin() = default;
+		~Plugin() = default;
 		std::string Name;
 		std::vector<LicenseName> LicenseName;
 	};
 	struct PluginsLicenseNameMapping {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		PluginsLicenseNameMapping(PluginsLicenseNameMapping&&);
-	PluginsLicenseNameMapping(){ }
+		PluginsLicenseNameMapping(const PluginsLicenseNameMapping&) = delete;
+		PluginsLicenseNameMapping& operator=(PluginsLicenseNameMapping&&) = delete;
+		PluginsLicenseNameMapping& operator=(PluginsLicenseNameMapping&) = delete;
+		PluginsLicenseNameMapping(PluginsLicenseNameMapping&&) noexcept;
+		PluginsLicenseNameMapping() = default;
+		~PluginsLicenseNameMapping() = default;
 		std::vector<Plugin> Plugin;
 	};
 }
-Materialise::License::License(Materialise::License &&___License)
+Materialise::License::License(Materialise::License &&___License) noexcept
 	: Name(std::move(___License.Name))
 	, DisplayName(std::move(___License.DisplayName))
 	, IsMain(std::move(___License.IsMain))
@@ -120,7 +144,7 @@ bool Materialise::License::Read(IXmlSerializerReader& s, const std::string& __na
 		Visibility = Materialise::ConvertStringToLicenseVisibility(__tmp_var);
 	return true;
 }
-Materialise::Licenses::Licenses(Materialise::Licenses &&___Licenses)
+Materialise::Licenses::Licenses(Materialise::Licenses &&___Licenses) noexcept
 	: License(std::move(___Licenses.License))
 { }
 void Materialise::Licenses::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -142,7 +166,7 @@ bool Materialise::Licenses::Read(IXmlSerializerReader& s, const std::string& __n
 	}
 	return true;
 }
-Materialise::Plugin::Plugin(Materialise::Plugin &&___Plugin)
+Materialise::Plugin::Plugin(Materialise::Plugin &&___Plugin) noexcept
 	: Name(std::move(___Plugin.Name))
 	, LicenseName(std::move(___Plugin.LicenseName))
 { }
@@ -167,7 +191,7 @@ bool Materialise::Plugin::Read(IXmlSerializerReader& s, const std::string& __nam
 	}
 	return true;
 }
-Materialise::LicenseName::LicenseName(Materialise::LicenseName &&___LicenseName)
+Materialise::LicenseName::LicenseName(Materialise::LicenseName &&___LicenseName) noexcept
 	: From(std::move(___LicenseName.From))
 	, To(std::move(___LicenseName.To))
 { }
@@ -184,7 +208,7 @@ bool Materialise::LicenseName::Read(IXmlSerializerReader& s, const std::string& 
 	s.ReadAttrStr("To", To);
 	return true;
 }
-Materialise::PluginsLicenseNameMapping::PluginsLicenseNameMapping(Materialise::PluginsLicenseNameMapping &&___PluginsLicenseNameMapping)
+Materialise::PluginsLicenseNameMapping::PluginsLicenseNameMapping(Materialise::PluginsLicenseNameMapping &&___PluginsLicenseNameMapping) noexcept
 	: Plugin(std::move(___PluginsLicenseNameMapping.Plugin))
 { }
 void Materialise::PluginsLicenseNameMapping::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -206,7 +230,7 @@ bool Materialise::PluginsLicenseNameMapping::Read(IXmlSerializerReader& s, const
 	}
 	return true;
 }
-Materialise::Licensing::Licensing(Materialise::Licensing &&___Licensing)
+Materialise::Licensing::Licensing(Materialise::Licensing &&___Licensing) noexcept
 	: Licenses(std::move(___Licensing.Licenses))
 	, PluginsLicenseNameMapping(std::move(___Licensing.PluginsLicenseNameMapping))
 { }

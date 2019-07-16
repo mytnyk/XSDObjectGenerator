@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files_test2_DriverCapabilities_2018_namespace = "http://schemas.materialise.com/BuildProcessor/2018";
+	const std::string schema_CppTest_DriverCapabilities_2018_namespace = "http://schemas.materialise.com/BuildProcessor/2018";
 	enum class DriverIssueSeverity {
 		Information,
 		Warning,
@@ -65,67 +65,103 @@ namespace Materialise {
 	struct RelationType {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		RelationType(RelationType&&);
-	RelationType(){ }
+		RelationType(const RelationType&) = delete;
+		RelationType& operator=(RelationType&&) = delete;
+		RelationType& operator=(RelationType&) = delete;
+		RelationType(RelationType&&) noexcept;
+		RelationType() = default;
+		~RelationType() = default;
 		std::string Id;
 	};
 	struct RelationTypes {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		RelationTypes(RelationTypes&&);
-	RelationTypes(){ }
+		RelationTypes(const RelationTypes&) = delete;
+		RelationTypes& operator=(RelationTypes&&) = delete;
+		RelationTypes& operator=(RelationTypes&) = delete;
+		RelationTypes(RelationTypes&&) noexcept;
+		RelationTypes() = default;
+		~RelationTypes() = default;
 		std::vector<RelationType> RelationType;
 	};
 	struct ContentType {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		ContentType(ContentType&&);
-	ContentType(){ }
+		ContentType(const ContentType&) = delete;
+		ContentType& operator=(ContentType&&) = delete;
+		ContentType& operator=(ContentType&) = delete;
+		ContentType(ContentType&&) noexcept;
+		ContentType() = default;
+		~ContentType() = default;
 		std::string Id;
 	};
 	struct ContentTypes {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		ContentTypes(ContentTypes&&);
-	ContentTypes(){ }
+		ContentTypes(const ContentTypes&) = delete;
+		ContentTypes& operator=(ContentTypes&&) = delete;
+		ContentTypes& operator=(ContentTypes&) = delete;
+		ContentTypes(ContentTypes&&) noexcept;
+		ContentTypes() = default;
+		~ContentTypes() = default;
 		std::vector<ContentType> ContentType;
 	};
 	struct _Namespace {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		_Namespace(_Namespace&&);
-	_Namespace(){ }
+		_Namespace(const _Namespace&) = delete;
+		_Namespace& operator=(_Namespace&&) = delete;
+		_Namespace& operator=(_Namespace&) = delete;
+		_Namespace(_Namespace&&) noexcept;
+		_Namespace() = default;
+		~_Namespace() = default;
 		std::string Id;
 	};
 	struct Namespaces {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Namespaces(Namespaces&&);
-	Namespaces(){ }
+		Namespaces(const Namespaces&) = delete;
+		Namespaces& operator=(Namespaces&&) = delete;
+		Namespaces& operator=(Namespaces&) = delete;
+		Namespaces(Namespaces&&) noexcept;
+		Namespaces() = default;
+		~Namespaces() = default;
 		std::vector<_Namespace> Namespace;
 	};
 	struct Format3mf {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Format3mf(Format3mf&&);
-	Format3mf(){ }
+		Format3mf(const Format3mf&) = delete;
+		Format3mf& operator=(Format3mf&&) = delete;
+		Format3mf& operator=(Format3mf&) = delete;
+		Format3mf(Format3mf&&) noexcept;
+		Format3mf() = default;
+		~Format3mf() = default;
 		bool Supported;
-		Materialise::Namespaces Namespaces;
-		Materialise::ContentTypes ContentTypes;
-		Materialise::RelationTypes RelationTypes;
+		Namespaces Namespaces;
+		ContentTypes ContentTypes;
+		RelationTypes RelationTypes;
 	};
 	struct FileIO {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		FileIO(FileIO&&);
-	FileIO(){ }
+		FileIO(const FileIO&) = delete;
+		FileIO& operator=(FileIO&&) = delete;
+		FileIO& operator=(FileIO&) = delete;
+		FileIO(FileIO&&) noexcept;
+		FileIO() = default;
+		~FileIO() = default;
 		std::optional<std::unique_ptr<Format3mf>> Format3mf;
 	};
 	struct DriverCapabilities {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		DriverCapabilities(DriverCapabilities&&);
-	DriverCapabilities(){ }
+		DriverCapabilities(const DriverCapabilities&) = delete;
+		DriverCapabilities& operator=(DriverCapabilities&&) = delete;
+		DriverCapabilities& operator=(DriverCapabilities&) = delete;
+		DriverCapabilities(DriverCapabilities&&) noexcept;
+		DriverCapabilities() = default;
+		~DriverCapabilities() = default;
 		std::optional<std::unique_ptr<DriverIssues>> DriverIssues;
 		std::optional<std::unique_ptr<FileIO>> FileIO;
 		std::optional<bool> NonGenericProfiles {false};
@@ -139,16 +175,24 @@ namespace Materialise {
 	struct Capability {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Capability(Capability&&);
-	Capability(){ }
+		Capability(const Capability&) = delete;
+		Capability& operator=(Capability&&) = delete;
+		Capability& operator=(Capability&) = delete;
+		Capability(Capability&&) noexcept;
+		Capability() = default;
+		~Capability() = default;
 		std::string Id;
 		std::optional<std::string> Value;
 	};
 	struct Capabilities {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Capabilities(Capabilities&&);
-	Capabilities(){ }
+		Capabilities(const Capabilities&) = delete;
+		Capabilities& operator=(Capabilities&&) = delete;
+		Capabilities& operator=(Capabilities&) = delete;
+		Capabilities(Capabilities&&) noexcept;
+		Capabilities() = default;
+		~Capabilities() = default;
 		std::string Id;
 		std::vector<Capability> Capability;
 		std::vector<Capabilities> __Capabilities;
@@ -156,8 +200,12 @@ namespace Materialise {
 	struct DriverIssue {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		DriverIssue(DriverIssue&&);
-	DriverIssue(){ }
+		DriverIssue(const DriverIssue&) = delete;
+		DriverIssue& operator=(DriverIssue&&) = delete;
+		DriverIssue& operator=(DriverIssue&) = delete;
+		DriverIssue(DriverIssue&&) noexcept;
+		DriverIssue() = default;
+		~DriverIssue() = default;
 		Materialise::DriverIssueId Id;
 		std::string Title;
 		std::optional<std::string> Description;
@@ -166,12 +214,16 @@ namespace Materialise {
 	struct DriverIssues {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		DriverIssues(DriverIssues&&);
-	DriverIssues(){ }
+		DriverIssues(const DriverIssues&) = delete;
+		DriverIssues& operator=(DriverIssues&&) = delete;
+		DriverIssues& operator=(DriverIssues&) = delete;
+		DriverIssues(DriverIssues&&) noexcept;
+		DriverIssues() = default;
+		~DriverIssues() = default;
 		std::vector<DriverIssue> DriverIssue;
 	};
 }
-Materialise::DriverIssue::DriverIssue(Materialise::DriverIssue &&___DriverIssue)
+Materialise::DriverIssue::DriverIssue(Materialise::DriverIssue &&___DriverIssue) noexcept
 	: Id(std::move(___DriverIssue.Id))
 	, Title(std::move(___DriverIssue.Title))
 	, Description(std::move(___DriverIssue.Description))
@@ -200,7 +252,7 @@ bool Materialise::DriverIssue::Read(IXmlSerializerReader& s, const std::string& 
 		Severity = Materialise::ConvertStringToDriverIssueSeverity(__tmp_var);
 	return true;
 }
-Materialise::DriverIssues::DriverIssues(Materialise::DriverIssues &&___DriverIssues)
+Materialise::DriverIssues::DriverIssues(Materialise::DriverIssues &&___DriverIssues) noexcept
 	: DriverIssue(std::move(___DriverIssues.DriverIssue))
 { }
 void Materialise::DriverIssues::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -222,7 +274,7 @@ bool Materialise::DriverIssues::Read(IXmlSerializerReader& s, const std::string&
 	}
 	return true;
 }
-Materialise::Capability::Capability(Materialise::Capability &&___Capability)
+Materialise::Capability::Capability(Materialise::Capability &&___Capability) noexcept
 	: Id(std::move(___Capability.Id))
 	, Value(std::move(___Capability.Value))
 { }
@@ -242,7 +294,7 @@ bool Materialise::Capability::Read(IXmlSerializerReader& s, const std::string& _
 		Value = std::optional<std::string> { __Value };
 	return true;
 }
-Materialise::Capabilities::Capabilities(Materialise::Capabilities &&___Capabilities)
+Materialise::Capabilities::Capabilities(Materialise::Capabilities &&___Capabilities) noexcept
 	: Id(std::move(___Capabilities.Id))
 	, Capability(std::move(___Capabilities.Capability))
 	, __Capabilities(std::move(___Capabilities.__Capabilities))
@@ -278,7 +330,7 @@ bool Materialise::Capabilities::Read(IXmlSerializerReader& s, const std::string&
 	}
 	return true;
 }
-Materialise::DriverCapabilities::DriverCapabilities(Materialise::DriverCapabilities &&___DriverCapabilities)
+Materialise::DriverCapabilities::DriverCapabilities(Materialise::DriverCapabilities &&___DriverCapabilities) noexcept
 	: DriverIssues(std::move(___DriverCapabilities.DriverIssues))
 	, FileIO(std::move(___DriverCapabilities.FileIO))
 	, NonGenericProfiles(std::move(___DriverCapabilities.NonGenericProfiles))
@@ -331,7 +383,7 @@ bool Materialise::DriverCapabilities::Read(IXmlSerializerReader& s, const std::s
 		Capabilities = std::optional<std::unique_ptr<Materialise::Capabilities>> { __Capabilities };
 	return true;
 }
-Materialise::FileIO::FileIO(Materialise::FileIO &&___FileIO)
+Materialise::FileIO::FileIO(Materialise::FileIO &&___FileIO) noexcept
 	: Format3mf(std::move(___FileIO.Format3mf))
 { }
 void Materialise::FileIO::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -348,7 +400,7 @@ bool Materialise::FileIO::Read(IXmlSerializerReader& s, const std::string& __nam
 		Format3mf = std::optional<std::unique_ptr<Materialise::Format3mf>> { __Format3mf };
 	return true;
 }
-Materialise::Format3mf::Format3mf(Materialise::Format3mf &&___Format3mf)
+Materialise::Format3mf::Format3mf(Materialise::Format3mf &&___Format3mf) noexcept
 	: Supported(std::move(___Format3mf.Supported))
 	, Namespaces(std::move(___Format3mf.Namespaces))
 	, ContentTypes(std::move(___Format3mf.ContentTypes))
@@ -371,7 +423,7 @@ bool Materialise::Format3mf::Read(IXmlSerializerReader& s, const std::string& __
 	RelationTypes.Read(s, "RelationTypes");
 	return true;
 }
-Materialise::Namespaces::Namespaces(Materialise::Namespaces &&___Namespaces)
+Materialise::Namespaces::Namespaces(Materialise::Namespaces &&___Namespaces) noexcept
 	: Namespace(std::move(___Namespaces.Namespace))
 { }
 void Materialise::Namespaces::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -393,7 +445,7 @@ bool Materialise::Namespaces::Read(IXmlSerializerReader& s, const std::string& _
 	}
 	return true;
 }
-Materialise::_Namespace::_Namespace(Materialise::_Namespace &&____Namespace)
+Materialise::_Namespace::_Namespace(Materialise::_Namespace &&____Namespace) noexcept
 	: Id(std::move(____Namespace.Id))
 { }
 void Materialise::_Namespace::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -407,7 +459,7 @@ bool Materialise::_Namespace::Read(IXmlSerializerReader& s, const std::string& _
 	s.ReadAttrStr("Id", Id);
 	return true;
 }
-Materialise::ContentTypes::ContentTypes(Materialise::ContentTypes &&___ContentTypes)
+Materialise::ContentTypes::ContentTypes(Materialise::ContentTypes &&___ContentTypes) noexcept
 	: ContentType(std::move(___ContentTypes.ContentType))
 { }
 void Materialise::ContentTypes::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -429,7 +481,7 @@ bool Materialise::ContentTypes::Read(IXmlSerializerReader& s, const std::string&
 	}
 	return true;
 }
-Materialise::ContentType::ContentType(Materialise::ContentType &&___ContentType)
+Materialise::ContentType::ContentType(Materialise::ContentType &&___ContentType) noexcept
 	: Id(std::move(___ContentType.Id))
 { }
 void Materialise::ContentType::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -443,7 +495,7 @@ bool Materialise::ContentType::Read(IXmlSerializerReader& s, const std::string& 
 	s.ReadAttrStr("Id", Id);
 	return true;
 }
-Materialise::RelationTypes::RelationTypes(Materialise::RelationTypes &&___RelationTypes)
+Materialise::RelationTypes::RelationTypes(Materialise::RelationTypes &&___RelationTypes) noexcept
 	: RelationType(std::move(___RelationTypes.RelationType))
 { }
 void Materialise::RelationTypes::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -465,7 +517,7 @@ bool Materialise::RelationTypes::Read(IXmlSerializerReader& s, const std::string
 	}
 	return true;
 }
-Materialise::RelationType::RelationType(Materialise::RelationType &&___RelationType)
+Materialise::RelationType::RelationType(Materialise::RelationType &&___RelationType) noexcept
 	: Id(std::move(___RelationType.Id))
 { }
 void Materialise::RelationType::Write(IXmlSerializerWriter& s, const std::string& __name__) {

@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files_test2_MtlsBuildTicket_2016_namespace = "http://schemas.materialise.com/build_processing/2016/04";
+	const std::string schema_CppTest_MtlsBuildTicket_2016_namespace = "http://schemas.materialise.com/build_processing/2016/04";
 	enum class ST_PropertyType {
 		_bool,
 		integer,
@@ -126,8 +126,12 @@ namespace Materialise {
 	struct Dim {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Dim(Dim&&);
-	Dim(){ }
+		Dim(const Dim&) = delete;
+		Dim& operator=(Dim&&) = delete;
+		Dim& operator=(Dim&) = delete;
+		Dim(Dim&&) noexcept;
+		Dim() = default;
+		~Dim() = default;
 		std::optional<double> x;
 		std::optional<double> y;
 		double z;
@@ -136,8 +140,12 @@ namespace Materialise {
 	struct Pos {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Pos(Pos&&);
-	Pos(){ }
+		Pos(const Pos&) = delete;
+		Pos& operator=(Pos&&) = delete;
+		Pos& operator=(Pos&) = delete;
+		Pos(Pos&&) noexcept;
+		Pos() = default;
+		~Pos() = default;
 		double x;
 		double y;
 		double z;
@@ -145,87 +153,127 @@ namespace Materialise {
 	struct CT_MtlsMachineInfoComponent {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		CT_MtlsMachineInfoComponent(CT_MtlsMachineInfoComponent&&);
-	CT_MtlsMachineInfoComponent(){ }
+		CT_MtlsMachineInfoComponent(const CT_MtlsMachineInfoComponent&) = delete;
+		CT_MtlsMachineInfoComponent& operator=(CT_MtlsMachineInfoComponent&&) = delete;
+		CT_MtlsMachineInfoComponent& operator=(CT_MtlsMachineInfoComponent&) = delete;
+		CT_MtlsMachineInfoComponent(CT_MtlsMachineInfoComponent&&) noexcept;
+		CT_MtlsMachineInfoComponent() = default;
+		~CT_MtlsMachineInfoComponent() = default;
 		Shape Shape;
-		Materialise::Pos Pos;
-		Materialise::Dim Dim;
+		Pos Pos;
+		Dim Dim;
 		std::optional<std::unique_ptr<Mesh>> Mesh;
 		bool Visible;
 	};
 	struct CT_MtlsMachineInfo {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		CT_MtlsMachineInfo(CT_MtlsMachineInfo&&);
-	CT_MtlsMachineInfo(){ }
+		CT_MtlsMachineInfo(const CT_MtlsMachineInfo&) = delete;
+		CT_MtlsMachineInfo& operator=(CT_MtlsMachineInfo&&) = delete;
+		CT_MtlsMachineInfo& operator=(CT_MtlsMachineInfo&) = delete;
+		CT_MtlsMachineInfo(CT_MtlsMachineInfo&&) noexcept;
+		CT_MtlsMachineInfo() = default;
+		~CT_MtlsMachineInfo() = default;
 		std::optional<ST_Version> version;
-		Materialise::CT_MtlsMachineInfoComponent BuildVolume;
-		Materialise::CT_MtlsMachineInfoComponent Tray;
+		CT_MtlsMachineInfoComponent BuildVolume;
+		CT_MtlsMachineInfoComponent Tray;
 		std::optional<std::unique_ptr<LockedAreas>> LockedAreas;
 	};
 	struct MtlsMachineInfo {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		MtlsMachineInfo(MtlsMachineInfo&&);
-	MtlsMachineInfo(){ }
+		MtlsMachineInfo(const MtlsMachineInfo&) = delete;
+		MtlsMachineInfo& operator=(MtlsMachineInfo&&) = delete;
+		MtlsMachineInfo& operator=(MtlsMachineInfo&) = delete;
+		MtlsMachineInfo(MtlsMachineInfo&&) noexcept;
+		MtlsMachineInfo() = default;
+		~MtlsMachineInfo() = default;
 		std::optional<ST_Version> version;
-		Materialise::CT_MtlsMachineInfoComponent BuildVolume;
-		Materialise::CT_MtlsMachineInfoComponent Tray;
+		CT_MtlsMachineInfoComponent BuildVolume;
+		CT_MtlsMachineInfoComponent Tray;
 		std::optional<std::unique_ptr<LockedAreas>> LockedAreas;
 	};
 	struct CT_PropertyTemplateTree {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		CT_PropertyTemplateTree(CT_PropertyTemplateTree&&);
-	CT_PropertyTemplateTree(){ }
+		CT_PropertyTemplateTree(const CT_PropertyTemplateTree&) = delete;
+		CT_PropertyTemplateTree& operator=(CT_PropertyTemplateTree&&) = delete;
+		CT_PropertyTemplateTree& operator=(CT_PropertyTemplateTree&) = delete;
+		CT_PropertyTemplateTree(CT_PropertyTemplateTree&&) noexcept;
+		CT_PropertyTemplateTree() = default;
+		~CT_PropertyTemplateTree() = default;
 		std::vector<CT_PropertyTemplateNode> PropertyNode;
 	};
 	struct BuildTicket {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		BuildTicket(BuildTicket&&);
-	BuildTicket(){ }
-		Materialise::CT_PropertyTemplateTree Defaults;
+		BuildTicket(const BuildTicket&) = delete;
+		BuildTicket& operator=(BuildTicket&&) = delete;
+		BuildTicket& operator=(BuildTicket&) = delete;
+		BuildTicket(BuildTicket&&) noexcept;
+		BuildTicket() = default;
+		~BuildTicket() = default;
+		CT_PropertyTemplateTree Defaults;
 		std::optional<std::unique_ptr<CT_PropertyTemplateTree>> PartOverrides;
 	};
 	struct CT_MtlsPropertyTemplate {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		CT_MtlsPropertyTemplate(CT_MtlsPropertyTemplate&&);
-	CT_MtlsPropertyTemplate(){ }
+		CT_MtlsPropertyTemplate(const CT_MtlsPropertyTemplate&) = delete;
+		CT_MtlsPropertyTemplate& operator=(CT_MtlsPropertyTemplate&&) = delete;
+		CT_MtlsPropertyTemplate& operator=(CT_MtlsPropertyTemplate&) = delete;
+		CT_MtlsPropertyTemplate(CT_MtlsPropertyTemplate&&) noexcept;
+		CT_MtlsPropertyTemplate() = default;
+		~CT_MtlsPropertyTemplate() = default;
 		std::optional<ST_Version> version;
-		Materialise::CT_PropertyTemplateTree MachineParameters;
-		Materialise::BuildTicket BuildTicket;
+		CT_PropertyTemplateTree MachineParameters;
+		BuildTicket BuildTicket;
 	};
 	struct MtlsPropertyTemplate {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		MtlsPropertyTemplate(MtlsPropertyTemplate&&);
-	MtlsPropertyTemplate(){ }
+		MtlsPropertyTemplate(const MtlsPropertyTemplate&) = delete;
+		MtlsPropertyTemplate& operator=(MtlsPropertyTemplate&&) = delete;
+		MtlsPropertyTemplate& operator=(MtlsPropertyTemplate&) = delete;
+		MtlsPropertyTemplate(MtlsPropertyTemplate&&) noexcept;
+		MtlsPropertyTemplate() = default;
+		~MtlsPropertyTemplate() = default;
 		std::optional<ST_Version> version;
-		Materialise::CT_PropertyTemplateTree MachineParameters;
-		Materialise::BuildTicket BuildTicket;
+		CT_PropertyTemplateTree MachineParameters;
+		BuildTicket BuildTicket;
 	};
 	struct CT_PropertyTree {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		CT_PropertyTree(CT_PropertyTree&&);
-	CT_PropertyTree(){ }
+		CT_PropertyTree(const CT_PropertyTree&) = delete;
+		CT_PropertyTree& operator=(CT_PropertyTree&&) = delete;
+		CT_PropertyTree& operator=(CT_PropertyTree&) = delete;
+		CT_PropertyTree(CT_PropertyTree&&) noexcept;
+		CT_PropertyTree() = default;
+		~CT_PropertyTree() = default;
 		std::vector<CT_Property> Property;
 	};
 	struct MtlsMachineParameters {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		MtlsMachineParameters(MtlsMachineParameters&&);
-	MtlsMachineParameters(){ }
+		MtlsMachineParameters(const MtlsMachineParameters&) = delete;
+		MtlsMachineParameters& operator=(MtlsMachineParameters&&) = delete;
+		MtlsMachineParameters& operator=(MtlsMachineParameters&) = delete;
+		MtlsMachineParameters(MtlsMachineParameters&&) noexcept;
+		MtlsMachineParameters() = default;
+		~MtlsMachineParameters() = default;
 		std::optional<ST_Version> version;
 		std::vector<CT_Property> Property;
 	};
 	struct CT_BuildTicket {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		CT_BuildTicket(CT_BuildTicket&&);
-	CT_BuildTicket(){ }
+		CT_BuildTicket(const CT_BuildTicket&) = delete;
+		CT_BuildTicket& operator=(CT_BuildTicket&&) = delete;
+		CT_BuildTicket& operator=(CT_BuildTicket&) = delete;
+		CT_BuildTicket(CT_BuildTicket&&) noexcept;
+		CT_BuildTicket() = default;
+		~CT_BuildTicket() = default;
 		std::optional<std::unique_ptr<CT_PropertyTree>> Defaults;
 		std::optional<std::unique_ptr<PartOverrides>> PartOverrides;
 		std::optional<std::unique_ptr<ObjectProperties>> ObjectProperties;
@@ -233,8 +281,12 @@ namespace Materialise {
 	struct MtlsBuildTicket {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		MtlsBuildTicket(MtlsBuildTicket&&);
-	MtlsBuildTicket(){ }
+		MtlsBuildTicket(const MtlsBuildTicket&) = delete;
+		MtlsBuildTicket& operator=(MtlsBuildTicket&&) = delete;
+		MtlsBuildTicket& operator=(MtlsBuildTicket&) = delete;
+		MtlsBuildTicket(MtlsBuildTicket&&) noexcept;
+		MtlsBuildTicket() = default;
+		~MtlsBuildTicket() = default;
 		std::optional<std::unique_ptr<CT_PropertyTree>> Defaults;
 		std::optional<std::unique_ptr<PartOverrides>> PartOverrides;
 		std::optional<std::unique_ptr<ObjectProperties>> ObjectProperties;
@@ -242,22 +294,34 @@ namespace Materialise {
 	struct Mesh {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Mesh(Mesh&&);
-	Mesh(){ }
+		Mesh(const Mesh&) = delete;
+		Mesh& operator=(Mesh&&) = delete;
+		Mesh& operator=(Mesh&) = delete;
+		Mesh(Mesh&&) noexcept;
+		Mesh() = default;
+		~Mesh() = default;
 		std::string uuid;
 	};
 	struct LockedAreas {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		LockedAreas(LockedAreas&&);
-	LockedAreas(){ }
+		LockedAreas(const LockedAreas&) = delete;
+		LockedAreas& operator=(LockedAreas&&) = delete;
+		LockedAreas& operator=(LockedAreas&) = delete;
+		LockedAreas(LockedAreas&&) noexcept;
+		LockedAreas() = default;
+		~LockedAreas() = default;
 		std::vector<std::string> Area;
 	};
 	struct CT_PropertyTemplateNode {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		CT_PropertyTemplateNode(CT_PropertyTemplateNode&&);
-	CT_PropertyTemplateNode(){ }
+		CT_PropertyTemplateNode(const CT_PropertyTemplateNode&) = delete;
+		CT_PropertyTemplateNode& operator=(CT_PropertyTemplateNode&&) = delete;
+		CT_PropertyTemplateNode& operator=(CT_PropertyTemplateNode&) = delete;
+		CT_PropertyTemplateNode(CT_PropertyTemplateNode&&) noexcept;
+		CT_PropertyTemplateNode() = default;
+		~CT_PropertyTemplateNode() = default;
 		std::string Name;
 		std::optional<ST_PropertyType> Type;
 		std::optional<std::string> DisplayName;
@@ -272,16 +336,24 @@ namespace Materialise {
 	struct CT_ProfileWithProperties {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		CT_ProfileWithProperties(CT_ProfileWithProperties&&);
-	CT_ProfileWithProperties(){ }
+		CT_ProfileWithProperties(const CT_ProfileWithProperties&) = delete;
+		CT_ProfileWithProperties& operator=(CT_ProfileWithProperties&&) = delete;
+		CT_ProfileWithProperties& operator=(CT_ProfileWithProperties&) = delete;
+		CT_ProfileWithProperties(CT_ProfileWithProperties&&) noexcept;
+		CT_ProfileWithProperties() = default;
+		~CT_ProfileWithProperties() = default;
 		std::string Name;
 		std::vector<CT_Property> Property;
 	};
 	struct CT_Property {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		CT_Property(CT_Property&&);
-	CT_Property(){ }
+		CT_Property(const CT_Property&) = delete;
+		CT_Property& operator=(CT_Property&&) = delete;
+		CT_Property& operator=(CT_Property&) = delete;
+		CT_Property(CT_Property&&) noexcept;
+		CT_Property() = default;
+		~CT_Property() = default;
 		std::string Name;
 		std::optional<ST_PropertyType> Type;
 		std::optional<std::string> ProfileList;
@@ -291,22 +363,34 @@ namespace Materialise {
 	struct ObjectProperties {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		ObjectProperties(ObjectProperties&&);
-	ObjectProperties(){ }
+		ObjectProperties(const ObjectProperties&) = delete;
+		ObjectProperties& operator=(ObjectProperties&&) = delete;
+		ObjectProperties& operator=(ObjectProperties&) = delete;
+		ObjectProperties(ObjectProperties&&) noexcept;
+		ObjectProperties() = default;
+		~ObjectProperties() = default;
 		std::vector<CT_PropertyTreeWithUUID> Instance;
 	};
 	struct PartOverrides {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		PartOverrides(PartOverrides&&);
-	PartOverrides(){ }
+		PartOverrides(const PartOverrides&) = delete;
+		PartOverrides& operator=(PartOverrides&&) = delete;
+		PartOverrides& operator=(PartOverrides&) = delete;
+		PartOverrides(PartOverrides&&) noexcept;
+		PartOverrides() = default;
+		~PartOverrides() = default;
 		std::vector<CT_PropertyTreeWithComponents> Instance;
 	};
 	struct CT_PropertyTreeWithUUID {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		CT_PropertyTreeWithUUID(CT_PropertyTreeWithUUID&&);
-	CT_PropertyTreeWithUUID(){ }
+		CT_PropertyTreeWithUUID(const CT_PropertyTreeWithUUID&) = delete;
+		CT_PropertyTreeWithUUID& operator=(CT_PropertyTreeWithUUID&&) = delete;
+		CT_PropertyTreeWithUUID& operator=(CT_PropertyTreeWithUUID&) = delete;
+		CT_PropertyTreeWithUUID(CT_PropertyTreeWithUUID&&) noexcept;
+		CT_PropertyTreeWithUUID() = default;
+		~CT_PropertyTreeWithUUID() = default;
 		std::string uuid;
 		std::optional<ST_PropertyTreeType> type;
 		std::vector<CT_Property> Property;
@@ -314,15 +398,19 @@ namespace Materialise {
 	struct CT_PropertyTreeWithComponents {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		CT_PropertyTreeWithComponents(CT_PropertyTreeWithComponents&&);
-	CT_PropertyTreeWithComponents(){ }
+		CT_PropertyTreeWithComponents(const CT_PropertyTreeWithComponents&) = delete;
+		CT_PropertyTreeWithComponents& operator=(CT_PropertyTreeWithComponents&&) = delete;
+		CT_PropertyTreeWithComponents& operator=(CT_PropertyTreeWithComponents&) = delete;
+		CT_PropertyTreeWithComponents(CT_PropertyTreeWithComponents&&) noexcept;
+		CT_PropertyTreeWithComponents() = default;
+		~CT_PropertyTreeWithComponents() = default;
 		std::vector<CT_PropertyTreeWithUUID> Component;
 		std::string uuid;
 		std::optional<ST_PropertyTreeType> type;
 		std::vector<CT_Property> Property;
 	};
 }
-Materialise::CT_PropertyTree::CT_PropertyTree(Materialise::CT_PropertyTree &&___CT_PropertyTree)
+Materialise::CT_PropertyTree::CT_PropertyTree(Materialise::CT_PropertyTree &&___CT_PropertyTree) noexcept
 	: Property(std::move(___CT_PropertyTree.Property))
 { }
 void Materialise::CT_PropertyTree::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -344,7 +432,7 @@ bool Materialise::CT_PropertyTree::Read(IXmlSerializerReader& s, const std::stri
 	}
 	return true;
 }
-Materialise::CT_PropertyTreeWithUUID::CT_PropertyTreeWithUUID(Materialise::CT_PropertyTreeWithUUID &&___CT_PropertyTreeWithUUID)
+Materialise::CT_PropertyTreeWithUUID::CT_PropertyTreeWithUUID(Materialise::CT_PropertyTreeWithUUID &&___CT_PropertyTreeWithUUID) noexcept
 	: uuid(std::move(___CT_PropertyTreeWithUUID.uuid))
 	, type(std::move(___CT_PropertyTreeWithUUID.type))
 	, Property(std::move(___CT_PropertyTreeWithUUID.Property))
@@ -375,7 +463,7 @@ bool Materialise::CT_PropertyTreeWithUUID::Read(IXmlSerializerReader& s, const s
 	}
 	return true;
 }
-Materialise::CT_PropertyTreeWithComponents::CT_PropertyTreeWithComponents(Materialise::CT_PropertyTreeWithComponents &&___CT_PropertyTreeWithComponents)
+Materialise::CT_PropertyTreeWithComponents::CT_PropertyTreeWithComponents(Materialise::CT_PropertyTreeWithComponents &&___CT_PropertyTreeWithComponents) noexcept
 	: Component(std::move(___CT_PropertyTreeWithComponents.Component))
 	, uuid(std::move(___CT_PropertyTreeWithComponents.uuid))
 	, type(std::move(___CT_PropertyTreeWithComponents.type))
@@ -417,7 +505,7 @@ bool Materialise::CT_PropertyTreeWithComponents::Read(IXmlSerializerReader& s, c
 	}
 	return true;
 }
-Materialise::CT_BuildTicket::CT_BuildTicket(Materialise::CT_BuildTicket &&___CT_BuildTicket)
+Materialise::CT_BuildTicket::CT_BuildTicket(Materialise::CT_BuildTicket &&___CT_BuildTicket) noexcept
 	: Defaults(std::move(___CT_BuildTicket.Defaults))
 	, PartOverrides(std::move(___CT_BuildTicket.PartOverrides))
 	, ObjectProperties(std::move(___CT_BuildTicket.ObjectProperties))
@@ -446,7 +534,7 @@ bool Materialise::CT_BuildTicket::Read(IXmlSerializerReader& s, const std::strin
 		ObjectProperties = std::optional<std::unique_ptr<Materialise::ObjectProperties>> { __ObjectProperties };
 	return true;
 }
-Materialise::PartOverrides::PartOverrides(Materialise::PartOverrides &&___PartOverrides)
+Materialise::PartOverrides::PartOverrides(Materialise::PartOverrides &&___PartOverrides) noexcept
 	: Instance(std::move(___PartOverrides.Instance))
 { }
 void Materialise::PartOverrides::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -468,7 +556,7 @@ bool Materialise::PartOverrides::Read(IXmlSerializerReader& s, const std::string
 	}
 	return true;
 }
-Materialise::ObjectProperties::ObjectProperties(Materialise::ObjectProperties &&___ObjectProperties)
+Materialise::ObjectProperties::ObjectProperties(Materialise::ObjectProperties &&___ObjectProperties) noexcept
 	: Instance(std::move(___ObjectProperties.Instance))
 { }
 void Materialise::ObjectProperties::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -490,7 +578,7 @@ bool Materialise::ObjectProperties::Read(IXmlSerializerReader& s, const std::str
 	}
 	return true;
 }
-Materialise::CT_MtlsPropertyTemplate::CT_MtlsPropertyTemplate(Materialise::CT_MtlsPropertyTemplate &&___CT_MtlsPropertyTemplate)
+Materialise::CT_MtlsPropertyTemplate::CT_MtlsPropertyTemplate(Materialise::CT_MtlsPropertyTemplate &&___CT_MtlsPropertyTemplate) noexcept
 	: version(std::move(___CT_MtlsPropertyTemplate.version))
 	, MachineParameters(std::move(___CT_MtlsPropertyTemplate.MachineParameters))
 	, BuildTicket(std::move(___CT_MtlsPropertyTemplate.BuildTicket))
@@ -513,7 +601,7 @@ bool Materialise::CT_MtlsPropertyTemplate::Read(IXmlSerializerReader& s, const s
 	BuildTicket.Read(s, "BuildTicket");
 	return true;
 }
-Materialise::BuildTicket::BuildTicket(Materialise::BuildTicket &&___BuildTicket)
+Materialise::BuildTicket::BuildTicket(Materialise::BuildTicket &&___BuildTicket) noexcept
 	: Defaults(std::move(___BuildTicket.Defaults))
 	, PartOverrides(std::move(___BuildTicket.PartOverrides))
 { }
@@ -533,7 +621,7 @@ bool Materialise::BuildTicket::Read(IXmlSerializerReader& s, const std::string& 
 		PartOverrides = std::optional<std::unique_ptr<Materialise::CT_PropertyTemplateTree>> { __PartOverrides };
 	return true;
 }
-Materialise::CT_Property::CT_Property(Materialise::CT_Property &&___CT_Property)
+Materialise::CT_Property::CT_Property(Materialise::CT_Property &&___CT_Property) noexcept
 	: Name(std::move(___CT_Property.Name))
 	, Type(std::move(___CT_Property.Type))
 	, ProfileList(std::move(___CT_Property.ProfileList))
@@ -581,7 +669,7 @@ bool Materialise::CT_Property::Read(IXmlSerializerReader& s, const std::string& 
 	}
 	return true;
 }
-Materialise::CT_ProfileWithProperties::CT_ProfileWithProperties(Materialise::CT_ProfileWithProperties &&___CT_ProfileWithProperties)
+Materialise::CT_ProfileWithProperties::CT_ProfileWithProperties(Materialise::CT_ProfileWithProperties &&___CT_ProfileWithProperties) noexcept
 	: Name(std::move(___CT_ProfileWithProperties.Name))
 	, Property(std::move(___CT_ProfileWithProperties.Property))
 { }
@@ -606,7 +694,7 @@ bool Materialise::CT_ProfileWithProperties::Read(IXmlSerializerReader& s, const 
 	}
 	return true;
 }
-Materialise::CT_PropertyTemplateTree::CT_PropertyTemplateTree(Materialise::CT_PropertyTemplateTree &&___CT_PropertyTemplateTree)
+Materialise::CT_PropertyTemplateTree::CT_PropertyTemplateTree(Materialise::CT_PropertyTemplateTree &&___CT_PropertyTemplateTree) noexcept
 	: PropertyNode(std::move(___CT_PropertyTemplateTree.PropertyNode))
 { }
 void Materialise::CT_PropertyTemplateTree::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -628,7 +716,7 @@ bool Materialise::CT_PropertyTemplateTree::Read(IXmlSerializerReader& s, const s
 	}
 	return true;
 }
-Materialise::CT_PropertyTemplateNode::CT_PropertyTemplateNode(Materialise::CT_PropertyTemplateNode &&___CT_PropertyTemplateNode)
+Materialise::CT_PropertyTemplateNode::CT_PropertyTemplateNode(Materialise::CT_PropertyTemplateNode &&___CT_PropertyTemplateNode) noexcept
 	: Name(std::move(___CT_PropertyTemplateNode.Name))
 	, Type(std::move(___CT_PropertyTemplateNode.Type))
 	, DisplayName(std::move(___CT_PropertyTemplateNode.DisplayName))
@@ -701,7 +789,7 @@ bool Materialise::CT_PropertyTemplateNode::Read(IXmlSerializerReader& s, const s
 	}
 	return true;
 }
-Materialise::CT_MtlsMachineInfo::CT_MtlsMachineInfo(Materialise::CT_MtlsMachineInfo &&___CT_MtlsMachineInfo)
+Materialise::CT_MtlsMachineInfo::CT_MtlsMachineInfo(Materialise::CT_MtlsMachineInfo &&___CT_MtlsMachineInfo) noexcept
 	: version(std::move(___CT_MtlsMachineInfo.version))
 	, BuildVolume(std::move(___CT_MtlsMachineInfo.BuildVolume))
 	, Tray(std::move(___CT_MtlsMachineInfo.Tray))
@@ -730,7 +818,7 @@ bool Materialise::CT_MtlsMachineInfo::Read(IXmlSerializerReader& s, const std::s
 		LockedAreas = std::optional<std::unique_ptr<Materialise::LockedAreas>> { __LockedAreas };
 	return true;
 }
-Materialise::LockedAreas::LockedAreas(Materialise::LockedAreas &&___LockedAreas)
+Materialise::LockedAreas::LockedAreas(Materialise::LockedAreas &&___LockedAreas) noexcept
 	: Area(std::move(___LockedAreas.Area))
 { }
 void Materialise::LockedAreas::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -747,7 +835,7 @@ bool Materialise::LockedAreas::Read(IXmlSerializerReader& s, const std::string& 
 Area = s.ReadVectorStr("Area");
 	return true;
 }
-Materialise::CT_MtlsMachineInfoComponent::CT_MtlsMachineInfoComponent(Materialise::CT_MtlsMachineInfoComponent &&___CT_MtlsMachineInfoComponent)
+Materialise::CT_MtlsMachineInfoComponent::CT_MtlsMachineInfoComponent(Materialise::CT_MtlsMachineInfoComponent &&___CT_MtlsMachineInfoComponent) noexcept
 	: Shape(std::move(___CT_MtlsMachineInfoComponent.Shape))
 	, Pos(std::move(___CT_MtlsMachineInfoComponent.Pos))
 	, Dim(std::move(___CT_MtlsMachineInfoComponent.Dim))
@@ -778,7 +866,7 @@ bool Materialise::CT_MtlsMachineInfoComponent::Read(IXmlSerializerReader& s, con
 	s.ReadBool("Visible", Visible);
 	return true;
 }
-Materialise::Pos::Pos(Materialise::Pos &&___Pos)
+Materialise::Pos::Pos(Materialise::Pos &&___Pos) noexcept
 	: x(std::move(___Pos.x))
 	, y(std::move(___Pos.y))
 	, z(std::move(___Pos.z))
@@ -798,7 +886,7 @@ bool Materialise::Pos::Read(IXmlSerializerReader& s, const std::string& __name__
 	s.ReadAttrDouble("z", z);
 	return true;
 }
-Materialise::Dim::Dim(Materialise::Dim &&___Dim)
+Materialise::Dim::Dim(Materialise::Dim &&___Dim) noexcept
 	: x(std::move(___Dim.x))
 	, y(std::move(___Dim.y))
 	, z(std::move(___Dim.z))
@@ -830,7 +918,7 @@ bool Materialise::Dim::Read(IXmlSerializerReader& s, const std::string& __name__
 		radius = std::optional<std::string> { __radius };
 	return true;
 }
-Materialise::Mesh::Mesh(Materialise::Mesh &&___Mesh)
+Materialise::Mesh::Mesh(Materialise::Mesh &&___Mesh) noexcept
 	: uuid(std::move(___Mesh.uuid))
 { }
 void Materialise::Mesh::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -844,7 +932,7 @@ bool Materialise::Mesh::Read(IXmlSerializerReader& s, const std::string& __name_
 	s.ReadAttrStr("uuid", uuid);
 	return true;
 }
-Materialise::MtlsBuildTicket::MtlsBuildTicket(Materialise::MtlsBuildTicket &&___MtlsBuildTicket)
+Materialise::MtlsBuildTicket::MtlsBuildTicket(Materialise::MtlsBuildTicket &&___MtlsBuildTicket) noexcept
 	: Defaults(std::move(___MtlsBuildTicket.Defaults))
 	, PartOverrides(std::move(___MtlsBuildTicket.PartOverrides))
 	, ObjectProperties(std::move(___MtlsBuildTicket.ObjectProperties))
@@ -873,7 +961,7 @@ bool Materialise::MtlsBuildTicket::Read(IXmlSerializerReader& s, const std::stri
 		ObjectProperties = std::optional<std::unique_ptr<Materialise::ObjectProperties>> { __ObjectProperties };
 	return true;
 }
-Materialise::MtlsMachineParameters::MtlsMachineParameters(Materialise::MtlsMachineParameters &&___MtlsMachineParameters)
+Materialise::MtlsMachineParameters::MtlsMachineParameters(Materialise::MtlsMachineParameters &&___MtlsMachineParameters) noexcept
 	: version(std::move(___MtlsMachineParameters.version))
 	, Property(std::move(___MtlsMachineParameters.Property))
 { }
@@ -901,7 +989,7 @@ bool Materialise::MtlsMachineParameters::Read(IXmlSerializerReader& s, const std
 	}
 	return true;
 }
-Materialise::MtlsPropertyTemplate::MtlsPropertyTemplate(Materialise::MtlsPropertyTemplate &&___MtlsPropertyTemplate)
+Materialise::MtlsPropertyTemplate::MtlsPropertyTemplate(Materialise::MtlsPropertyTemplate &&___MtlsPropertyTemplate) noexcept
 	: version(std::move(___MtlsPropertyTemplate.version))
 	, MachineParameters(std::move(___MtlsPropertyTemplate.MachineParameters))
 	, BuildTicket(std::move(___MtlsPropertyTemplate.BuildTicket))
@@ -924,7 +1012,7 @@ bool Materialise::MtlsPropertyTemplate::Read(IXmlSerializerReader& s, const std:
 	BuildTicket.Read(s, "BuildTicket");
 	return true;
 }
-Materialise::MtlsMachineInfo::MtlsMachineInfo(Materialise::MtlsMachineInfo &&___MtlsMachineInfo)
+Materialise::MtlsMachineInfo::MtlsMachineInfo(Materialise::MtlsMachineInfo &&___MtlsMachineInfo) noexcept
 	: version(std::move(___MtlsMachineInfo.version))
 	, BuildVolume(std::move(___MtlsMachineInfo.BuildVolume))
 	, Tray(std::move(___MtlsMachineInfo.Tray))

@@ -8,22 +8,30 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files_test2_Documentation_namespace = "";
+	const std::string schema_CppTest_Documentation_namespace = "";
 	struct Links;
 	struct Link;
 	struct Documentation;
 	struct Documentation {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Documentation(Documentation&&);
-	Documentation(){ }
+		Documentation(const Documentation&) = delete;
+		Documentation& operator=(Documentation&&) = delete;
+		Documentation& operator=(Documentation&) = delete;
+		Documentation(Documentation&&) noexcept;
+		Documentation() = default;
+		~Documentation() = default;
 		std::optional<std::unique_ptr<Links>> Links;
 	};
 	struct Link {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Link(Link&&);
-	Link(){ }
+		Link(const Link&) = delete;
+		Link& operator=(Link&&) = delete;
+		Link& operator=(Link&) = delete;
+		Link(Link&&) noexcept;
+		Link() = default;
+		~Link() = default;
 		std::string Name;
 		std::string Description;
 		std::string LinkToFile;
@@ -31,12 +39,16 @@ namespace Materialise {
 	struct Links {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Links(Links&&);
-	Links(){ }
+		Links(const Links&) = delete;
+		Links& operator=(Links&&) = delete;
+		Links& operator=(Links&) = delete;
+		Links(Links&&) noexcept;
+		Links() = default;
+		~Links() = default;
 		std::vector<Link> Link;
 	};
 }
-Materialise::Links::Links(Materialise::Links &&___Links)
+Materialise::Links::Links(Materialise::Links &&___Links) noexcept
 	: Link(std::move(___Links.Link))
 { }
 void Materialise::Links::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -58,7 +70,7 @@ bool Materialise::Links::Read(IXmlSerializerReader& s, const std::string& __name
 	}
 	return true;
 }
-Materialise::Link::Link(Materialise::Link &&___Link)
+Materialise::Link::Link(Materialise::Link &&___Link) noexcept
 	: Name(std::move(___Link.Name))
 	, Description(std::move(___Link.Description))
 	, LinkToFile(std::move(___Link.LinkToFile))
@@ -78,7 +90,7 @@ bool Materialise::Link::Read(IXmlSerializerReader& s, const std::string& __name_
 	s.ReadStr("LinkToFile", LinkToFile);
 	return true;
 }
-Materialise::Documentation::Documentation(Materialise::Documentation &&___Documentation)
+Materialise::Documentation::Documentation(Materialise::Documentation &&___Documentation) noexcept
 	: Links(std::move(___Documentation.Links))
 { }
 void Materialise::Documentation::Write(IXmlSerializerWriter& s, const std::string& __name__) {

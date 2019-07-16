@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files_test2_ExternalProperties_namespace = "";
+	const std::string schema_CppTest_ExternalProperties_namespace = "";
 	enum class PropertyType {
 		_bool,
 		integer,
@@ -62,29 +62,41 @@ namespace Materialise {
 	struct Properties {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Properties(Properties&&);
-	Properties(){ }
+		Properties(const Properties&) = delete;
+		Properties& operator=(Properties&&) = delete;
+		Properties& operator=(Properties&) = delete;
+		Properties(Properties&&) noexcept;
+		Properties() = default;
+		~Properties() = default;
 		std::string ID;
 		std::vector<PropertyElement> Property;
 	};
 	struct ExternalPropertyFile {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		ExternalPropertyFile(ExternalPropertyFile&&);
-	ExternalPropertyFile(){ }
+		ExternalPropertyFile(const ExternalPropertyFile&) = delete;
+		ExternalPropertyFile& operator=(ExternalPropertyFile&&) = delete;
+		ExternalPropertyFile& operator=(ExternalPropertyFile&) = delete;
+		ExternalPropertyFile(ExternalPropertyFile&&) noexcept;
+		ExternalPropertyFile() = default;
+		~ExternalPropertyFile() = default;
 		std::vector<Properties> Properties;
 	};
 	struct PropertyElement {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		PropertyElement(PropertyElement&&);
-	PropertyElement(){ }
+		PropertyElement(const PropertyElement&) = delete;
+		PropertyElement& operator=(PropertyElement&&) = delete;
+		PropertyElement& operator=(PropertyElement&) = delete;
+		PropertyElement(PropertyElement&&) noexcept;
+		PropertyElement() = default;
+		~PropertyElement() = default;
 		std::string Name;
 		Materialise::PropertyType Type;
 		std::vector<PropertyElement> Property;
 	};
 }
-Materialise::PropertyElement::PropertyElement(Materialise::PropertyElement &&___PropertyElement)
+Materialise::PropertyElement::PropertyElement(Materialise::PropertyElement &&___PropertyElement) noexcept
 	: Name(std::move(___PropertyElement.Name))
 	, Type(std::move(___PropertyElement.Type))
 	, Property(std::move(___PropertyElement.Property))
@@ -114,7 +126,7 @@ bool Materialise::PropertyElement::Read(IXmlSerializerReader& s, const std::stri
 	}
 	return true;
 }
-Materialise::ExternalPropertyFile::ExternalPropertyFile(Materialise::ExternalPropertyFile &&___ExternalPropertyFile)
+Materialise::ExternalPropertyFile::ExternalPropertyFile(Materialise::ExternalPropertyFile &&___ExternalPropertyFile) noexcept
 	: Properties(std::move(___ExternalPropertyFile.Properties))
 { }
 void Materialise::ExternalPropertyFile::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -136,7 +148,7 @@ bool Materialise::ExternalPropertyFile::Read(IXmlSerializerReader& s, const std:
 	}
 	return true;
 }
-Materialise::Properties::Properties(Materialise::Properties &&___Properties)
+Materialise::Properties::Properties(Materialise::Properties &&___Properties) noexcept
 	: ID(std::move(___Properties.ID))
 	, Property(std::move(___Properties.Property))
 { }

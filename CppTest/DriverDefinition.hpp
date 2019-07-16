@@ -8,7 +8,7 @@
 #include "Serializers.hpp"
 #include <optional>
 namespace Materialise {
-	const std::string schema_generated_files_test2_DriverDefinition_namespace = "";
+	const std::string schema_CppTest_DriverDefinition_namespace = "";
 	enum class PrintMode {
 		None,
 		Normal,
@@ -38,8 +38,12 @@ namespace Materialise {
 	struct Printer {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Printer(Printer&&);
-	Printer(){ }
+		Printer(const Printer&) = delete;
+		Printer& operator=(Printer&&) = delete;
+		Printer& operator=(Printer&) = delete;
+		Printer(Printer&&) noexcept;
+		Printer() = default;
+		~Printer() = default;
 		std::string ModelId;
 		std::string Name;
 		std::string Manufacturer;
@@ -50,15 +54,23 @@ namespace Materialise {
 	struct SupportedPrinters {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		SupportedPrinters(SupportedPrinters&&);
-	SupportedPrinters(){ }
+		SupportedPrinters(const SupportedPrinters&) = delete;
+		SupportedPrinters& operator=(SupportedPrinters&&) = delete;
+		SupportedPrinters& operator=(SupportedPrinters&) = delete;
+		SupportedPrinters(SupportedPrinters&&) noexcept;
+		SupportedPrinters() = default;
+		~SupportedPrinters() = default;
 		std::vector<Printer> Printer;
 	};
 	struct Driver {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Driver(Driver&&);
-	Driver(){ }
+		Driver(const Driver&) = delete;
+		Driver& operator=(Driver&&) = delete;
+		Driver& operator=(Driver&) = delete;
+		Driver(Driver&&) noexcept;
+		Driver() = default;
+		~Driver() = default;
 		std::string Id;
 		std::string Name;
 		std::string Provider;
@@ -68,34 +80,46 @@ namespace Materialise {
 		std::optional<std::string> UserDriverDll;
 		std::string SupportedApi;
 		std::optional<std::unique_ptr<Properties>> Properties;
-		Materialise::SupportedPrinters SupportedPrinters;
+		SupportedPrinters SupportedPrinters;
 	};
 	struct Property {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Property(Property&&);
-	Property(){ }
+		Property(const Property&) = delete;
+		Property& operator=(Property&&) = delete;
+		Property& operator=(Property&) = delete;
+		Property(Property&&) noexcept;
+		Property() = default;
+		~Property() = default;
 		std::string Name;
 	};
 	struct Properties {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		Properties(Properties&&);
-	Properties(){ }
+		Properties(const Properties&) = delete;
+		Properties& operator=(Properties&&) = delete;
+		Properties& operator=(Properties&) = delete;
+		Properties(Properties&&) noexcept;
+		Properties() = default;
+		~Properties() = default;
 		std::vector<Property> Property;
 	};
 	struct DriverCapabilities {
 		void Write(IXmlSerializerWriter& s, const std::string& __name__);
 		bool Read(IXmlSerializerReader& s, const std::string& __name__);
-		DriverCapabilities(DriverCapabilities&&);
-	DriverCapabilities(){ }
+		DriverCapabilities(const DriverCapabilities&) = delete;
+		DriverCapabilities& operator=(DriverCapabilities&&) = delete;
+		DriverCapabilities& operator=(DriverCapabilities&) = delete;
+		DriverCapabilities(DriverCapabilities&&) noexcept;
+		DriverCapabilities() = default;
+		~DriverCapabilities() = default;
 		std::optional<bool> CanUploadOnly;
 		std::optional<PrintMode> PrintMode;
 		std::optional<bool> NoUpload;
 		std::optional<bool> CanGetPrintDetails;
 	};
 }
-Materialise::Printer::Printer(Materialise::Printer &&___Printer)
+Materialise::Printer::Printer(Materialise::Printer &&___Printer) noexcept
 	: ModelId(std::move(___Printer.ModelId))
 	, Name(std::move(___Printer.Name))
 	, Manufacturer(std::move(___Printer.Manufacturer))
@@ -131,7 +155,7 @@ bool Materialise::Printer::Read(IXmlSerializerReader& s, const std::string& __na
 		Properties = std::optional<std::unique_ptr<Materialise::Properties>> { __Properties };
 	return true;
 }
-Materialise::DriverCapabilities::DriverCapabilities(Materialise::DriverCapabilities &&___DriverCapabilities)
+Materialise::DriverCapabilities::DriverCapabilities(Materialise::DriverCapabilities &&___DriverCapabilities) noexcept
 	: CanUploadOnly(std::move(___DriverCapabilities.CanUploadOnly))
 	, PrintMode(std::move(___DriverCapabilities.PrintMode))
 	, NoUpload(std::move(___DriverCapabilities.NoUpload))
@@ -160,7 +184,7 @@ bool Materialise::DriverCapabilities::Read(IXmlSerializerReader& s, const std::s
 	s.ReadBool("CanGetPrintDetails", CanGetPrintDetails.value());
 	return true;
 }
-Materialise::Properties::Properties(Materialise::Properties &&___Properties)
+Materialise::Properties::Properties(Materialise::Properties &&___Properties) noexcept
 	: Property(std::move(___Properties.Property))
 { }
 void Materialise::Properties::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -182,7 +206,7 @@ bool Materialise::Properties::Read(IXmlSerializerReader& s, const std::string& _
 	}
 	return true;
 }
-Materialise::Property::Property(Materialise::Property &&___Property)
+Materialise::Property::Property(Materialise::Property &&___Property) noexcept
 	: Name(std::move(___Property.Name))
 { }
 void Materialise::Property::Write(IXmlSerializerWriter& s, const std::string& __name__) {
@@ -196,7 +220,7 @@ bool Materialise::Property::Read(IXmlSerializerReader& s, const std::string& __n
 	s.ReadAttrStr("Name", Name);
 	return true;
 }
-Materialise::Driver::Driver(Materialise::Driver &&___Driver)
+Materialise::Driver::Driver(Materialise::Driver &&___Driver) noexcept
 	: Id(std::move(___Driver.Id))
 	, Name(std::move(___Driver.Name))
 	, Provider(std::move(___Driver.Provider))
@@ -242,7 +266,7 @@ bool Materialise::Driver::Read(IXmlSerializerReader& s, const std::string& __nam
 	SupportedPrinters.Read(s, "SupportedPrinters");
 	return true;
 }
-Materialise::SupportedPrinters::SupportedPrinters(Materialise::SupportedPrinters &&___SupportedPrinters)
+Materialise::SupportedPrinters::SupportedPrinters(Materialise::SupportedPrinters &&___SupportedPrinters) noexcept
 	: Printer(std::move(___SupportedPrinters.Printer))
 { }
 void Materialise::SupportedPrinters::Write(IXmlSerializerWriter& s, const std::string& __name__) {

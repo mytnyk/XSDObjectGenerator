@@ -8,6 +8,7 @@
 #include "Serializers.hpp"
 #include "MtlsBuildTicket_2017.hpp"
 #include "DeviceState.hpp"
+//#include <gtest/gtest.h>
 
 
 //------------------- Generated code begin--------------//
@@ -80,7 +81,7 @@ void write2() {
 
 	ds.Write(s, "DeviceState");
 
-	s.SetSchemaTargetNamespace(Materialise::schema_generated_files_test2_DeviceState_namespace);
+	s.SetSchemaTargetNamespace(Materialise::schema_CppTest_DeviceState_namespace);
 	s.SaveToFile("simple_xml.xml");
 }
 
@@ -92,31 +93,18 @@ void read2() {
 	auto g = bt.Log.value().get();
 	auto jj = bt.Log.value()->Entries.value().get();
 	std::string ns = s.getSchemaTargetNamespace();
+	//EXPECT_EQ(3, jj->Entry.size());
+	//EXPECT_EQ(Materialise::DeviceStatusValue::ReadyToPrint, jj->Entry[0].category);
 	return;
 }
-
-int main()
-{
+/*
+TEST(WriteRead, DeviceStateTest) {
 	write2();
 	read2();
-	
-	//Test::shiporder c;
-	//c.Read(s);
-	//int a;
-	//std::cin >> a;
-	/*Test::shiporder c;
-	c.orderid = "falshjje";
-	c.orderperson = "Alex";
-	c.shipto.address = "asd";
-	c.shipto.country = "Ukraine";
-	c.shipto.name = "asdaaa";
-	Test::item i;
-	i.price = 200;
-	i.note = "asd";
-	c.item.push_back(i);
-	c.Write(s);*/
+}*/
 
-	//s.SaveToFile("text.xml");
-
-	return 0;
+int main(int argc, char* argv[])
+{
+	//testing::InitGoogleTest(&argc, argv);
+	return 1;// RUN_ALL_TESTS();
 }
