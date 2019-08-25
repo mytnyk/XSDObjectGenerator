@@ -48,31 +48,49 @@ namespace XSDObjectGenAll
                            }
                        }
 
+                       var currentDir = Path.GetDirectoryName(typeof(Program).Assembly.Location);
+                       var filePathToStart = Path.Combine(currentDir, "XSDObjectGen.exe");
                        string[] filePaths = Directory.GetFiles(o.Input);
                        foreach (var path in filePaths)
                        {
+                           Console.WriteLine($"---------- Processing {path}");
                            System.Diagnostics.Process pProcess = new System.Diagnostics.Process();
-                           pProcess.StartInfo.FileName = "XSDObjectGen.exe";
+                           pProcess.StartInfo.FileName = filePathToStart;
+
                            if (o.Output != null)
                            {
                                pProcess.StartInfo.Arguments = $"{path} /n:{o.Namespace} /f:{o.Output}\\{Path.GetFileNameWithoutExtension(path)}";
-                               if (!Directory.Exists($"{Environment.CurrentDirectory}\\{o.Output}"))
+                               var dir = Path.Combine(Environment.CurrentDirectory, o.Output);
+                               if (!Directory.Exists(dir))
                                {
-                                   Directory.CreateDirectory($"{Environment.CurrentDirectory}\\{o.Output}");
+                                   Directory.CreateDirectory(dir);
                                }
                            }
                            else
                            {
                                pProcess.StartInfo.Arguments = $"{path} /n:{o.Namespace} /f:{Path.GetFileNameWithoutExtension(path)}";
                            }
-
-                           if (o.Shell_execute)
-                               pProcess.StartInfo.UseShellExecute = true;
-                           else
+                           pProcess.StartInfo.RedirectStandardOutput = true;
+                           pProcess.StartInfo.RedirectStandardError = true;
+                           //if (o.Shell_execute)
+                           //    pProcess.StartInfo.UseShellExecute = true;
+                           //else
                                pProcess.StartInfo.UseShellExecute = false;
                            pProcess.Start();
-                           if (o.Wait_for_exit)
-                               pProcess.WaitForExit();
+                           //if (o.Wait_for_exit)
+                           //    pProcess.WaitForExit();
+                           var output = pProcess.StandardOutput.ReadToEnd();
+                           if (!string.IsNullOrWhiteSpace(output))
+                           {
+                               Console.WriteLine(output);
+                           }
+                           var error = pProcess.StandardError.ReadToEnd();
+                           if (!string.IsNullOrWhiteSpace(error))
+                           {
+                               Console.WriteLine(error);
+                           }
+                           pProcess.WaitForExit();
+                           var code = pProcess.ExitCode;
                            pProcess.Close();
                        }
                    });

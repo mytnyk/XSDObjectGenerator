@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="Driver">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="Name" type="xs:string" />
+        <xs:element name="Provider" type="xs:string" />
+        <xs:element name="Version" type="xs:string" />
+        <xs:element name="DriverDll" type="xs:string" />
+        <xs:element name="MonitorDll" type="xs:string" minOccurs="0" />
+        <xs:element name="UserDriverDll" type="xs:string" minOccurs="0" />
+        <xs:element name="Date" type="xs:date" />
+        <xs:element name="SupportedApi" type="xs:string" />
+        <xs:element name="Properties" type="Properties" minOccurs="0" />
+        <xs:element name="SupportedPrinters">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Printer" type="Printer" maxOccurs="unbounded" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:all>
+      <xs:attribute name="Id" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="Printer">
+    <xs:all>
+      <xs:element name="Name" type="xs:string" />
+      <xs:element name="Manufacturer" type="xs:string" />
+      <xs:element name="IconFile" type="xs:string" minOccurs="0" />
+      <xs:element name="DriverCapabilities" minOccurs="0">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="CanUploadOnly" type="xs:boolean" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>
+                  Specifies that driver doesn't provide any print capabilities
+                  and print jobs will become completed after uploading finishes.
+                  Default value is false.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="PrintMode" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>
+                  Specifies how driver performs device monitoring and printing.
+                  Default value is None.
+                </xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:token">
+                  <xs:enumeration value="None" />
+                  <xs:enumeration value="Normal" />
+                  <xs:enumeration value="Monitor" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="NoUpload" type="xs:boolean" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>
+                  Specifies that driver prints input data directly without
+                  first storing it inside an internal storage.
+                  Default value is false.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="CanGetPrintDetails" type="xs:boolean" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>
+                  Specifies that driver provides print details such as sensor states,
+                  printed layers and attachments.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Properties" type="Properties" minOccurs="0" />
+    </xs:all>
+    <xs:attribute name="ModelId" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="Properties">
+    <xs:sequence>
+      <xs:element name="Property" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="NonEmptyString">
+              <xs:attribute name="Name" type="NonEmptyString" use="required" />
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="NonEmptyString">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

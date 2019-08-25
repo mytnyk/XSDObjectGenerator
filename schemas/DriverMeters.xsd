@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema
+    id="DriverMeters"
+    version="1.0"
+    targetNamespace="urn:Print3D"
+    elementFormDefault="qualified"
+    xmlns="urn:Print3D"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    >
+
+    <xs:include schemaLocation="Meters.xsd"/>
+
+    <xs:element name="DriverMeters">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="Meters" type="MeterDefinitions"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns="http://schemas.materialise.com/BuildProcessor/2016"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://schemas.materialise.com/BuildProcessor/2016"
+           elementFormDefault="qualified">
+    <!-- Basic Types -->
+    <!-- Driver Issues -->
+    <xs:simpleType name="DriverIssueId">
+        <xs:restriction base="xs:token">
+            <xs:enumeration value="Licensing">
+                <xs:annotation>
+                    <xs:documentation>A license issue that affects a build processing functioning, for instance: no license available</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Configuration">
+                <xs:annotation>
+                    <xs:documentation>A configuration issue that affects a build processor functioning, for instance: no build processor available</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Other">
+                <xs:annotation>
+                    <xs:documentation>Any other issue that doesn't fall into any of the predefined types</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="DriverIssueSeverity">
+        <xs:restriction base="xs:token">
+            <xs:enumeration value="Information">
+                <xs:annotation>
+                    <xs:documentation>Any kind of non-critical information that might be useful for user</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Warning">
+                <xs:annotation>
+                    <xs:documentation>Non-critical but still important issue for user to know</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Critical">
+                <xs:annotation>
+                    <xs:documentation>Issue must be resolved for the machine or the build processor to be usable</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="DriverIssue">
+        <xs:attribute name="Id" type="DriverIssueId" use="required"/>
+        <xs:attribute name="Title" type="xs:normalizedString" use="required">
+            <xs:annotation>
+                <xs:documentation>Brief description of this issue</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Description" type="xs:normalizedString" use="optional">
+            <xs:annotation>
+                <xs:documentation>Detailed description of this issue</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Severity" type="DriverIssueSeverity" use="required">
+            <xs:annotation>
+                <xs:documentation>Severity of this issue</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="DriverIssues">
+        <xs:annotation>
+            <xs:documentation>This section lists active issues that may require attention from a user</xs:documentation>
+        </xs:annotation>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="DriverIssue" type="DriverIssue"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- Generic Capabilities -->
+    <xs:complexType name="Capability" >
+        <xs:attribute name="Id" type="xs:token" use="required"/>
+        <xs:attribute name="Value" type="xs:string" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    Optional value of this capability.
+                    Value can be any string. Interpretation rules is defined externally of this schema.
+                    In some cases, presence of capability without a value is enough.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="Capabilities">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="Capability" type="Capability"/>
+            <xs:element name="Capabilities" type="Capabilities"/>
+        </xs:choice>
+        <xs:attribute name="Id" type="xs:token" use="required"/>
+    </xs:complexType>
+</xs:schema>

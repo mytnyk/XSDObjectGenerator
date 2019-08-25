@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<xsd:schema id="ExternalProperties"
+           version="1.0"
+           attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:simpleType name="PropertyType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="bool"/>
+            <xsd:enumeration value="integer"/>
+            <xsd:enumeration value="unsigned"/>
+            <xsd:enumeration value="double"/>
+            <xsd:enumeration value="float"/>
+            <xsd:enumeration value="string"/>
+            <xsd:enumeration value="long"/>
+            <xsd:enumeration value="Properties"/>
+            <xsd:enumeration value="PositionMatrix"/>
+            <xsd:enumeration value="ExternalProperties"/>
+            <xsd:enumeration value="SubProperties"/>
+            <xsd:enumeration value="FileContent"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:complexType name="PropertyElement" mixed="true">
+        <xsd:sequence>
+            <xsd:element name="Property" type="PropertyElement" maxOccurs="unbounded" minOccurs="0" />
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="Name" use="required" />
+        <xsd:attribute type="PropertyType" name="Type" use="required" />
+    </xsd:complexType>
+    <xsd:element name="ExternalPropertyFile">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Properties" maxOccurs="unbounded" minOccurs="0">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Property" type="PropertyElement" maxOccurs="unbounded" minOccurs="0" />
+                        </xsd:sequence>
+                        <xsd:attribute type="xsd:string" name="ID" use="required" />
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xs:simpleType name="NonEmptyString">
+        <xs:restriction base ="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="Links">
+        <xs:sequence>
+            <xs:element name="Link" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="Name" type="NonEmptyString"/>
+                        <xs:element name="Description" type="NonEmptyString"/>
+                        <xs:element name="LinkToFile" type="NonEmptyString"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="Documentation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Links" type="Links" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

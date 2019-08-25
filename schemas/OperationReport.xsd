@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="OperationReport"
+           version="1.0"
+           targetNamespace="urn:Print3D"
+           elementFormDefault="qualified"
+           xmlns="urn:Print3D"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           >
+
+    <xs:include schemaLocation="Log.xsd"/>
+
+    <xs:element name="OperationReport" type="OperationReport">
+    </xs:element>
+
+    <xs:complexType name="OperationReport">
+        <xs:all>
+            <xs:element name="Title" type="xs:normalizedString"/>
+            <xs:element name="Description" type="xs:normalizedString" minOccurs="0"/>
+            <xs:element name="Progress" type="ProgressValue"/>
+            <xs:element name="UploadId" type="string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Upload identifier may only be specified in PrintOperationReport of DeviceState.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="UploadLocation" type="xs:anyURI" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Upload location may only be specified in OperationReport during an uploading phase.
+                        If processor has CanUpload capability then location may also be reported during a processing phase if uploading was scheduled.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="MeterValues" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence minOccurs="0">
+                        <xs:element name="Value" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:simpleContent>
+                                    <xs:extension base="MeterValue">
+                                        <xs:attribute name="meter" type="xs:string" use="required"/>
+                                    </xs:extension>
+                                </xs:simpleContent>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="count" type="xs:nonNegativeInteger" use="optional"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="Log" type="Log" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        This section contains log entries generated during operation.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:simpleType name="ProgressValue">
+        <xs:restriction base="double">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

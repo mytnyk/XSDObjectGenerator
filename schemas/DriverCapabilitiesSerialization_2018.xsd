@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema targetNamespace="http://schemas.materialise.com/BuildProcessor/2018"
+           elementFormDefault="qualified"
+           xmlns="http://schemas.materialise.com/BuildProcessor/2018"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:include schemaLocation="DriverPrivateCapabilities_2018.xsd"/>
+
+</xs:schema>

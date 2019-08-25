@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="PreprocessorCapabilities"
+           version="1.0"
+           targetNamespace="http://www.materialise.com/BuildProcessor/2014"
+           elementFormDefault="qualified"
+           xmlns="http://www.materialise.com/BuildProcessor/2014"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           >
+
+    <xs:element name="PreprocessorCapabilities">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="Labelling" type="xs:boolean" default="false" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Indicates if driver can apply text labels to a geometry during conversion to a machine specific representation.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="DeferredLabelling" type="xs:boolean" default="false" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Indicates if driver can apply text labels to a preprocessed geometry.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

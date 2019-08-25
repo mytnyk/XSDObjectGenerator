@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns="http://schemas.materialise.com/BuildProcessor/2016"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://schemas.materialise.com/BuildProcessor/2016"
+           elementFormDefault="qualified">
+    <xs:include schemaLocation="DriverCapabilities_2016.xsd"/>
+    <xs:element name="DriverPrivateCapabilities" type="DriverPrivateCapabilities">
+        <xs:annotation>
+            <xs:documentation>This section describes capabilities of a build processor that MAY NOT be exposed to third parties</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="DriverPrivateCapabilities">
+        <xs:complexContent>
+            <xs:extension base="DriverCapabilities">
+                <xs:sequence>
+                    <xs:element name="NoSupportsAsSubcomponents" type="xs:boolean" default="false" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Indicates that BP doesn't support processing supports as subcomponenets and it should be converted to Magics support internal structures</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="SupportsToolpathGeneration" type="xs:boolean" default="false" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Indicates that BP supports toolpath generation</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

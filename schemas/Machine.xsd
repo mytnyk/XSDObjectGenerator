@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xs:simpleType name="NonEmptyString">
+        <xs:restriction base ="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="MachineCustomProperty">
+        <xs:simpleContent>
+            <xs:extension base="NonEmptyString">
+                <xs:attribute name="VariableName" type="NonEmptyString" use="required"/>
+                <xs:attribute name="VariableType" type="NonEmptyString" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:element name="Machine">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="Name" type="NonEmptyString"/>
+                <xs:element name="Manufacturer" type="NonEmptyString"/>
+                <xs:element name="RequiredLicenseName" type="NonEmptyString"/>
+                <xs:element name="CustomProperties" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Property" type="MachineCustomProperty" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:unique name="VariableName">
+                        <xs:selector xpath="./*"/>
+                        <xs:field xpath="@VariableName"/>
+                    </xs:unique>
+                </xs:element>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

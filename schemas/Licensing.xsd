@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xs:simpleType name="NonEmptyString">
+        <xs:restriction base ="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="LicenseVisibility">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Visible"/>
+            <xs:enumeration value="Hidden"/>
+            <xs:enumeration value="HiddenIfAbsent"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="License">
+        <xs:attribute name="Name" type="NonEmptyString" use="required"/>
+        <xs:attribute name="DisplayName" type="NonEmptyString" use="required"/>
+        <xs:attribute name="IsMain" type="xs:boolean" default="false" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    Main license makes BP useable.
+                    It can be several main licenses.
+                    It should be one main license at least.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="IsDemo" type="xs:boolean" default="false" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    Demo license is used to determine demo mode.
+                    If demo license is available and other main licenses aren't, BP will work in demo mode.
+                    It can be only one demo license.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Visibility" type="LicenseVisibility" default="Visible" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="Licenses">
+        <xs:sequence>
+            <xs:element name="License" type="License" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Plugin">
+        <xs:sequence>
+            <xs:element name="LicenseName" minOccurs="1" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="From" type="NonEmptyString" use="required"/>
+                    <xs:attribute name="To" type="NonEmptyString" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Name" type="NonEmptyString" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="PluginsLicenseNameMapping">
+        <xs:sequence>
+            <xs:element name="Plugin" type="Plugin" minOccurs="1" maxOccurs="unbounded">
+                <xs:unique name="UniquePluginFrom">
+                    <xs:selector xpath="LicenseName"/>
+                    <xs:field xpath="@From"/>
+                </xs:unique>
+                <xs:unique name="UniquePluginTo">
+                    <xs:selector xpath="LicenseName"/>
+                    <xs:field xpath="@To"/>
+                </xs:unique>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="Licensing">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="Licenses" type="Licenses">
+                    <xs:unique name="UniqueLicenseName">
+                        <xs:selector xpath="License"/>
+                        <xs:field xpath="@Name"/>
+                    </xs:unique>
+                    <xs:unique name="UniqueLicenseDisplayName">
+                        <xs:selector xpath="License"/>
+                        <xs:field xpath="@DisplayName"/>
+                    </xs:unique>
+                </xs:element>
+                <xs:element name="PluginsLicenseNameMapping" type="PluginsLicenseNameMapping" minOccurs="0">
+                    <xs:unique name="UniquePluginName">
+                        <xs:selector xpath="Plugin"/>
+                        <xs:field xpath="@Name"/>
+                    </xs:unique>
+                </xs:element>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

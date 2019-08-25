@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema
+    id="DeviceState"
+    version="1.0"
+    targetNamespace="urn:Print3D"
+    elementFormDefault="qualified"
+    xmlns="urn:Print3D"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    >
+
+    <xs:include schemaLocation="Meters.xsd"/>
+    <xs:include schemaLocation="OperationReport.xsd"/>
+    <xs:include schemaLocation="Print3D.xsd"/>
+
+    <xs:element name="DeviceState">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="Status" type="DeviceStatus">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Report 'None' when device status is not available for expected reason, e.g.: machine monitoring is disabled.
+                            Put explanation into 'description' attribute.
+                            'PrintOperationReport' element must not be specified otherwise corresponding job may fail.
+
+                            Report 'Error' when device status is not available for unknown error, e.g.: no connection to the machine.
+                            Put explanation into 'description' attribute value.
+                            'PrintOperationReport' element must not be specified otherwise corresponding job may fail.
+
+                            When build fails report 'Error' device status and include 'PrintOperationReport' element.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="Meters" type="Meters" minOccurs="0"/>
+                <xs:element name="Time" type="utcDateTime" minOccurs="0"/>
+                <xs:element name="PrintOperationReport" type="OperationReport" minOccurs="0"/>
+                <xs:element name="Log" type="Log" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>
+                            This section contains recently generated log entries.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="DeviceStatus">
+        <xs:attribute name="value" type="DeviceStatusValue" use="required"/>
+        <xs:attribute name="description" type="string"/>
+    </xs:complexType>
+
+    <xs:simpleType name="DeviceStatusValue">
+        <xs:restriction base="xs:token">
+            <xs:enumeration value="None"/>
+            <xs:enumeration value="Offline"/>
+            <xs:enumeration value="Free"/>
+            <xs:enumeration value="ReadyToPrint"/>
+            <xs:enumeration value="Printing"/>
+            <xs:enumeration value="PrintingPaused"/>
+            <xs:enumeration value="PrintingAborted"/>
+            <xs:enumeration value="Error"/>
+            <xs:enumeration value="Printed"/>
+            <xs:enumeration value="UserIntervention"/>
+            <xs:enumeration value="Busy"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

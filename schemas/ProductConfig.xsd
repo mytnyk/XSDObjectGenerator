@@ -1,0 +1,157 @@
+<xs:schema id="ProductConfig" version="1.0" attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="Product">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="xs:string" name="Title">
+                    <xs:annotation>
+                        <xs:documentation>Full name of the build processor (e.g. "Basic Build Processor").</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element type="xs:string" name="ShortName">
+                    <xs:annotation>
+                        <xs:documentation>Short name of the build processor. It will be used to create folder name in ProgramData and ProgramFiles for keeping build processor data and binaries correspondingly (e.g. "Basic").</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element type="xs:string" name="Company"/>
+                <xs:element type="xs:string" name="Copyright"/>
+                <xs:element name="Version">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:unsignedByte" name="Major"/>
+                            <xs:element type="xs:unsignedByte" name="Minor"/>
+                            <xs:element type="xs:unsignedShort" name="Build"/>
+                            <xs:element type="xs:unsignedShort" name="Revision"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element type="xs:string" name="DriverId">
+                    <xs:annotation>
+                        <xs:documentation>Unique GUID that identifies this driver in BP system.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="DriverDefinitionMetaData">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:string" name="FileNameForBuildDirectory">
+                                <xs:annotation>
+                                    <xs:documentation>Driver definition file name for development purposes.</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element type="xs:string" name="FileNameWithPlaceHolders">
+                                <xs:annotation>
+                                    <xs:documentation>Driver definition file name that is included into installer.</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element type="xs:string" name="AbsolutePathPlaceHolder">
+                                <xs:annotation>
+                                    <xs:documentation>This placeholder is replaced with installation directory during installation.</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Installer">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:string" name="Binaries">
+                                <xs:annotation>
+                                    <xs:documentation>Relative path to folder with binaries.</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element type="xs:string" name="UpgradeId"/>
+                            <xs:element type="xs:string" name="BundleUpgradeId"/>
+                            <xs:element type="xs:string" name="Name">
+                                <xs:annotation>
+                                    <xs:documentation>Name of the generated installer file ("BasicBuildProcessor").</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="Filters" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element name="ExcludeFiles" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:simpleContent>
+                                                    <xs:annotation>
+                                                        <xs:documentation>|-separated list of substrings present in files to be excluded from distribution. Additionally 'except' attribute can be specified to exceptionally include files.</xs:documentation>
+                                                    </xs:annotation>
+                                                    <xs:extension base="xs:string">
+                                                        <xs:attribute type="xs:string" name="except" use="optional"/>
+                                                    </xs:extension>
+                                                </xs:simpleContent>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element type="xs:string" name="ExcludeFolders" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>|-separated list of folders to be excluded from distribution. Match is exact. Specify either Exclude or Include Folders.</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element type="xs:string" name="IncludeFolders" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>|-separated list of folders to be included to distribution. Match is exact. Specify either Exclude or Include Folders.</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                    </xs:all>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="LicenseFiles" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element type="xs:string" name="Prerelease" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Prerelease license agreement file that comes with installer. File should be in the root directory. If the file is not set, then default file is used.</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element type="xs:string" name="Release" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>Release license agreement file that comes with installer. File should be in the root directory. If the file is not set, then default file is used.</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                    </xs:all>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="BundlePackages">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="PackageId" maxOccurs="unbounded" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:simpleContent>
+                                                    <xs:annotation>
+                                                        <xs:documentation>Package identifier as it is defined in wix source code.</xs:documentation>
+                                                    </xs:annotation>
+                                                    <xs:extension base="xs:string">
+                                                        <xs:attribute type="xs:string" name="path" use="optional"/>
+                                                    </xs:extension>
+                                                </xs:simpleContent>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="BuildInfo">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:string" name="Prerelease">
+                                <xs:annotation>
+                                    <xs:documentation>String that describes current product state ("beta", "alpha" etc, will be added to the product title, for release make it empty or remove the tag).</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element type="xs:string" name="Branch">
+                                <xs:annotation>
+                                    <xs:documentation>Information from VCS about location of sources ("trunk").</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element type="xs:string" name="VcsNumber">
+                                <xs:annotation>
+                                    <xs:documentation>Information from VCS about changeset, revision, hash value.</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

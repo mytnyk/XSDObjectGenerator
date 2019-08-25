@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="PreprocessorInput"
+           version="1.0"
+           targetNamespace="http://www.materialise.com/BuildProcessor/2014"
+           elementFormDefault="qualified"
+           xmlns="http://www.materialise.com/BuildProcessor/2014"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           >
+
+    <xs:element name="PreprocessorInput">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="Labelling" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="enabled" type="xs:boolean" default="true" use="optional"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="PreliminaryPass" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="enabled" type="xs:boolean" default="false" use="optional"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Parts" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Part" minOccurs="1" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:all>
+                                        <xs:element name="FilePath" type="xs:string" minOccurs="0"/>
+                                        <xs:element name="Instances" type="PartInstances" minOccurs="0"/>
+                                    </xs:all>
+                                    <xs:attribute name="id" type="xs:string" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="PartInstances">
+        <xs:sequence>
+            <xs:element name="Instance" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="Labels" type="PartLabels" minOccurs="0"/>
+                    </xs:all>
+                    <xs:attribute name="id" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="PartLabels">
+        <xs:sequence>
+            <xs:element name="Label" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="id" type="xs:string" use="required"/>
+                    <xs:attribute name="value" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

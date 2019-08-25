@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2014 (x64) (http://www.altova.com) by Kurt Renap (Materialise NV) -->
+<!-- Schema is not for public use. Just for code generation.
+     Reduced property content from any to more specific structures -->
+<xsd:schema xmlns="http://schemas.materialise.com/build_processing/2016/04" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://schemas.materialise.com/build_processing/2016/04" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+    <xsd:simpleType name="ST_Version" final="restriction">
+        <xsd:restriction base="xsd:token">
+            <xsd:enumeration value="1.0"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:element name="MtlsBuildTicket" type="CT_BuildTicket"/>
+    <xsd:element name="MtlsMachineParameters">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="CT_PropertyTree">
+                    <xsd:attribute name="version" type="ST_Version"/>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="MtlsPropertyTemplate" type="CT_MtlsPropertyTemplate"/>
+    <xsd:element name="MtlsMachineInfo" type="CT_MtlsMachineInfo"/>
+    <xsd:simpleType name="ST_PropertyType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="bool"/>
+            <xsd:enumeration value="integer"/>
+            <xsd:enumeration value="unsigned"/>
+            <xsd:enumeration value="string"/>
+            <xsd:enumeration value="number"/>
+            <xsd:enumeration value="enum"/>
+            <xsd:enumeration value="Complex"/>
+            <xsd:enumeration value="ProfileName"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="ST_PropertyTreeType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="object"/>
+            <xsd:enumeration value="component"/>
+            <xsd:enumeration value="build"/>
+            <xsd:enumeration value="builditem"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:complexType name="CT_PropertyTree">
+        <xsd:sequence>
+            <xsd:element name="Property" type="CT_Property" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="CT_PropertyTreeWithUUID">
+        <xsd:complexContent>
+            <xsd:extension base="CT_PropertyTree">
+                <xsd:attribute name="uuid" type="xsd:string" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation>uuid of the object/component /item/build to which these properties should be applied</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="type" type="ST_PropertyTreeType">
+                    <xsd:annotation>
+                        <xsd:documentation>optional information about type of object to which thse properties belong</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="CT_PropertyTreeWithComponents">
+        <xsd:complexContent>
+            <xsd:extension base="CT_PropertyTreeWithUUID">
+                <xsd:sequence>
+                    <xsd:element name="Component" type="CT_PropertyTreeWithUUID" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="CT_BuildTicket">
+        <xsd:sequence>
+            <xsd:element name="Defaults" type="CT_PropertyTree" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Default properties to be applied on the build</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="PartOverrides" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Overriden properties for certain builditems on a build</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Instance" type="CT_PropertyTreeWithComponents" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="ObjectProperties" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Extra properties for certain objects (and components).</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Instance" type="CT_PropertyTreeWithUUID" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="CT_MtlsPropertyTemplate">
+        <xsd:sequence>
+            <xsd:element name="MachineParameters" type="CT_PropertyTemplateTree"/>
+            <xsd:element name="BuildTicket">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Defaults" type="CT_PropertyTemplateTree"/>
+                        <xsd:element name="PartOverrides" type="CT_PropertyTemplateTree" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="version" type="ST_Version" use="optional"/>
+    </xsd:complexType>
+    <xsd:complexType name="CT_Property" mixed="true">
+        <xsd:sequence>
+            <xsd:element name="Profile" type="CT_ProfileWithProperties" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="Property" type="CT_Property" minOccurs="0" maxOccurs="unbounded"/>
+            <!-- For code generation we are more specific than 'any'.
+            We specify possible appearance of profiles or properties above explicitly.
+            <xsd:any processContents="skip" minOccurs="0" maxOccurs="unbounded"/>
+            -->
+        </xsd:sequence>
+        <xsd:attribute name="Name" type="xsd:string" use="required"/>
+        <xsd:attribute name="Type" type="ST_PropertyType" use="optional"/>
+        <xsd:attribute name="ProfileList" use="optional"/>
+    </xsd:complexType>
+    <xsd:complexType name="CT_ProfileWithProperties">
+        <xsd:sequence>
+            <xsd:element name="Property" type="CT_Property" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="Name" type="xsd:string" use="required"/>
+    </xsd:complexType>
+    <xsd:complexType name="CT_PropertyTemplateTree" mixed="true">
+        <xsd:sequence>
+            <xsd:element name="PropertyNode" type="CT_PropertyTemplateNode" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="CT_PropertyTemplateNode" mixed="true">
+        <xsd:sequence>
+            <xsd:element name="PropertyNode" type="CT_PropertyTemplateNode" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="Name" type="xsd:string" use="required"/>
+        <xsd:attribute name="Type" type="ST_PropertyType" use="optional"/>
+        <xsd:attribute name="DisplayName" type="xsd:string" use="optional"/>
+        <xsd:attribute name="DisplayNameContainer" type="xsd:string" use="optional"/>
+        <xsd:attribute name="PropertyName" type="xsd:string" use="optional"/>
+        <xsd:attribute name="Default" type="xsd:string" use="optional"/>
+        <xsd:attribute name="ProfileList" use="optional"/>
+        <xsd:attribute name="List" use="optional"/>
+        <xsd:attribute name="ProfileName" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+    <xsd:complexType name="CT_MtlsMachineInfo">
+        <xsd:sequence>
+            <xsd:element name="BuildVolume" type="CT_MtlsMachineInfoComponent"/>
+            <xsd:element name="Tray" type="CT_MtlsMachineInfoComponent"/>
+            <xsd:element name="LockedAreas" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Area" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="version" type="ST_Version" use="optional"/>
+    </xsd:complexType>
+    <xsd:complexType name="CT_MtlsMachineInfoComponent">
+        <xsd:sequence>
+            <xsd:element name="Shape">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="box"/>
+                        <xsd:enumeration value="cylinder"/>
+                        <xsd:enumeration value="custom"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="Pos">
+                <xsd:complexType>
+                    <xsd:attribute name="x" type="xsd:double" use="required"/>
+                    <xsd:attribute name="y" type="xsd:double" use="required"/>
+                    <xsd:attribute name="z" type="xsd:double" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="Dim">
+                <xsd:complexType>
+                    <xsd:attribute name="x" type="xsd:double" use="optional"/>
+                    <xsd:attribute name="y" type="xsd:double" use="optional"/>
+                    <xsd:attribute name="z" type="xsd:double" use="required"/>
+                    <xsd:attribute name="radius"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="Mesh" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="uuid" type="xsd:string" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="Visible" type="xsd:boolean" default="false"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

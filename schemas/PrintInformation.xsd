@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="PrintInformation"
+           version="1.0"
+           targetNamespace="urn:Print3D"
+           elementFormDefault="qualified"
+           xmlns="urn:Print3D"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           >
+
+    <xs:include schemaLocation="Log.xsd"/>
+    <xs:include schemaLocation="Meters.xsd"/>
+
+    <xs:element name="PrintInformation">
+        <xs:complexType>
+            <xs:all minOccurs="0">
+                <xs:element name="Meters" type="MeterDefinitions" minOccurs="0"/>
+                <xs:element name="Log" type="Log" minOccurs="0"/>
+                <xs:element name="MeterValues" type="MeterValues" minOccurs="0"/>
+                <xs:element name="MeterStates" type="PrintInformationMeterStates" minOccurs="0"/>
+                <xs:element name="PrintedLayers" type="PrintInformationPrintedLayers" minOccurs="0"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Meters -->
+
+    <xs:complexType name="PrintInformationMeterStates">
+        <xs:sequence minOccurs="0">
+            <xs:element name="States" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence minOccurs="0">
+                        <xs:element name="State" type="PrintInformationMeterState" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                    <xs:attribute name="meter" type="MeterRef" use="required"/>
+                    <xs:attribute name="count" type="xs:nonNegativeInteger" use="optional"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="count" type="xs:nonNegativeInteger" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="PrintInformationMeterState">
+        <xs:simpleContent>
+            <xs:extension base="MeterValue">
+                <xs:attribute name="time" type="utcDateTime" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <!-- Printed Layers -->
+
+    <xs:complexType name="PrintInformationPrintedLayers">
+        <xs:sequence minOccurs="0">
+            <xs:element name="Layer" type="PrintInformationPrintedLayer" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="count" type="xs:nonNegativeInteger" use="optional"/>
+        <xs:attribute name="total" type="xs:nonNegativeInteger" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="PrintInformationPrintedLayer">
+        <xs:sequence minOccurs="0">
+            <xs:element name="MeterValues" type="MeterValues" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="index" type="xs:positiveInteger" use="required"/>
+    </xs:complexType>
+
+</xs:schema>

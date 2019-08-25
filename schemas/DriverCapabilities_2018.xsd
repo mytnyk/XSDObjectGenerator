@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns="http://schemas.materialise.com/BuildProcessor/2018"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://schemas.materialise.com/BuildProcessor/2018"
+           elementFormDefault="qualified">
+    <xs:include schemaLocation="DriverCapabilities.CommonTypes_2018.xsd"/>
+    <xs:element name="DriverCapabilities" type="DriverCapabilities">
+        <xs:annotation>
+            <xs:documentation>This section describes capabilities of a build processor that may be exposed to third parties.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="DriverCapabilities">
+        <xs:sequence>
+            <xs:element name="DriverIssues" type="DriverIssues" minOccurs="0"/>
+            <xs:element name="FileIO" minOccurs="0">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="Format3mf" type="Format3mf" minOccurs="0"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="NonGenericProfiles" type="xs:boolean" default="false" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Indicates that assigning of profiles to platform and parts must be performed by BP only</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="NoDefaultProfiles" type="xs:boolean" default="false" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Indicates that BP may fail operation if platform and parts don't have profiles assigned</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="NoMeshSupport" type="xs:boolean" default="false" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Indicates whether a BP has a code base with an issue with lost triangles order during slicing fixed.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="NoStandaloneSupport" type="xs:boolean" default="false" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Indicates whether a BP is able to process standalone support (not attached to any part).</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SubcomponentProfileAssignment" type="xs:boolean" default="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Indicates whether a BP is able to assign a profiles to subcomponents.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SupportsBeamLatticeCapModesButtAndSphere" type="xs:boolean" default="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Indicates whether a BP is able to process beam lattice with butt and sphere capmodes.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Capabilities" type="Capabilities" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- FileIO -->
+    <xs:complexType name="Format3mf">
+        <xs:sequence>
+            <xs:element name="Namespaces">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Namespace" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:attribute name="Id" type="xs:string" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="ContentTypes">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="ContentType" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:attribute name="Id" type="xs:string" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="RelationTypes">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="RelationType" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:attribute name="Id" type="xs:string" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Supported" type="xs:boolean" use="required"/>
+    </xs:complexType>
+</xs:schema>

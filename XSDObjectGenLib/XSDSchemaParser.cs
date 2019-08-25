@@ -95,19 +95,35 @@ namespace XSDObjectGenLib
 
             public override object GetEntity(Uri absoluteUri, string role, Type ofObjectToReturn)
 			{
-				if (absoluteUri.Scheme == "file")
-				{
-                    if (!File.Exists(absoluteUri.AbsoluteUri))
+                try
+                {
+
+                    if (absoluteUri.Scheme == "file")
                     {
-                        var fn = Path.GetFileName(absoluteUri.AbsoluteUri);
-                        var newPath = Path.Combine(_directoryPath, fn);
-                        var newUri = new Uri(newPath);
-                        return base.GetEntity(newUri, role, ofObjectToReturn);
+                        if (!File.Exists(absoluteUri.AbsoluteUri))
+                        {
+                            var fn = Path.GetFileName(absoluteUri.AbsoluteUri);
+                            var newPath = Path.Combine(_directoryPath, fn);
+                            var fullPath = Path.GetFullPath(newPath);
+                            var newUri = new Uri(fullPath);
+                            var obj = base.GetEntity(newUri, role, ofObjectToReturn);
+                            return obj;
+                        }
                     }
-				}
-                var ret = base.GetEntity(absoluteUri, role, ofObjectToReturn);
-                return ret;
-			}
+                    var ret = base.GetEntity(absoluteUri, role, ofObjectToReturn);
+                    return ret;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw;
+                }
+                finally
+                {
+                    int i = 0;
+                    i++;
+                }
+            }
 		}
 
 		#region Orchestrator

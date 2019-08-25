@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="Print3D"
+           version="1.0"
+           targetNamespace="urn:Print3D"
+           elementFormDefault="qualified"
+           xmlns="urn:Print3D"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           >
+
+    <!-- ******************************************************** -->
+    <!-- BASIC TYPES -->
+    <!-- ******************************************************** -->
+
+    <!-- Example: true -->
+    <xs:simpleType name="boolean">
+        <xs:restriction base="xs:boolean"/>
+    </xs:simpleType>
+
+    <!-- Example: 198 -->
+    <xs:simpleType name="integer">
+        <xs:restriction base="xs:integer"/>
+    </xs:simpleType>
+
+    <!-- Example: 198.02323 -->
+    <xs:simpleType name="double">
+        <xs:restriction base="xs:double"/>
+    </xs:simpleType>
+
+    <!-- Example: just a text -->
+    <xs:simpleType name="string">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+    <!-- Example: 2002-10-09T19:00:00Z -->
+    <xs:simpleType name="utcDateTime">
+        <xs:restriction base="xs:dateTime"/>
+    </xs:simpleType>
+
+    <!-- Example: P1Y2M3DT10H30M -->
+    <xs:simpleType name="duration">
+        <xs:restriction base="xs:duration"/>
+    </xs:simpleType>
+
+    <!-- Example: 0.1250 -->
+    <xs:simpleType name="mm">
+        <xs:restriction base="double"/>
+    </xs:simpleType>
+
+    <!-- Example: 26.2 -->
+    <xs:simpleType name="degreesCelsius">
+        <xs:restriction base="double"/>
+    </xs:simpleType>
+
+</xs:schema>

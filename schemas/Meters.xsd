@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="Meters"
+           version="1.0"
+           targetNamespace="urn:Print3D"
+           elementFormDefault="qualified"
+           xmlns="urn:Print3D"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           >
+
+    <xs:include schemaLocation="Print3D.xsd"/>
+
+    <xs:complexType name="Meters">
+        <xs:sequence minOccurs="0">
+            <xs:element name="Meter" type="Meter" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="count" type="xs:nonNegativeInteger" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="Meter">
+        <xs:simpleContent>
+            <xs:extension base="MeterValue">
+                <xs:attribute name="id" type="MeterId" use="required"/>
+                <xs:attribute name="name" type="string" use="required"/>
+                <xs:attribute name="type" type="MeterType" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="MeterId">
+        <xs:restriction base="xs:ID"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="MeterRef">
+        <xs:restriction base="xs:IDREF"/>
+    </xs:simpleType>
+
+    <xs:complexType name="MeterDefinition">
+        <xs:attribute name="id" type="MeterId" use="required"/>
+        <xs:attribute name="name" type="string" use="required"/>
+        <xs:attribute name="type" type="MeterType" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="MeterType">
+        <xs:restriction base="xs:token">
+            <xs:enumeration value="undefined"/>
+            <xs:enumeration value="boolean"/>
+            <xs:enumeration value="integer"/>
+            <xs:enumeration value="double"/>
+            <xs:enumeration value="string"/>
+            <xs:enumeration value="utcDateTime"/>
+            <xs:enumeration value="duration"/>
+            <xs:enumeration value="mm"/>
+            <xs:enumeration value="degreesCelsius"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="MeterValue">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="boolean"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="integer"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="double"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="string"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="utcDateTime"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="duration"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="mm"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="degreesCelsius"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:complexType name="MeterDefinitions">
+        <xs:sequence minOccurs="0">
+            <xs:element name="Meter" type="MeterDefinition" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="count" type="xs:nonNegativeInteger" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="MeterValues">
+        <xs:sequence minOccurs="0">
+            <xs:element name="Value" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="MeterValue">
+                            <xs:attribute name="meter" type="MeterRef" use="required"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="count" type="xs:nonNegativeInteger" use="optional"/>
+    </xs:complexType>
+
+</xs:schema>

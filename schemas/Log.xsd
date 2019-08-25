@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="OperationReport"
+           version="1.0"
+           targetNamespace="urn:Print3D"
+           elementFormDefault="qualified"
+           xmlns="urn:Print3D"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           >
+
+    <xs:include schemaLocation="Meters.xsd"/>
+
+    <xs:element name="Log" type="Log"/>
+
+    <xs:complexType name="Log">
+        <xs:all>
+            <xs:element name="Meters" type="MeterDefinitions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        This section defines sensors that may appear in log entries.
+                        If sensors were already defined elsewhere in this document then this section can be omitted.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Entries" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Entry" type="LogEntry" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                    <xs:attribute name="count" type="xs:nonNegativeInteger" use="optional"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:simpleType name="LogEntryType">
+        <xs:restriction base="xs:token">
+            <xs:enumeration value="Information"/>
+            <xs:enumeration value="Warning"/>
+            <xs:enumeration value="Error"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="LogEntry">
+        <xs:all>
+            <xs:element name="Meters" type="MeterValues" minOccurs="0"/>
+        </xs:all>
+        <xs:attribute name="type" type="LogEntryType" use="required"/>
+        <xs:attribute name="time" type="utcDateTime" use="required"/>
+        <xs:attribute name="source" type="xs:normalizedString" use="optional"/>
+        <xs:attribute name="category" type="xs:normalizedString" use="optional"/>
+        <xs:attribute name="message" type="xs:string" use="optional"/>
+    </xs:complexType>
+
+</xs:schema>
